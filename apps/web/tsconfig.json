@@ -19,7 +19,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@agrochain/ui": ["../../packages/ui/src"],
+      "@agrochain/api": ["../../packages/api/src"],
+      "@agrochain/blockchain": ["../../packages/blockchain/src"],
+      "@agrochain/store": ["../../packages/store/src"]
     }
   },
   "include": [
