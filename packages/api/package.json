@@ -16,7 +16,16 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@react-native-async-storage/async-storage": "^2.1.2",
     "@types/node": "^20",
     "typescript": "^5"
+  },
+  "peerDependencies": {
+    "@react-native-async-storage/async-storage": ">=1.18.0"
+  },
+  "peerDependenciesMeta": {
+    "@react-native-async-storage/async-storage": {
+      "optional": true
+    }
   }
 }
