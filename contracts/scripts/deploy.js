@@ -1,12 +1,31 @@
-const hre = require("hardhat");
+import hre from "hardhat";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 async function main() {
-    const AgroChain = await hre.ethers.getContractFactory("AgroChain");
-    const agroChain = await AgroChain.deploy();
+    const TradeAgreement = await hre.ethers.getContractFactory("TradeAgreement");
+    const tradeAgreement = await TradeAgreement.deploy();
+    await tradeAgreement.waitForDeployment();
 
-    await agroChain.waitForDeployment();
+    const address = await tradeAgreement.getAddress();
+    console.log("Deployed to:", address);
 
-    console.log("AgroChain deployed to:", await agroChain.getAddress());
+    const Artifact = await hre.artifacts.readArtifact("TradeAgreement");
+    const deployedData = {
+        address: address,
+        abi: Artifact.abi
+    };
+
+    fs.writeFileSync(
+        path.join(__dirname, "../deployed.json"),
+        JSON.stringify(deployedData, null, 2)
+    );
+
+    console.log("deployed.json saved.");
 }
 
 main().catch((error) => {

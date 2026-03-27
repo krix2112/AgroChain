@@ -1,1 +1,2 @@
-export const BLOCKCHAIN = "AgroChain Blockchain";
+export * from './config';
+export * from './reader';

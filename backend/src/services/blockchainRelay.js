@@ -32,8 +32,6 @@ const relayCreateTrade = async (farmerAddress, traderAddress, cropName, quantity
     try {
         const { contract } = await getContract();
         
-        // Convert price/quantity to appropriate units if necessary (e.g. Wei)
-        // For this demo, we'll assume they are numbers/strings acceptable by the contract
         const tx = await contract.createTrade(
             farmerAddress,
             traderAddress,
@@ -44,7 +42,6 @@ const relayCreateTrade = async (farmerAddress, traderAddress, cropName, quantity
         
         const receipt = await tx.wait();
         
-        // Find TradeCreated event to get tradeId
         const event = receipt.logs.find(log => {
             try {
                 const parsed = contract.interface.parseLog(log);
