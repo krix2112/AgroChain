@@ -1,0 +1,197 @@
+// backend/src/routes/trade.js
+const express = require('express');
+const router = express.Router();
+const auth = require('../middleware/auth');
+const Trade = require('../models/Trade');
+const User = require('../models/User');
+const blockchainRelay = require('../services/blockchainRelay');
+
+// Create Trade listing (Farmer)
+router.post('/create', auth, async (req, res, next) => {
+    try {
+        const { cropName, quantity, price, traderPhone } = req.body;
+
+        // Find trader by phone
+        const trader = traderPhone
+            ? await User.findOne({ phone: traderPhone, role: 'trader' })
+            : null;
+
+        const tradeCount = await Trade.countDocuments();
+        const tradeId = 2000 + tradeCount;
+
+        const trade = new Trade({
+            tradeId,
+            farmer: req.user.id,
+            trader: trader?._id || null,
+            cropName,
+            quantity,
+            price,
+            state: 'CREATED'
+        });
+
+        // Attempt blockchain relay — gracefully skip if contract not yet deployed
+        try {
+            const tx = await blockchainRelay.relayCreateTrade(
+                req.user.walletAddress || '0x0000000000000000000000000000000000000000',
+                trader?.walletAddress || '0x0000000000000000000000000000000000000000',
+                cropName,
+                quantity,
+                price
+            );
+            trade.txHash = tx.txHash;
+        } catch (chainErr) {
+            console.warn('[blockchain] relay skipped (no contract):', chainErr.message);
+        }
+
+        await trade.save();
+        res.status(201).json(trade);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Get Marketplace — All CREATED trades
+router.get('/marketplace', auth, async (req, res, next) => {
+    try {
+        const trades = await Trade.find({ state: 'CREATED' })
+            .populate('farmer', 'name phone')
+            .sort('-createdAt');
+        res.json(trades);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Get single trade by tradeId
+router.get('/:id', auth, async (req, res, next) => {
+    try {
+        const trade = await Trade.findOne({ tradeId: req.params.id })
+            .populate('farmer trader transporter', 'name phone role walletAddress');
+        if (!trade) return res.status(404).json({ message: 'Trade not found' });
+        res.json(trade);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Get my trades (all roles)
+router.get('/my/all', auth, async (req, res, next) => {
+    try {
+        const trades = await Trade.find({
+            $or: [
+                { farmer: req.user.id },
+                { trader: req.user.id },
+                { transporter: req.user.id }
+            ]
+        }).populate('farmer trader transporter', 'name phone role');
+        res.json(trades);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Agree to Trade (Trader)
+router.post('/:id/agree', auth, async (req, res, next) => {
+    try {
+        const trade = await Trade.findOne({ tradeId: req.params.id });
+        if (!trade) return res.status(404).json({ message: 'Trade not found' });
+
+        try {
+            await blockchainRelay.relayAgreeTrade(req.user.id, trade.tradeId);
+        } catch (chainErr) {
+            console.warn('[blockchain] agreeTrade skipped:', chainErr.message);
+        }
+
+        trade.trader = req.user.id;
+        trade.state = 'AGREED';
+        await trade.save();
+        res.json(trade);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Assign Transporter
+router.post('/:id/assign-transporter', auth, async (req, res, next) => {
+    try {
+        const trade = await Trade.findOne({ tradeId: req.params.id });
+        if (!trade) return res.status(404).json({ message: 'Trade not found' });
+
+        const transporter = await User.findOne({ phone: req.body.transporterPhone, role: 'transporter' });
+        if (!transporter) return res.status(404).json({ message: 'Transporter not found' });
+
+        try {
+            await blockchainRelay.relayAssignTransporter(req.user.id, trade.tradeId, transporter.walletAddress);
+        } catch (chainErr) {
+            console.warn('[blockchain] assignTransporter skipped:', chainErr.message);
+        }
+
+        trade.transporter = transporter._id;
+        await trade.save();
+        res.json(trade);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Mark Picked Up (Transporter)
+router.post('/:id/pickup', auth, async (req, res, next) => {
+    try {
+        const trade = await Trade.findOne({ tradeId: req.params.id });
+        if (!trade) return res.status(404).json({ message: 'Trade not found' });
+
+        try {
+            await blockchainRelay.relayMarkPickedUp(req.user.id, trade.tradeId);
+        } catch (chainErr) {
+            console.warn('[blockchain] markPickedUp skipped:', chainErr.message);
+        }
+
+        trade.state = 'IN_DELIVERY';
+        await trade.save();
+        res.json(trade);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Mark Delivered (Transporter)
+router.post('/:id/deliver', auth, async (req, res, next) => {
+    try {
+        const trade = await Trade.findOne({ tradeId: req.params.id });
+        if (!trade) return res.status(404).json({ message: 'Trade not found' });
+
+        try {
+            await blockchainRelay.relayMarkDelivered(req.user.id, trade.tradeId);
+        } catch (chainErr) {
+            console.warn('[blockchain] markDelivered skipped:', chainErr.message);
+        }
+
+        trade.state = 'DELIVERED';
+        await trade.save();
+        res.json(trade);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Complete Trade (Farmer/Trader)
+router.post('/:id/complete', auth, async (req, res, next) => {
+    try {
+        const trade = await Trade.findOne({ tradeId: req.params.id });
+        if (!trade) return res.status(404).json({ message: 'Trade not found' });
+
+        try {
+            await blockchainRelay.relayCompleteTrade(req.user.id, trade.tradeId);
+        } catch (chainErr) {
+            console.warn('[blockchain] completeTrade skipped:', chainErr.message);
+        }
+
+        trade.state = 'COMPLETED';
+        await trade.save();
+        res.json(trade);
+    } catch (err) {
+        next(err);
+    }
+});
+
+module.exports = router;
