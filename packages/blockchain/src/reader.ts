@@ -15,7 +15,19 @@ export interface Trade {
   createdAt: number;
 }
 
+export interface CropRequest {
+  requestId: number;
+  trader: string;
+  cropName: string;
+  quantity: number;
+  preferredPrice: number;
+  state: string;
+  linkedTradeId: number;
+  createdAt: string;
+}
+
 const STATE_MAP = ["CREATED", "AGREED", "IN_DELIVERY", "DELIVERED", "COMPLETED"];
+const REQUEST_STATE_MAP = ["OPEN", "ACCEPTED", "CANCELLED"];
 
 export function getProvider() {
   return new ethers.JsonRpcProvider(SHARDEUM_RPC);
@@ -65,4 +77,38 @@ export async function getTradeState(id: number): Promise<string> {
   const contract = getContract();
   const tradeData = await contract.getTrade(id);
   return STATE_MAP[Number(tradeData.state)] || "UNKNOWN";
+}
+
+export async function getCropRequest(requestId: number): Promise<CropRequest> {
+  const contract = getContract();
+  const raw = await contract.getCropRequest(requestId);
+  
+  return {
+    requestId: Number(raw.requestId),
+    trader: raw.trader,
+    cropName: raw.cropName,
+    quantity: Number(raw.quantity),
+    preferredPrice: Number(raw.preferredPrice),
+    state: REQUEST_STATE_MAP[Number(raw.state)] || "UNKNOWN",
+    linkedTradeId: Number(raw.linkedTradeId),
+    createdAt: new Date(Number(raw.createdAt) * 1000).toISOString()
+  };
+}
+
+export async function getOpenRequests(): Promise<CropRequest[]> {
+  const contract = getContract();
+  const rawArray = await contract.getAllOpenRequests();
+  
+  const mapped = rawArray.map((raw: any) => ({
+    requestId: Number(raw.requestId),
+    trader: raw.trader,
+    cropName: raw.cropName,
+    quantity: Number(raw.quantity),
+    preferredPrice: Number(raw.preferredPrice),
+    state: REQUEST_STATE_MAP[Number(raw.state)] || "UNKNOWN",
+    linkedTradeId: Number(raw.linkedTradeId),
+    createdAt: new Date(Number(raw.createdAt) * 1000).toISOString()
+  }));
+
+  return mapped.filter((req: CropRequest) => req.state === 'OPEN');
 }

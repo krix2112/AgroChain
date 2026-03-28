@@ -27,7 +27,10 @@ const storage = {
 
 // ─── Axios instance ───────────────────────────────────────────────────────────
 const client = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL:
+    (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) ||
+    (typeof process !== 'undefined' && process.env.EXPO_PUBLIC_API_URL) ||
+    'http://localhost:5000/api',
   headers: { 'Content-Type': 'application/json' }
 })
 
