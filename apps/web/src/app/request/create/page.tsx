@@ -38,7 +38,14 @@ export default function CreateRequestPage() {
     setSubmitting(true);
     
     try {
-        await requestAPI.createRequest(formData);
+        await requestAPI.createRequest({
+          cropName: formData.cropName,
+          quantity: parseInt(formData.quantity),
+          preferredPrice: parseInt(formData.preferredPrice),
+          deliveryCity: formData.deliveryCity,
+          deliveryState: formData.deliveryState,
+          deliveryDate: formData.deliveryDate
+        });
         alert('✅ Request posted successfully! Farmers will be notified.');
         router.push('/dashboard/trader');
     } catch (err: any) {
@@ -79,7 +86,7 @@ export default function CreateRequestPage() {
                             required
                             className="px-8 py-5 bg-white/5 border border-white/10 rounded-2xl outline-none font-bold"
                             value={formData.quantity}
-                            onChange={(e) => setFormData({...formData, quantity: Number(e.target.value)})}
+                            onChange={(e) => setFormData({...formData, quantity: e.target.value})}
                         />
                         <input 
                             type="number" 
@@ -87,7 +94,7 @@ export default function CreateRequestPage() {
                             required
                             className="px-8 py-5 bg-white/5 border border-white/10 rounded-2xl outline-none font-bold"
                             value={formData.preferredPrice}
-                            onChange={(e) => setFormData({...formData, preferredPrice: Number(e.target.value)})}
+                            onChange={(e) => setFormData({...formData, preferredPrice: e.target.value})}
                         />
                     </div>
                 </div>

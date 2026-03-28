@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -11,7 +15,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "incremental": true,
     "plugins": [
       {
@@ -19,11 +23,21 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@agrochain/ui": ["../../packages/ui/src"],
-      "@agrochain/api": ["../../packages/api/src"],
-      "@agrochain/blockchain": ["../../packages/blockchain/src"],
-      "@agrochain/store": ["../../packages/store/src"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@agrochain/ui": [
+        "../../packages/ui/src"
+      ],
+      "@agrochain/api": [
+        "../../packages/api/src"
+      ],
+      "@agrochain/blockchain": [
+        "../../packages/blockchain/src"
+      ],
+      "@agrochain/store": [
+        "../../packages/store/src"
+      ]
     }
   },
   "include": [
@@ -34,5 +48,7 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

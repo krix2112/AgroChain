@@ -9,19 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@agrochain/ui": "*",
     "@agrochain/api": "*",
     "@agrochain/blockchain": "*",
     "@agrochain/store": "*",
+    "@agrochain/ui": "*",
     "@tanstack/react-query": "^5.0.0",
     "axios": "^1.9.0",
     "ethers": "^6.16.0",
     "html5-qrcode": "^2.3.8",
     "js-cookie": "^3.0.5",
+    "lucide-react": "^1.7.0",
+    "motion": "^12.38.0",
     "next": "^15.1.0",
     "qrcode.react": "^4.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-native-web": "^0.21.2",
     "zustand": "^5.0.0"
   },
   "devDependencies": {

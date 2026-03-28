@@ -1,7 +1,7 @@
 // apps/web/src/app/wallet/page.tsx
 'use client';
 import React, { useEffect, useState } from 'react';
-import { getMe } from '../../services/api';
+import { authAPI } from '@agrochain/api';
 import Sidebar from '../../components/Sidebar';
 
 export default function WalletPage() {
@@ -9,7 +9,9 @@ export default function WalletPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getMe().then(setUser).finally(() => setLoading(false));
+    authAPI.getMe()
+      .then(res => setUser(res.data.user))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <div className="min-h-screen bg-black" />;

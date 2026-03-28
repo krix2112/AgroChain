@@ -14,7 +14,7 @@ export default function DashboardRouter() {
       try {
         const meRes = await authAPI.getMe();
         const user = meRes.data.user;
-        
+
         if (user.role === 'farmer') {
           router.push('/dashboard/farmer');
         } else if (user.role === 'trader') {

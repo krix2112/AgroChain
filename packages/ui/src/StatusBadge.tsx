@@ -1,5 +1,3 @@
-import { View, Text, StyleSheet } from 'react-native'
-
 interface StatusBadgeProps {
   state: string
 }
@@ -17,24 +15,18 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ state }) => {
   }
 
   return (
-    <View style={[styles.badge, { backgroundColor: getBackgroundColor() }]}>
-      <Text style={styles.text}>{state}</Text>
-    </View>
+    <span style={{
+      display: 'inline-block',
+      padding: '4px 8px',
+      borderRadius: '4px',
+      backgroundColor: getBackgroundColor(),
+      color: 'white',
+      fontSize: '12px',
+      fontWeight: 'bold'
+    }}>
+      {state}
+    </span>
   )
 }
-
-const styles = StyleSheet.create({
-  badge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-    alignSelf: 'flex-start'
-  },
-  text: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: 'bold'
-  }
-})
 
 export default StatusBadge

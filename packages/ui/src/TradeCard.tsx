@@ -1,89 +1,59 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import StatusBadge from './StatusBadge'
 
 interface TradeCardProps {
-  id: number
-  cropName: string
-  quantity: number
-  price: number
-  state: string
-  farmerName: string
-  traderName: string
-  onPress: () => void
+  trade?: any
+  highlight?: boolean
 }
 
-const TradeCard: React.FC<TradeCardProps> = ({
-  cropName,
-  quantity,
-  price,
-  state,
-  farmerName,
-  traderName,
-  onPress
-}) => {
+const TradeCard: React.FC<TradeCardProps> = ({ trade, highlight }) => {
+  if (!trade) return null
+
+  const cropName = trade.cropName || 'Unknown Crop'
+  const quantity = trade.quantity || 0
+  const price = trade.price || 0
+  const state = trade.state || 'UNKNOWN'
+  const farmerName = trade.farmer?.name || trade.farmer || 'Unknown'
+  const traderName = trade.trader?.name || trade.trader || 'Unknown'
+
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
-      <View style={styles.topRow}>
-        <Text style={styles.cropName}>{cropName}</Text>
+    <div style={{
+      padding: '16px',
+      margin: '8px',
+      borderRadius: '8px',
+      backgroundColor: highlight ? '#1a1a1a' : 'white',
+      border: highlight ? '1px solid #008000' : 'none',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+    }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '8px'
+      }}>
+        <span style={{
+          fontSize: '18px',
+          fontWeight: 'bold',
+          color: highlight ? 'white' : '#333'
+        }}>{cropName}</span>
         <StatusBadge state={state} />
-      </View>
-      <Text style={styles.middle}>{`${quantity}kg · ₹${price}`}</Text>
-      <View style={styles.bottomRow}>
-        <Text style={styles.names}>{`Farmer: ${farmerName} → Trader: ${traderName}`}</Text>
-        <TouchableOpacity style={styles.arrowButton} onPress={onPress}>
-          <Text style={styles.arrow}>→</Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
+      </div>
+      <div style={{
+        fontSize: '14px',
+        color: highlight ? '#999' : '#666',
+        marginBottom: '8px'
+      }}>{`${quantity}kg · ₹${price}`}</div>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <span style={{
+          fontSize: '12px',
+          color: highlight ? '#999' : '#666'
+        }}>{`Farmer: ${farmerName} → Trader: ${traderName}`}</span>
+      </div>
+    </div>
   )
 }
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: 'white',
-    padding: 16,
-    margin: 8,
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2
-  },
-  topRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8
-  },
-  cropName: {
-    fontSize: 18,
-    fontWeight: 'bold'
-  },
-  middle: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 8
-  },
-  bottomRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  names: {
-    fontSize: 12,
-    color: '#666',
-    flex: 1
-  },
-  arrowButton: {
-    padding: 8,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 4
-  },
-  arrow: {
-    fontSize: 16,
-    color: '#333'
-  }
-})
 
 export default TradeCard

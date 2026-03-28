@@ -1,7 +1,7 @@
 // apps/web/src/app/inventory/page.tsx
 'use client';
 import React, { useEffect, useState } from 'react';
-import { getMyTrades, getMe } from '../../services/api';
+import { authAPI, tradeAPI } from '@agrochain/api';
 import Sidebar from '../../components/Sidebar';
 
 export default function InventoryPage() {
@@ -12,9 +12,10 @@ export default function InventoryPage() {
   useEffect(() => {
     const init = async () => {
       try {
-        const u = await getMe();
-        setUser(u);
-        const data = await getMyTrades();
+        const uRes = await authAPI.getMe();
+        setUser(uRes.data.user);
+        const tradesRes = await tradeAPI.getMyTrades();
+        const data = tradesRes.data;
         setTrades(data);
       } catch (err) {
         console.error(err);

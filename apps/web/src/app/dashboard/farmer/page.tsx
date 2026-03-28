@@ -49,13 +49,13 @@ export default function FarmerDashboard() {
             <p className="text-zinc-500 font-medium">Manage your crops and trade requests</p>
           </div>
           <div className="flex gap-4">
-            <button 
+            <button
               onClick={() => router.push('/listing/create')}
               className="px-8 py-4 bg-emerald-500 text-black font-black rounded-2xl shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:scale-105 transition-all text-sm"
             >
               + List New Crop
             </button>
-            <button 
+            <button
               onClick={() => router.push('/requests')}
               className="px-8 py-4 border border-zinc-800 text-white font-black rounded-2xl hover:bg-white/5 transition-all text-sm"
             >
@@ -105,7 +105,7 @@ export default function FarmerDashboard() {
                                     <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-black">{t.state}</span>
                                 </td>
                                 <td className="px-8 py-6">
-                                    <button 
+                                    <button
                                         onClick={() => router.push(`/trade/${t.tradeId || t._id}`)}
                                         className="text-xs font-bold text-emerald-500 hover:underline"
                                     >

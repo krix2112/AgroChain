@@ -48,13 +48,13 @@ export default function TraderDashboard() {
             <p className="text-zinc-500 font-medium">Monitoring your acquisitions and requests</p>
           </div>
           <div className="flex gap-4">
-            <button 
+            <button
               onClick={() => router.push('/marketplace')}
               className="px-8 py-4 bg-emerald-500 text-black font-black rounded-2xl shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:scale-105 transition-all text-sm"
             >
               Browse Marketplace
             </button>
-            <button 
+            <button
               onClick={() => router.push('/request/create')}
               className="px-8 py-4 border border-cyan-500/30 text-cyan-400 font-black rounded-2xl hover:bg-cyan-500/10 transition-all text-sm"
             >
@@ -110,7 +110,7 @@ export default function TraderDashboard() {
                                     <span className="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-full text-[10px] font-black">{t.state}</span>
                                 </td>
                                 <td className="px-8 py-6">
-                                    <button 
+                                    <button
                                         onClick={() => router.push(`/trade/${t.tradeId || t._id}`)}
                                         className="px-4 py-2 bg-white/5 rounded-xl text-[10px] font-black hover:bg-white/10 transition-all"
                                     >

@@ -15,7 +15,7 @@ export default function MarketplacePage() {
         const uRes = await authAPI.getMe();
         setUser(uRes.data.user);
         const lRes = await listingAPI.getListings();
-        setListings(lRes.data);
+        setListings(lRes.data.listings);
       } catch (err) {
         console.error(err);
       } finally {

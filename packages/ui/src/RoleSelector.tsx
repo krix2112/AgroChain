@@ -1,5 +1,3 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-
 interface RoleSelectorProps {
   selected: string
   onSelect: (role: string) => void
@@ -13,47 +11,34 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({ selected, onSelect }) => {
   ]
 
   return (
-    <View style={styles.container}>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      padding: '16px'
+    }}>
       {roles.map(role => (
-        <TouchableOpacity
+        <button
           key={role.key}
-          style={[
-            styles.card,
-            selected === role.key && styles.selected
-          ]}
-          onPress={() => onSelect(role.key)}
+          onClick={() => onSelect(role.key)}
+          style={{
+            flex: 1,
+            padding: '16px',
+            margin: '0 4px',
+            borderRadius: '8px',
+            borderWidth: 2,
+            borderColor: selected === role.key ? '#008000' : '#ccc',
+            backgroundColor: selected === role.key ? '#e6f7e6' : 'white',
+            cursor: 'pointer',
+            fontSize: '14px',
+            color: '#333'
+          }}
         >
-          <Text style={styles.label}>{role.label}</Text>
-        </TouchableOpacity>
+          {role.label}
+        </button>
       ))}
-    </View>
+    </div>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 16
-  },
-  card: {
-    flex: 1,
-    padding: 16,
-    marginHorizontal: 4,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: '#ccc',
-    backgroundColor: 'white',
-    alignItems: 'center'
-  },
-  selected: {
-    borderColor: '#008000',
-    backgroundColor: '#e6f7e6'
-  },
-  label: {
-    fontSize: 14,
-    color: '#333'
-  }
-})
 
 export default RoleSelector
