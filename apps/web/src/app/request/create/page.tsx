@@ -4,6 +4,15 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { authAPI, requestAPI } from '@agrochain/api';
 import Sidebar from '../../../components/Sidebar';
+import { Button } from "@/components/ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default function CreateRequestPage() {
   const router = useRouter();
@@ -12,8 +21,8 @@ export default function CreateRequestPage() {
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     cropName: '',
-    quantity: '',
-    preferredPrice: '',
+    quantity: '' as string | number,
+    preferredPrice: '' as string | number,
     deliveryCity: '',
     deliveryState: '',
     deliveryDate: ''
@@ -38,7 +47,12 @@ export default function CreateRequestPage() {
     setSubmitting(true);
     
     try {
-        await requestAPI.createRequest(formData);
+        const payload = {
+            ...formData,
+            quantity: Number(formData.quantity),
+            preferredPrice: Number(formData.preferredPrice)
+        };
+        await requestAPI.createRequest(payload as any);
         alert('✅ Request posted successfully! Farmers will be notified.');
         router.push('/dashboard/trader');
     } catch (err: any) {
@@ -55,7 +69,23 @@ export default function CreateRequestPage() {
       <Sidebar user={user} activePath="/dashboard" />
       
       <main className="flex-1 lg:ml-72 p-8 lg:p-12">
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-2xl mx-auto">
+            <Breadcrumb className="mb-8">
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/requests">Requests</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Create Request</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+
             <header className="mb-12 text-center">
                 <h1 className="text-4xl font-black mb-2 text-cyan-400">Post a Request</h1>
                 <p className="text-zinc-500 font-medium">Tell farmers exactly what you need and where</p>
@@ -121,12 +151,13 @@ export default function CreateRequestPage() {
                     />
                 </div>
 
-                <button 
+                <Button 
+                    type="submit"
                     disabled={submitting}
-                    className="w-full py-6 bg-cyan-500 text-black font-black rounded-3xl shadow-[0_0_30px_rgba(34,211,238,0.2)] hover:scale-[1.02] active:scale-95 transition-all text-lg"
+                    className="w-full py-8 bg-cyan-500 text-black font-black rounded-3xl shadow-[0_0_30px_rgba(34,211,238,0.2)] hover:bg-cyan-400 text-lg"
                 >
                     {submitting ? 'Posting...' : 'Post Request'}
-                </button>
+                </Button>
             </form>
         </div>
       </main>

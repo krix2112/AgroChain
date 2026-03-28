@@ -1,8 +1,12 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+"use client";
+
+"use client";
+
+import React from 'react';
 
 interface RoleSelectorProps {
-  selected: string
-  onSelect: (role: string) => void
+  selected: string;
+  onSelect: (role: string) => void;
 }
 
 const RoleSelector: React.FC<RoleSelectorProps> = ({ selected, onSelect }) => {
@@ -10,50 +14,25 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({ selected, onSelect }) => {
     { key: 'farmer', label: '🌾 Farmer' },
     { key: 'trader', label: '🤝 Trader' },
     { key: 'transporter', label: '🚛 Transporter' }
-  ]
+  ];
 
   return (
-    <View style={styles.container}>
+    <div className="flex flex-wrap justify-center gap-4 p-4">
       {roles.map(role => (
-        <TouchableOpacity
+        <button
           key={role.key}
-          style={[
-            styles.card,
-            selected === role.key && styles.selected
-          ]}
-          onPress={() => onSelect(role.key)}
+          onClick={() => onSelect(role.key)}
+          className={`flex-1 min-w-[120px] p-4 rounded-2xl border-2 transition-all font-bold text-sm ${
+            selected === role.key 
+            ? 'border-emerald-500 bg-emerald-500/10 text-white' 
+            : 'border-white/5 bg-zinc-900/40 text-zinc-500 hover:border-white/10'
+          }`}
         >
-          <Text style={styles.label}>{role.label}</Text>
-        </TouchableOpacity>
+          {role.label}
+        </button>
       ))}
-    </View>
-  )
-}
+    </div>
+  );
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 16
-  },
-  card: {
-    flex: 1,
-    padding: 16,
-    marginHorizontal: 4,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: '#ccc',
-    backgroundColor: 'white',
-    alignItems: 'center'
-  },
-  selected: {
-    borderColor: '#008000',
-    backgroundColor: '#e6f7e6'
-  },
-  label: {
-    fontSize: 14,
-    color: '#333'
-  }
-})
-
-export default RoleSelector
+export default RoleSelector;

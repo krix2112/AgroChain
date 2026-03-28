@@ -1,40 +1,30 @@
-import { View, Text, StyleSheet } from 'react-native'
+"use client";
+
+"use client";
+
+import React from 'react';
 
 interface StatusBadgeProps {
-  state: string
+  state: string;
 }
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ state }) => {
-  const getBackgroundColor = () => {
+  const getColors = () => {
     switch (state.toUpperCase()) {
-      case 'CREATED': return '#808080'
-      case 'AGREED': return '#0000FF'
-      case 'IN_DELIVERY': return '#FFFF00'
-      case 'DELIVERED': return '#FFA500'
-      case 'COMPLETED': return '#008000'
-      default: return '#808080'
+      case 'CREATED': return 'bg-gray-500/10 text-gray-400 border-gray-500/20';
+      case 'AGREED': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+      case 'IN_DELIVERY': return 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20';
+      case 'DELIVERED': return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
+      case 'COMPLETED': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+      default: return 'bg-gray-500/10 text-gray-400 border-gray-500/20';
     }
   }
 
   return (
-    <View style={[styles.badge, { backgroundColor: getBackgroundColor() }]}>
-      <Text style={styles.text}>{state}</Text>
-    </View>
-  )
-}
+    <div className={`px-2 py-1 rounded text-xs font-bold border ${getColors()}`}>
+      {state}
+    </div>
+  );
+};
 
-const styles = StyleSheet.create({
-  badge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-    alignSelf: 'flex-start'
-  },
-  text: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: 'bold'
-  }
-})
-
-export default StatusBadge
+export default StatusBadge;

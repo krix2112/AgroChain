@@ -1,20 +1,19 @@
-import { View } from 'react-native'
+"use client";
+
+import React from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 
 interface QRDisplayProps {
-  value: string
-  size?: number
+  value: string;
+  size?: number;
 }
 
 const QRDisplay: React.FC<QRDisplayProps> = ({ value, size = 200 }) => {
-  const isWeb = typeof window !== 'undefined'
+  return (
+    <div className="bg-white p-2 rounded-xl inline-block">
+      <QRCodeSVG value={value} size={size} />
+    </div>
+  );
+};
 
-  if (isWeb) {
-    const { QRCodeSVG } = require('qrcode.react')
-    return <QRCodeSVG value={value} size={size} />
-  } else {
-    const QRCode = require('react-native-qrcode-svg')
-    return <QRCode value={value} size={size} />
-  }
-}
-
-export default QRDisplay
+export default QRDisplay;

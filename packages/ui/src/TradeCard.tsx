@@ -1,15 +1,19 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import StatusBadge from './StatusBadge'
+"use client";
+
+"use client";
+
+import React from 'react';
+import StatusBadge from './StatusBadge';
 
 interface TradeCardProps {
-  id: number
-  cropName: string
-  quantity: number
-  price: number
-  state: string
-  farmerName: string
-  traderName: string
-  onPress: () => void
+  id: number;
+  cropName: string;
+  quantity: number;
+  price: number;
+  state: string;
+  farmerName: string;
+  traderName: string;
+  onPress: () => void;
 }
 
 const TradeCard: React.FC<TradeCardProps> = ({
@@ -22,68 +26,25 @@ const TradeCard: React.FC<TradeCardProps> = ({
   onPress
 }) => {
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
-      <View style={styles.topRow}>
-        <Text style={styles.cropName}>{cropName}</Text>
+    <div 
+      onClick={onPress}
+      className="bg-zinc-900/40 border border-white/5 p-6 m-2 rounded-[32px] hover:border-emerald-500/20 transition-all cursor-pointer group"
+    >
+      <div className="flex justify-between items-start mb-4">
+        <h3 className="text-xl font-bold group-hover:text-emerald-400 transition-colors uppercase tracking-tight">{cropName}</h3>
         <StatusBadge state={state} />
-      </View>
-      <Text style={styles.middle}>{`${quantity}kg · ₹${price}`}</Text>
-      <View style={styles.bottomRow}>
-        <Text style={styles.names}>{`Farmer: ${farmerName} → Trader: ${traderName}`}</Text>
-        <TouchableOpacity style={styles.arrowButton} onPress={onPress}>
-          <Text style={styles.arrow}>→</Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
-  )
-}
+      </div>
+      <p className="text-sm text-zinc-500 font-medium mb-4">{`${quantity}kg · ₹${price}`}</p>
+      <div className="flex justify-between items-center bg-white/[0.02] border border-white/5 p-4 rounded-2xl">
+        <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest leading-none flex-1">
+          Farmer: {farmerName} <br/> <span className="text-emerald-500/40">→</span> Trader: {traderName}
+        </p>
+        <button className="p-2 bg-zinc-800 rounded-xl hover:bg-emerald-500 hover:text-black transition-all">
+          <span className="font-black">→</span>
+        </button>
+      </div>
+    </div>
+  );
+};
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: 'white',
-    padding: 16,
-    margin: 8,
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2
-  },
-  topRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8
-  },
-  cropName: {
-    fontSize: 18,
-    fontWeight: 'bold'
-  },
-  middle: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 8
-  },
-  bottomRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  names: {
-    fontSize: 12,
-    color: '#666',
-    flex: 1
-  },
-  arrowButton: {
-    padding: 8,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 4
-  },
-  arrow: {
-    fontSize: 16,
-    color: '#333'
-  }
-})
-
-export default TradeCard
+export default TradeCard;
