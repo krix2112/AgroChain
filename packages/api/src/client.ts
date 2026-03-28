@@ -1,27 +1,16 @@
 import axios, { type InternalAxiosRequestConfig, type AxiosResponse, type AxiosError } from 'axios'
 
 // ─── Platform-safe storage helpers ───────────────────────────────────────────
-// localStorage doesn't exist in React Native; AsyncStorage is async.
-// We expose a unified interface so the interceptors work on both platforms.
+const getToken = (): string|null => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('agrochain_token')
+  }
+  return null
+}
 
-const isWeb = typeof window !== 'undefined' && typeof localStorage !== 'undefined'
-
-const storage = {
-  getItem: async (key: string): Promise<string | null> => {
-    if (isWeb) {
-      return localStorage.getItem(key)
-    }
-    // React Native — dynamically imported so the web bundle never touches it
-    const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default
-    return AsyncStorage.getItem(key)
-  },
-  clear: async (): Promise<void> => {
-    if (isWeb) {
-      localStorage.clear()
-      return
-    }
-    const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default
-    await AsyncStorage.clear()
+const clearStorage = (): void => {
+  if (typeof window !== 'undefined') {
+    localStorage.clear()
   }
 }
 
@@ -37,7 +26,7 @@ const client = axios.create({
 // Request interceptor — attach Bearer token from whichever storage is available
 client.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    const token = await storage.getItem('agrochain_token')
+    const token = getToken()
     if (token) config.headers.Authorization = `Bearer ${token}`
     return config
   },
@@ -49,11 +38,10 @@ client.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
     if (error.response?.status === 401) {
-      await storage.clear()
-      if (isWeb) {
+      clearStorage()
+      if (typeof window !== 'undefined') {
         window.location.href = '/login'
       }
-      // On mobile, the auth store's loadFromStorage will handle the redirect
     }
     return Promise.reject(error)
   }

@@ -1,0 +1,62 @@
+﻿node.exe : 
+ProviderError: failed to 
+broadcast transaction: 
+provided fee < minimum 
+global fee 
+(3600000000000000000000 
+< 
+6144390841167123000000). 
+Please increase the 
+priority tip (for 
+EIP-1559 txs) or the gas 
+prices (for access list 
+or legacy txs): 
+insufficient fee: 
+insufficient fee [cosmoss
+dk.io/errors@v1.0.2/error
+s.go:77]
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo       
+       : NotSpecified:   
+  (ProviderError: ...2   
+ /errors.go:77]:Strin    
+g) [], RemoteExcepti    
+on
+    + FullyQualifiedErro 
+   rId : NativeCommandE  
+  rror
+ 
+    at 
+HttpProvider.request (F:\
+AgroChain-Projects\AgroCh
+ain\contracts\node_module
+s\hardhat\src\internal\co
+re\providers\http.ts:116:
+21)
+    at processTicksAndRej
+ections (node:internal/pr
+ocess/task_queues:105:5)
+    at HardhatEthersSigne
+r.sendTransaction (F:\Agr
+oChain-Projects\AgroChain
+\contracts\node_modules\@
+nomicfoundation\hardhat-e
+thers\src\signers.ts:185:
+18)
+    at 
+ContractFactory.deploy (F
+:\AgroChain-Projects\Agro
+Chain\contracts\node_modu
+les\ethers\src.ts\contrac
+t\factory.ts:111:24)
+    at main (file:///F:/A
+groChain-Projects/AgroCha
+in/contracts/scripts/depl
+oy.js:11:28)

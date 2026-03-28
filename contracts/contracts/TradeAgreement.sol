@@ -3,6 +3,18 @@ pragma solidity 0.8.28;
 
 contract TradeAgreement {
     enum State { CREATED, AGREED, IN_DELIVERY, DELIVERED, COMPLETED }
+    enum RequestState { OPEN, ACCEPTED, CANCELLED }
+
+    struct CropRequest {
+        uint256 requestId;
+        address trader;
+        string cropName;
+        uint256 quantity;
+        uint256 preferredPrice;
+        RequestState state;
+        uint256 linkedTradeId;
+        uint256 createdAt;
+    }
 
     struct Trade {
         uint256 id;
@@ -23,9 +35,16 @@ contract TradeAgreement {
     mapping(address => uint256[]) public traderTrades;
     uint256 public tradeCount;
 
+    mapping(uint256 => CropRequest) public cropRequests;
+    mapping(address => uint256[]) public traderRequests;
+    uint256 public requestCount;
+
     event TradeCreated(uint256 id, address farmer, address trader, string cropName);
     event StateUpdated(uint256 id, State newState, address by);
     event PaymentProofAdded(uint256 id, string utrHash);
+    
+    event RequestCreated(uint256 requestId, address trader, string cropName);
+    event RequestAccepted(uint256 requestId, address farmer, uint256 tradeId);
 
     modifier onlyFarmer(uint256 id) {
         require(msg.sender == trades[id].farmer, "Not farmer");
@@ -115,5 +134,62 @@ contract TradeAgreement {
 
     function getTradesByTrader(address addr) public view returns (uint256[] memory) {
         return traderTrades[addr];
+    }
+
+    function createCropRequest(string memory cropName, uint256 quantity, uint256 preferredPrice) public {
+        requestCount++;
+        uint256 reqId = requestCount;
+
+        cropRequests[reqId] = CropRequest({
+            requestId: reqId,
+            trader: msg.sender,
+            cropName: cropName,
+            quantity: quantity,
+            preferredPrice: preferredPrice,
+            state: RequestState.OPEN,
+            linkedTradeId: 0,
+            createdAt: block.timestamp
+        });
+
+        traderRequests[msg.sender].push(reqId);
+
+        emit RequestCreated(reqId, msg.sender, cropName);
+    }
+
+    function acceptCropRequest(uint256 requestId) public {
+        require(cropRequests[requestId].state == RequestState.OPEN, "Request not open");
+        
+        CropRequest memory req = cropRequests[requestId];
+        
+        uint256 newTradeId = createTrade(req.trader, req.cropName, req.quantity, req.preferredPrice);
+        
+        cropRequests[requestId].state = RequestState.ACCEPTED;
+        cropRequests[requestId].linkedTradeId = newTradeId;
+        
+        emit RequestAccepted(requestId, msg.sender, newTradeId);
+    }
+
+    function getCropRequest(uint256 requestId) public view returns (CropRequest memory) {
+        return cropRequests[requestId];
+    }
+
+    function getAllOpenRequests() public view returns (CropRequest[] memory) {
+        uint256 openCount = 0;
+        for (uint256 i = 1; i <= requestCount; i++) {
+            if (cropRequests[i].state == RequestState.OPEN) {
+                openCount++;
+            }
+        }
+
+        CropRequest[] memory openReqs = new CropRequest[](openCount);
+        uint256 index = 0;
+        for (uint256 i = 1; i <= requestCount; i++) {
+            if (cropRequests[i].state == RequestState.OPEN) {
+                openReqs[index] = cropRequests[i];
+                index++;
+            }
+        }
+        
+        return openReqs;
     }
 }

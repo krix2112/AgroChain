@@ -12,7 +12,7 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
     // Check if window is defined (for SSR)
     if (typeof window !== 'undefined') {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('agrochain_token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

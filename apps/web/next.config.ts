@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
       ...config.resolve.alias,
       react: path.dirname(require.resolve('react/package.json')),
       'react-dom': path.dirname(require.resolve('react-dom/package.json')),
+      '@react-native-async-storage/async-storage': require.resolve('./src/mocks/async-storage.js'),
     };
     return config;
   },

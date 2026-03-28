@@ -1,0 +1,6 @@
+module.exports = {
+  getItem: () => Promise.resolve(null),
+  setItem: () => Promise.resolve(),
+  removeItem: () => Promise.resolve(),
+  clear: () => Promise.resolve(),
+}
