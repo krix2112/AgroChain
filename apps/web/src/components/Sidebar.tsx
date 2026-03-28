@@ -38,7 +38,14 @@ const Sidebar = ({ user, activePath }: { user: any, activePath: string }) => {
           <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-emerald-500 to-cyan-500"></div>
           <div>
             <p className="font-bold text-sm truncate w-32">{user?.name || 'Loading...'}</p>
-            <p className="text-xs text-zinc-500 capitalize">{user?.role}</p>
+            <div className="flex flex-col">
+              <p className="text-[10px] text-zinc-500 capitalize leading-tight">{user?.role}</p>
+              {user?.walletAddress && (
+                <p className="text-[10px] font-mono text-emerald-500/80 mt-1 italic">
+                  {user.walletAddress.slice(0, 6)}...{user.walletAddress.slice(-4)}
+                </p>
+              )}
+            </div>
           </div>
         </div>
         <button className="w-full py-2 bg-red-500/10 text-red-400 rounded-xl text-xs font-bold border border-red-500/20 hover:bg-red-500/20 transition-all">

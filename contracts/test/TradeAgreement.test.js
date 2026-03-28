@@ -1,5 +1,6 @@
-const { expect } = require("chai");
-const { ethers } = require("hardhat");
+import { expect } from "chai";
+import hardhat from "hardhat";
+const { ethers } = hardhat;
 
 describe("TradeAgreement", function () {
   let TradeAgreement;
@@ -93,6 +94,8 @@ describe("TradeAgreement", function () {
     await tradeAgreement.connect(trader).assignTransporter(1, transporter.address);
     await tradeAgreement.connect(transporter).markPickedUp(1);
     await tradeAgreement.connect(transporter).markDelivered(1);
+    
+    await tradeAgreement.connect(trader).addPaymentProof(1, "UTR123");
 
     await expect(tradeAgreement.connect(farmer).completeTrade(1))
       .to.emit(tradeAgreement, "StateUpdated")
@@ -100,5 +103,51 @@ describe("TradeAgreement", function () {
 
     const trade = await tradeAgreement.getTrade(1);
     expect(trade.state).to.equal(4);
+  });
+
+  describe("CropRequest Feature", function () {
+    it("Test 1: trader can createCropRequest", async function () {
+      await tradeAgreement.connect(trader).createCropRequest("Wheat", 100, 2000);
+      const count = await tradeAgreement.requestCount();
+      expect(count).to.equal(1);
+      
+      const req = await tradeAgreement.getCropRequest(1);
+      expect(req.state).to.equal(0); // OPEN
+      expect(req.trader).to.equal(trader.address);
+    });
+
+    it("Test 2: farmer can acceptCropRequest", async function () {
+      await tradeAgreement.connect(trader).createCropRequest("Wheat", 100, 2000);
+      await tradeAgreement.connect(farmer).acceptCropRequest(1);
+      
+      const req = await tradeAgreement.getCropRequest(1);
+      expect(req.state).to.equal(1); // ACCEPTED
+      expect(req.linkedTradeId).to.be.gt(0);
+      
+      const tradeCount = await tradeAgreement.tradeCount();
+      expect(tradeCount).to.equal(1);
+    });
+
+    it("Test 3: cannot accept same request twice", async function () {
+      await tradeAgreement.connect(trader).createCropRequest("Wheat", 100, 2000);
+      await tradeAgreement.connect(farmer).acceptCropRequest(1);
+      
+      await expect(
+        tradeAgreement.connect(owner).acceptCropRequest(1)
+      ).to.be.revertedWith("Request not open");
+    });
+
+    it("Test 4: getAllOpenRequests returns only OPEN ones", async function () {
+      await tradeAgreement.connect(trader).createCropRequest("Wheat1", 10, 100);
+      await tradeAgreement.connect(trader).createCropRequest("Wheat2", 20, 200);
+      await tradeAgreement.connect(trader).createCropRequest("Wheat3", 30, 300);
+
+      await tradeAgreement.connect(farmer).acceptCropRequest(2);
+
+      const openRequests = await tradeAgreement.getAllOpenRequests();
+      expect(openRequests.length).to.equal(2);
+      expect(openRequests[0].cropName).to.equal("Wheat1");
+      expect(openRequests[1].cropName).to.equal("Wheat3");
+    });
   });
 });

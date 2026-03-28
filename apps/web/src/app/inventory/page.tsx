@@ -1,8 +1,17 @@
-// apps/web/src/app/inventory/page.tsx
-'use client';
+"use client";
+
 import React, { useEffect, useState } from 'react';
 import { authAPI, tradeAPI } from '@agrochain/api';
 import Sidebar from '../../components/Sidebar';
+import { Button } from "@/components/ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default function InventoryPage() {
   const [trades, setTrades] = useState<any[]>([]);
@@ -33,14 +42,29 @@ export default function InventoryPage() {
       <Sidebar user={user} activePath="/inventory" />
       
       <main className="flex-1 lg:ml-72 p-12">
+        <Breadcrumb className="mb-8">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>My Inventory</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+
         <header className="flex justify-between items-end mb-12">
           <div>
             <h1 className="text-4xl font-black mb-2">My Inventory</h1>
             <p className="text-zinc-500 font-medium">Managing your agricultural listings and trade states</p>
           </div>
-          <button className="px-6 py-3 bg-white text-black font-black rounded-xl hover:scale-105 transition-all">
+          <Button 
+            onClick={() => window.location.href = '/listing/create'}
+            className="px-6 py-3 bg-white text-black font-black rounded-xl hover:bg-emerald-400"
+          >
             + New Listing
-          </button>
+          </Button>
         </header>
 
         <div className="rounded-[40px] bg-zinc-900/20 border border-white/5 overflow-hidden backdrop-blur-3xl">
@@ -55,7 +79,7 @@ export default function InventoryPage() {
             </thead>
             <tbody className="divide-y divide-white/5">
               {trades.map((trade) => (
-                <tr key={trade._id} className="hover:bg-white/[0.02] transition-colors group">
+                <tr key={trade._id} className="hover:bg-white/[0.02] transition-colors group cursor-pointer" onClick={() => window.location.href = `/trade/${trade._id}`}>
                   <td className="px-8 py-8">
                     <p className="font-bold text-lg group-hover:text-emerald-400 transition-colors uppercase">{trade.cropName}</p>
                     <p className="text-xs text-zinc-600 font-mono">ID: {trade.tradeId}</p>

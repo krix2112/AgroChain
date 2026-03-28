@@ -1,6 +1,12 @@
+"use client";
+
+"use client";
+
+import React from 'react';
+
 interface RoleSelectorProps {
-  selected: string
-  onSelect: (role: string) => void
+  selected: string;
+  onSelect: (role: string) => void;
 }
 
 const RoleSelector: React.FC<RoleSelectorProps> = ({ selected, onSelect }) => {
@@ -8,37 +14,25 @@ const RoleSelector: React.FC<RoleSelectorProps> = ({ selected, onSelect }) => {
     { key: 'farmer', label: '🌾 Farmer' },
     { key: 'trader', label: '🤝 Trader' },
     { key: 'transporter', label: '🚛 Transporter' }
-  ]
+  ];
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      padding: '16px'
-    }}>
+    <div className="flex flex-wrap justify-center gap-4 p-4">
       {roles.map(role => (
         <button
           key={role.key}
           onClick={() => onSelect(role.key)}
-          style={{
-            flex: 1,
-            padding: '16px',
-            margin: '0 4px',
-            borderRadius: '8px',
-            borderWidth: 2,
-            borderColor: selected === role.key ? '#008000' : '#ccc',
-            backgroundColor: selected === role.key ? '#e6f7e6' : 'white',
-            cursor: 'pointer',
-            fontSize: '14px',
-            color: '#333'
-          }}
+          className={`flex-1 min-w-[120px] p-4 rounded-2xl border-2 transition-all font-bold text-sm ${
+            selected === role.key 
+            ? 'border-emerald-500 bg-emerald-500/10 text-white' 
+            : 'border-white/5 bg-zinc-900/40 text-zinc-500 hover:border-white/10'
+          }`}
         >
           {role.label}
         </button>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default RoleSelector
+export default RoleSelector;

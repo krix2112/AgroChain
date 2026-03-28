@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { authAPI } from '@agrochain/api';
+import { login, register } from '../../services/api';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -25,17 +25,19 @@ export default function LoginPage() {
 
     try {
       if (isRegister) {
-        await authAPI.register(formData);
+        await register(formData);
         // After registration, log them in
-        const res = await authAPI.login({ phone: formData.phone });
-        localStorage.setItem('agrochain_token', res.data.token);
+        const res = await login({ phone: formData.phone });
+        localStorage.setItem('agrochain_token', res.token);
+        localStorage.setItem('agrochain_user', JSON.stringify(res.user));
       } else {
-        const res = await authAPI.login({ phone: formData.phone });
-        localStorage.setItem('agrochain_token', res.data.token);
+        const res = await login({ phone: formData.phone });
+        localStorage.setItem('agrochain_token', res.token);
+        localStorage.setItem('agrochain_user', JSON.stringify(res.user));
       }
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err?.response?.data?.error || err?.message || 'Authentication failed');
+      setError(err?.message || 'Authentication failed');
     } finally {
       setLoading(false);
     }

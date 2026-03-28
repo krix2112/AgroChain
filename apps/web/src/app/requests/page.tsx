@@ -4,6 +4,15 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authAPI, requestAPI } from '@agrochain/api';
 import Sidebar from '../../components/Sidebar';
+import { Button } from "@/components/ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default function BrowseRequestsPage() {
   const router = useRouter();
@@ -45,6 +54,18 @@ export default function BrowseRequestsPage() {
       <Sidebar user={user} activePath="/requests" />
       
       <main className="flex-1 lg:ml-72 p-8 lg:p-12">
+        <Breadcrumb className="mb-8">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Trader Requests</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+
         <header className="mb-16">
             <h1 className="text-5xl font-black mb-4 uppercase tracking-tighter">Trader Requests</h1>
             <p className="text-zinc-500 font-medium text-lg">See what traders are looking for and fulfill their demand directly</p>
@@ -88,12 +109,12 @@ export default function BrowseRequestsPage() {
                             </div>
                         </div>
 
-                        <button 
+                        <Button 
                             onClick={() => handleAccept(req._id)}
-                            className="w-full py-5 bg-emerald-500 text-black font-black rounded-3xl hover:scale-[1.02] active:scale-95 transition-all shadow-[0_0_30px_rgba(16,185,129,0.2)] text-lg"
+                            className="w-full py-5 bg-emerald-500 text-black font-black rounded-3xl hover:bg-emerald-400 transition-all shadow-[0_0_30px_rgba(16,185,129,0.2)] text-lg"
                         >
                             Accept Request
-                        </button>
+                        </Button>
                     </div>
                 ))}
             </div>

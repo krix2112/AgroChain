@@ -1,97 +1,180 @@
-// apps/web/src/app/page.tsx
 'use client';
-
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function LandingPage() {
   return (
-    <div className="relative min-h-screen bg-black text-white font-sans overflow-hidden">
-      {/* Hero Background */}
-      <div className="absolute inset-0 opacity-40">
-        <Image
-          src="/hero-bg.png"
-          alt="AgroChain Hero Background"
-          fill
-          style={{ objectFit: 'cover' }}
-          className="scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black"></div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-green-950 via-green-900 to-emerald-900 text-white font-sans overflow-x-hidden">
 
-      {/* Navigation */}
-      <nav className="relative z-10 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
+      {/* Subtle background texture */}
+      <div className="fixed inset-0 opacity-10 pointer-events-none"
+        style={{
+          backgroundImage: `radial-gradient(circle at 20% 50%, #4ade80 0%, transparent 50%),
+                            radial-gradient(circle at 80% 20%, #86efac 0%, transparent 40%),
+                            radial-gradient(circle at 60% 80%, #166534 0%, transparent 50%)`
+        }}
+      />
+
+      {/* NAVBAR */}
+      <nav className="relative z-10 flex items-center justify-between px-6 py-4 md:px-12 border-b border-green-800/50 backdrop-blur-sm bg-green-950/30">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.5)]">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l.707.707M6.343 6.343l.707-.707" />
-            </svg>
-          </div>
-          <span className="text-2xl font-bold tracking-tighter text-emerald-400">AgroChain</span>
-        </div>
-        <div className="hidden md:flex items-center gap-8 text-zinc-400 font-medium">
-          <Link href="#features" className="hover:text-emerald-400 transition-colors">Features</Link>
-          <Link href="#how-it-works" className="hover:text-emerald-400 transition-colors">How it works</Link>
-          <Link href="#security" className="hover:text-emerald-400 transition-colors">Security</Link>
+          <span className="text-2xl">🌱</span>
+          <span className="text-xl font-bold tracking-tight text-green-300">AgroChain</span>
         </div>
         <div className="flex items-center gap-4">
-          <Link href="/login" className="px-6 py-2.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-all">
-            Login
+          <Link href="/login">
+            <Button variant="ghost" className="text-green-300 hover:text-green-100 hover:bg-green-800/50">Login</Button>
           </Link>
-          <Link href="/login" className="px-6 py-2.5 rounded-full bg-emerald-500 text-black font-bold hover:bg-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-all">
-            Get Started
+          <Link href="/register">
+            <Button className="bg-green-500 hover:bg-green-400 text-green-950 font-semibold shadow-lg shadow-green-500/25">
+              Get Started
+            </Button>
           </Link>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <main className="relative z-10 max-w-7xl mx-auto px-8 pt-20 pb-32">
-        <div className="max-w-3xl">
-          <h2 className="inline-block px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-semibold tracking-wide uppercase mb-6 animate-pulse">
-            Next-Gen Agricultural Supply Chain
+      {/* HERO SECTION */}
+      <section className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-24 md:py-36">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-sm font-medium mb-6">
+          <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+          Powered by Shardeum Blockchain
+        </div>
+
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
+          Direct{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-300">
+            Farm to Buyer
+          </span>{" "}
+          Trade
+        </h1>
+
+        <p className="text-lg md:text-xl text-green-200/70 max-w-2xl mb-10 leading-relaxed">
+          No middlemen. Transparent prices.<br className="hidden md:block" />
+          Every transaction stored on Shardeum Blockchain — forever.
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Link href="/register">
+            <Button size="lg" className="px-8 h-12 rounded-xl bg-green-500 hover:bg-green-400 text-green-950 font-bold text-base transition-all duration-200 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-0.5">
+              Create Account
+            </Button>
+          </Link>
+          <Link href="/login">
+            <Button size="lg" variant="outline" className="px-8 h-12 rounded-xl border-green-600 hover:border-green-400 text-green-300 hover:text-green-200 font-semibold text-base transition-all duration-200 hover:-translate-y-0.5">
+              Login Now
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* ROLE CARDS */}
+      <section className="relative z-10 px-6 md:px-12 pb-24">
+        <h2 className="text-center text-2xl font-bold text-green-200 mb-10">
+          Who are you?
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+
+          {/* Farmer Card */}
+          <div className="group relative rounded-2xl border border-green-700/50 bg-green-900/40 backdrop-blur-sm p-8 hover:border-green-500/70 hover:bg-green-800/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-green-900/50">
+            <div className="text-4xl mb-4">🌾</div>
+            <h3 className="text-xl font-bold text-green-100 mb-2">Farmer</h3>
+            <p className="text-green-300/70 text-sm leading-relaxed mb-6">
+              List your crops and get fair prices directly from traders — no middlemen cutting your earnings.
+            </p>
+            <Link href="/register?role=farmer">
+              <Button variant="secondary" className="bg-green-600 hover:bg-green-500 text-white border-none">
+                Join as Farmer →
+              </Button>
+            </Link>
+          </div>
+
+          {/* Trader Card */}
+          <div className="group relative rounded-2xl border border-green-700/50 bg-green-900/40 backdrop-blur-sm p-8 hover:border-emerald-500/70 hover:bg-green-800/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-green-900/50">
+            <div className="text-4xl mb-4">🤝</div>
+            <h3 className="text-xl font-bold text-green-100 mb-2">Trader</h3>
+            <p className="text-green-300/70 text-sm leading-relaxed mb-6">
+              Browse verified crop listings and negotiate directly with farmers at transparent prices.
+            </p>
+            <Link href="/register?role=trader">
+              <Button variant="secondary" className="bg-green-600 hover:bg-green-500 text-white border-none">
+                Join as Trader →
+              </Button>
+            </Link>
+          </div>
+
+          {/* Transporter Card */}
+          <div className="group relative rounded-2xl border border-green-700/50 bg-green-900/40 backdrop-blur-sm p-8 hover:border-teal-500/70 hover:bg-green-800/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-green-900/50">
+            <div className="text-4xl mb-4">🚛</div>
+            <h3 className="text-xl font-bold text-green-100 mb-2">Transporter</h3>
+            <p className="text-green-300/70 text-sm leading-relaxed mb-6">
+              Find delivery jobs near you and get paid automatically on successful completion.
+            </p>
+            <Link href="/register?role=transporter">
+              <Button variant="secondary" className="bg-green-600 hover:bg-green-500 text-white border-none">
+                Join as Transporter →
+              </Button>
+            </Link>
+          </div>
+
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="relative z-10 px-6 md:px-12 pb-24">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-center text-2xl font-bold text-green-200 mb-12">
+            How It Works
           </h2>
-          <h1 className="text-6xl md:text-8xl font-black leading-[1.1] tracking-tight mb-8">
-            The Future of <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-              Fair Trade
-            </span>
-          </h1>
-          <p className="text-xl text-zinc-400 mb-12 max-w-2xl leading-relaxed">
-            Eliminating middlemen and ensuring instant payments. Secure your harvest on the blockchain with real-time tracking and automated trust.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6">
-            <button className="px-10 py-5 bg-emerald-500 text-black text-lg font-black rounded-2xl flex items-center gap-3 hover:scale-105 transition-transform shadow-[0_0_40px_rgba(16,185,129,0.3)]">
-              Register as Farmer
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </button>
-            <button className="px-10 py-5 bg-zinc-900 border border-zinc-800 text-zinc-300 text-lg font-bold rounded-2xl hover:bg-zinc-800 transition-colors">
-              I'm a Trader
-            </button>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            {[
+              {
+                step: "01",
+                icon: "🌾",
+                title: "Farmer Lists Crop",
+                desc: "Farmer creates a trade listing with crop details, quantity, and price.",
+              },
+              {
+                step: "02",
+                icon: "💳",
+                title: "Trader Agrees & Pays",
+                desc: "Trader reviews the listing, agrees to the deal, and pays via UPI.",
+              },
+              {
+                step: "03",
+                icon: "⛓️",
+                title: "Proof on Blockchain",
+                desc: "Every step is recorded on Shardeum blockchain — transparent and permanent.",
+              },
+            ].map((item) => (
+              <div key={item.step} className="flex flex-col items-center text-center">
+                <div className="relative mb-4">
+                  <div className="w-16 h-16 rounded-2xl bg-green-800/60 border border-green-600/50 flex items-center justify-center text-3xl">
+                    {item.icon}
+                  </div>
+                  <span className="absolute -top-2 -right-2 text-xs font-bold text-green-500 bg-green-950 border border-green-700 rounded-full w-6 h-6 flex items-center justify-center">
+                    {item.step}
+                  </span>
+                </div>
+                <h3 className="text-base font-bold text-green-100 mb-2">{item.title}</h3>
+                <p className="text-green-400/70 text-sm leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+
+          </div>
+
+          {/* Connector line (desktop only) */}
+          <div className="hidden md:flex items-center justify-between px-20 -mt-28 mb-20 pointer-events-none">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-green-600/40 to-transparent"></div>
           </div>
         </div>
+      </section>
 
-        {/* Stats Section */}
-        <div className="mt-32 grid grid-cols-2 lg:grid-cols-4 gap-8">
-          {[
-            { label: 'Total Trades', val: '1.2K+' },
-            { label: 'Active Farmers', val: '450+' },
-            { label: 'On-chain Value', val: '$2.4M' },
-            { label: 'Avg. Delivery', val: '18 Hrs' }
-          ].map((stat, idx) => (
-            <div key={idx} className="p-8 rounded-3xl bg-zinc-900/50 border border-white/5 backdrop-blur-xl hover:border-emerald-500/30 transition-all group">
-              <span className="block text-4xl font-black mb-1 text-white group-hover:text-emerald-400 transition-colors">{stat.val}</span>
-              <span className="text-zinc-500 text-sm font-medium tracking-wider uppercase">{stat.label}</span>
-            </div>
-          ))}
-        </div>
-      </main>
+      {/* FOOTER */}
+      <footer className="relative z-10 border-t border-green-800/50 py-6 text-center text-green-500/60 text-sm">
+        Built on Shardeum Blockchain · Hackcraft 3.0
+      </footer>
 
-      {/* Decorative Orbs */}
-      <div className="absolute top-1/4 -right-24 w-96 h-96 bg-emerald-600/20 blur-[120px] rounded-full pointer-events-none"></div>
-      <div className="absolute bottom-1/4 -left-24 w-96 h-96 bg-cyan-600/20 blur-[120px] rounded-full pointer-events-none"></div>
     </div>
   );
 }

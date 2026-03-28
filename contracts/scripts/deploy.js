@@ -8,7 +8,10 @@ const __dirname = path.dirname(__filename);
 
 async function main() {
     const TradeAgreement = await hre.ethers.getContractFactory("TradeAgreement");
-    const tradeAgreement = await TradeAgreement.deploy();
+    const tradeAgreement = await TradeAgreement.deploy({
+        gasPrice: hre.ethers.parseUnits("1200000", "gwei"),
+        gasLimit: 3000000
+    });
     await tradeAgreement.waitForDeployment();
 
     const address = await tradeAgreement.getAddress();

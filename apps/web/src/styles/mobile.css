@@ -1,0 +1,383 @@
+/* ================================================================
+   AGROTRADE — Global Mobile Responsive Overrides
+   Breakpoints: ≥1024px desktop | 768-1023px tablet | <768px mobile
+   ================================================================ */
+
+/* ── Prevent body horizontal scroll ── */
+html, body {
+  overflow-x: hidden;
+}
+
+/* ── Hide / Show helpers ── */
+@media (max-width: 767px) {
+  .desktop-only { display: none !important; }
+  .mobile-show  { display: block !important; }
+  .mobile-flex  { display: flex !important; }
+}
+@media (min-width: 768px) {
+  .mobile-only  { display: none !important; }
+}
+
+/* ================================================================
+   NAVBAR — responsive
+   ================================================================ */
+.at-navbar {
+  height: 64px;
+  padding: 0 32px;
+}
+@media (max-width: 767px) {
+  .at-navbar {
+    height: 56px !important;
+    padding: 0 16px !important;
+  }
+  .at-navbar-breadcrumb  { display: none !important; }
+  .at-navbar-greeting    { display: none !important; }
+  .at-navbar-lang-full   { display: none !important; }
+  .at-navbar-lang-compact { display: flex !important; }
+}
+
+/* ================================================================
+   PAGE WRAPPER — account for smaller navbar + bottom nav on mobile
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-page-wrap {
+    padding-top: 56px !important;
+    padding-bottom: 80px !important;
+  }
+  .at-page-header {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .at-page-header h1 {
+    font-size: 26px !important;
+  }
+  .at-page-header p {
+    font-size: 13px !important;
+  }
+}
+
+/* ================================================================
+   GLASS PANELS — full width minus 32px on mobile
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-glass-panel {
+    margin-left: 16px !important;
+    margin-right: 16px !important;
+    border-radius: 16px !important;
+    padding: 20px !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    box-sizing: border-box !important;
+    width: calc(100% - 32px) !important;
+    max-width: none !important;
+  }
+}
+
+/* ================================================================
+   SELL CROP STEPPER — scrollable pills on mobile
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-stepper-wrap {
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    padding: 10px 16px !important;
+    margin: 12px 16px !important;
+    border-radius: 10px !important;
+    background: rgba(255,255,255,0.75) !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  .at-stepper-wrap::-webkit-scrollbar { display: none; }
+  .at-stepper-step {
+    display: inline-flex !important;
+    flex: none !important;
+    flex-shrink: 0 !important;
+  }
+  /* Hide vertical dividers between steps */
+  .at-stepper-divider { display: none !important; }
+}
+
+/* ================================================================
+   SELL CROP STEPS — panel & nav buttons on mobile
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-sell-container {
+    padding: 0 0 24px !important;
+    max-width: 100% !important;
+  }
+  .at-sell-nav-row {
+    padding: 0 16px !important;
+    gap: 10px !important;
+  }
+  .at-sell-nav-row button {
+    flex: 1 !important;
+    width: 48% !important;
+    font-size: 14px !important;
+  }
+  .at-qty-row {
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+  }
+  .at-price-row {
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: flex-start !important;
+  }
+  .at-price-input { width: 100% !important; }
+  .at-dispatch-input { width: 100% !important; }
+}
+
+/* ================================================================
+   BUYER OFFERS — card layout on mobile
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-buyer-card-row {
+    height: auto !important;
+    flex-direction: column !important;
+    padding: 16px !important;
+    gap: 12px !important;
+  }
+  .at-buyer-info-row {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+  }
+  .at-buyer-rating-row {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+  .at-buyer-cta-row {
+    width: 100% !important;
+  }
+  .at-buyer-view-btn { display: none !important; }
+  .at-buyer-call-btn {
+    width: 100% !important;
+    height: 48px !important;
+    border-radius: 10px !important;
+    justify-content: center !important;
+    font-size: 14px !important;
+  }
+  .at-buyer-price {
+    font-size: 18px !important;
+    text-align: right !important;
+  }
+}
+
+/* ================================================================
+   MY ORDERS — stacked cards on mobile
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-order-filter-row {
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none !important;
+  }
+  .at-order-filter-row::-webkit-scrollbar { display: none; }
+  .at-order-card {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  .at-order-btn-row {
+    flex-direction: row !important;
+    gap: 8px !important;
+  }
+  .at-order-btn-row button {
+    flex: 1 !important;
+    height: 44px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* ================================================================
+   MARKETPLACE — stacked sections on mobile
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-marketplace-grid {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+  .at-market-section {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .at-market-filter-chips {
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none !important;
+  }
+  .at-market-filter-chips::-webkit-scrollbar { display: none; }
+}
+
+/* ================================================================
+   PAYMENT — single column on mobile
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-payment-layout {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+  .at-upi-row {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .at-upi-btn {
+    width: 100% !important;
+    height: 56px !important;
+  }
+  .at-call-row {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .at-call-btn { width: 100% !important; }
+}
+
+/* ================================================================
+   SUCCESS — centered card on mobile
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-success-card {
+    width: calc(100% - 32px) !important;
+    padding: 40px 24px !important;
+    border-radius: 24px !important;
+    margin: 0 16px !important;
+  }
+  .at-success-btns {
+    flex-direction: column !important;
+    gap: 10px !important;
+    align-items: stretch !important;
+  }
+  .at-success-btns button {
+    width: 100% !important;
+    height: 52px !important;
+  }
+}
+
+/* ================================================================
+   LANGUAGE MODAL — bottom sheet on mobile
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-lang-modal-overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+  .at-lang-modal-card {
+    width: 100% !important;
+    border-radius: 24px 24px 0 0 !important;
+    padding: 32px 24px 48px !important;
+    max-width: 100% !important;
+    animation: slideUp 0.38s ease-out !important;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to   { transform: translateY(0);   opacity: 1; }
+  }
+}
+
+/* ================================================================
+   LOGIN SCREEN — full screen on mobile, hide right column
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-login-left  { width: 100% !important; padding: 32px 20px !important; overflow-y: auto !important; }
+  .at-login-right { display: none !important; }
+}
+
+/* ================================================================
+   BUYER DETAIL — stack columns on mobile
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-buyer-detail-layout {
+    flex-direction: column !important;
+    padding: 0 16px 80px !important;
+  }
+  .at-buyer-detail-col { width: 100% !important; }
+}
+
+/* ================================================================
+   ORDER TRACKING — stack on mobile
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-tracking-layout {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  .at-tracking-summary-row {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .at-tracking-summary-card { width: 100% !important; }
+  .at-tracking-stage-label { font-size: 10px !important; }
+}
+
+/* ================================================================
+   PROFILE — stack on mobile
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-profile-layout {
+    flex-direction: column !important;
+    gap: 12px !important;
+    padding: 0 16px 80px !important;
+  }
+  .at-profile-col { width: 100% !important; }
+  .at-notif-time  {
+    position: static !important;
+    display: block !important;
+    margin-top: 4px !important;
+  }
+  .at-notif-card  { flex-wrap: wrap !important; }
+}
+
+/* ================================================================
+   HOME DASHBOARD — mobile adjustments
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-home-hero { padding: 20px 16px 0 !important; }
+  .at-home-hero h1 { font-size: 28px !important; }
+  .at-home-feature-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    padding: 0 16px !important;
+  }
+  .at-home-feature-card { height: 130px !important; }
+  .at-home-section { padding: 0 16px !important; }
+}
+
+/* ================================================================
+   FOOTER — hide on mobile (bottom nav replaces it)
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-footer { display: none !important; }
+}
+
+/* ================================================================
+   FLOATING HELP BUTTON — mobile size
+   ================================================================ */
+@media (max-width: 767px) {
+  .at-help-btn {
+    bottom: 76px !important;
+    right: 16px !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+  }
+  .at-help-btn-label { display: none !important; }
+}
+
+/* ================================================================
+   TABLET (768-1023px) adjustments
+   ================================================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .at-glass-panel { padding: 24px 28px !important; }
+  .at-marketplace-grid { gap: 16px !important; }
+  .at-profile-layout   { gap: 16px !important; }
+}

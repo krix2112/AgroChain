@@ -1,59 +1,50 @@
-import StatusBadge from './StatusBadge'
+"use client";
+
+"use client";
+
+import React from 'react';
+import StatusBadge from './StatusBadge';
 
 interface TradeCardProps {
-  trade?: any
-  highlight?: boolean
+  id: number;
+  cropName: string;
+  quantity: number;
+  price: number;
+  state: string;
+  farmerName: string;
+  traderName: string;
+  onPress: () => void;
 }
 
-const TradeCard: React.FC<TradeCardProps> = ({ trade, highlight }) => {
-  if (!trade) return null
-
-  const cropName = trade.cropName || 'Unknown Crop'
-  const quantity = trade.quantity || 0
-  const price = trade.price || 0
-  const state = trade.state || 'UNKNOWN'
-  const farmerName = trade.farmer?.name || trade.farmer || 'Unknown'
-  const traderName = trade.trader?.name || trade.trader || 'Unknown'
-
+const TradeCard: React.FC<TradeCardProps> = ({
+  cropName,
+  quantity,
+  price,
+  state,
+  farmerName,
+  traderName,
+  onPress
+}) => {
   return (
-    <div style={{
-      padding: '16px',
-      margin: '8px',
-      borderRadius: '8px',
-      backgroundColor: highlight ? '#1a1a1a' : 'white',
-      border: highlight ? '1px solid #008000' : 'none',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-    }}>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '8px'
-      }}>
-        <span style={{
-          fontSize: '18px',
-          fontWeight: 'bold',
-          color: highlight ? 'white' : '#333'
-        }}>{cropName}</span>
+    <div 
+      onClick={onPress}
+      className="bg-zinc-900/40 border border-white/5 p-6 m-2 rounded-[32px] hover:border-emerald-500/20 transition-all cursor-pointer group"
+    >
+      <div className="flex justify-between items-start mb-4">
+        <h3 className="text-xl font-bold group-hover:text-emerald-400 transition-colors uppercase tracking-tight">{cropName}</h3>
         <StatusBadge state={state} />
       </div>
-      <div style={{
-        fontSize: '14px',
-        color: highlight ? '#999' : '#666',
-        marginBottom: '8px'
-      }}>{`${quantity}kg · ₹${price}`}</div>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <span style={{
-          fontSize: '12px',
-          color: highlight ? '#999' : '#666'
-        }}>{`Farmer: ${farmerName} → Trader: ${traderName}`}</span>
+      <p className="text-sm text-zinc-500 font-medium mb-4">{`${quantity}kg · ₹${price}`}</p>
+      <div className="flex justify-between items-center bg-white/[0.02] border border-white/5 p-4 rounded-2xl">
+        <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest leading-none flex-1">
+          Farmer: {farmerName} <br/> <span className="text-emerald-500/40">→</span> Trader: {traderName}
+        </p>
+        <button className="p-2 bg-zinc-800 rounded-xl hover:bg-emerald-500 hover:text-black transition-all">
+          <span className="font-black">→</span>
+        </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TradeCard
+export default TradeCard;

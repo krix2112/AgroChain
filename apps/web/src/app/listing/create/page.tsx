@@ -4,6 +4,15 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { authAPI, listingAPI } from '@agrochain/api';
 import Sidebar from '../../../components/Sidebar';
+import { Button } from "@/components/ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default function CreateListingPage() {
   const router = useRouter();
@@ -64,6 +73,22 @@ export default function CreateListingPage() {
       
       <main className="flex-1 lg:ml-72 p-8 lg:p-12">
         <div className="max-w-2xl mx-auto">
+            <Breadcrumb className="mb-8">
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/marketplace">Marketplace</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>List Harvest</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+
             <header className="mb-12 text-center">
                 <h1 className="text-4xl font-black mb-2 text-emerald-500">List Your Harvest</h1>
                 <p className="text-zinc-500 font-medium">Create a marketplace listing for traders to discover</p>
@@ -133,13 +158,14 @@ export default function CreateListingPage() {
                     </div>
                 </div>
 
-                <button 
+                <Button 
+                    type="submit"
                     disabled={submitting}
-                    className="w-full py-6 bg-emerald-500 text-black font-black rounded-3xl group relative overflow-hidden shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50"
+                    className="w-full py-8 bg-emerald-500 text-black font-black rounded-3xl group relative overflow-hidden shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all hover:bg-emerald-400 disabled:opacity-50"
                 >
                     <span className="relative z-10">{submitting ? 'Creating Listing...' : 'Submit Listing to Marketplace'}</span>
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform"></div>
-                </button>
+                </Button>
             </form>
         </div>
       </main>

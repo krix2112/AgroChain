@@ -1,8 +1,17 @@
-// apps/web/src/app/marketplace/page.tsx
-'use client';
+"use client";
+
 import React, { useEffect, useState } from 'react';
 import { authAPI, listingAPI } from '@agrochain/api';
 import Sidebar from '../../components/Sidebar';
+import { Button } from "@/components/ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default function MarketplacePage() {
   const [listings, setListings] = useState<any[]>([]);
@@ -47,6 +56,18 @@ export default function MarketplacePage() {
       <Sidebar user={user} activePath="/marketplace" />
       
       <main className="flex-1 lg:ml-72 p-12">
+        <Breadcrumb className="mb-8">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Marketplace</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+
         <h1 className="text-4xl font-black mb-12">Crop Marketplace</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {listings.map((item) => (
@@ -54,7 +75,7 @@ export default function MarketplacePage() {
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <h3 className="text-2xl font-bold group-hover:text-emerald-400 transition-colors uppercase tracking-tight">{item.cropName}</h3>
-                  <p className="text-zinc-500 text-sm font-medium">{item.location?.name || 'Local'} • {item.quantity} Quintals</p>
+                  <p className="text-zinc-500 text-sm font-medium">{item.location?.city || 'Local'}, {item.location?.state || ''} • {item.quantity} Quintals</p>
                 </div>
                 <span className="px-4 py-2 bg-emerald-500/10 text-emerald-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-500/20">
                   {item.state}
@@ -72,17 +93,17 @@ export default function MarketplacePage() {
                 </div>
               </div>
 
-              <button 
+              <Button 
                 onClick={() => handleBuy(item._id)}
                 disabled={item.state !== 'OPEN'}
-                className={`w-full py-4 font-black rounded-2xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] ${
+                className={`w-full py-6 font-black rounded-2xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] ${
                   item.state === 'OPEN' 
-                  ? 'bg-emerald-500 text-black hover:scale-[1.02] active:scale-95' 
+                  ? 'bg-emerald-500 text-black hover:bg-emerald-400' 
                   : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
                 }`}
               >
                 {item.state === 'OPEN' ? 'Buy Now' : 'Sold'}
-              </button>
+              </Button>
             </div>
           ))}
         </div>
