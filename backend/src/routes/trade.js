@@ -96,6 +96,10 @@ router.post('/:id/agree', auth, async (req, res, next) => {
         const trade = await Trade.findOne({ tradeId: req.params.id });
         if (!trade) return res.status(404).json({ message: 'Trade not found' });
 
+        if (req.user.role !== 'trader' || trade.state !== 'CREATED') {
+            return res.status(403).json({ error: 'Forbidden: insufficient role or ownership' });
+        }
+
         try {
             await blockchainRelay.relayAgreeTrade(req.user.id, trade.tradeId);
         } catch (chainErr) {
@@ -116,6 +120,14 @@ router.post('/:id/assign-transporter', auth, async (req, res, next) => {
     try {
         const trade = await Trade.findOne({ tradeId: req.params.id });
         if (!trade) return res.status(404).json({ message: 'Trade not found' });
+
+        if (
+            req.user.role !== 'trader' || 
+            trade.trader.toString() !== req.user.id.toString() || 
+            trade.state !== 'AGREED'
+        ) {
+            return res.status(403).json({ error: 'Forbidden: insufficient role or ownership' });
+        }
 
         const transporter = await User.findOne({ phone: req.body.transporterPhone, role: 'transporter' });
         if (!transporter) return res.status(404).json({ message: 'Transporter not found' });
@@ -140,6 +152,14 @@ router.post('/:id/pickup', auth, async (req, res, next) => {
         const trade = await Trade.findOne({ tradeId: req.params.id });
         if (!trade) return res.status(404).json({ message: 'Trade not found' });
 
+        if (
+            req.user.role !== 'transporter' || 
+            trade.transporter.toString() !== req.user.id.toString() || 
+            trade.state !== 'AGREED'
+        ) {
+            return res.status(403).json({ error: 'Forbidden: insufficient role or ownership' });
+        }
+
         try {
             await blockchainRelay.relayMarkPickedUp(req.user.id, trade.tradeId);
         } catch (chainErr) {
@@ -160,6 +180,14 @@ router.post('/:id/deliver', auth, async (req, res, next) => {
         const trade = await Trade.findOne({ tradeId: req.params.id });
         if (!trade) return res.status(404).json({ message: 'Trade not found' });
 
+        if (
+            req.user.role !== 'transporter' || 
+            trade.transporter.toString() !== req.user.id.toString() || 
+            trade.state !== 'IN_DELIVERY'
+        ) {
+            return res.status(403).json({ error: 'Forbidden: insufficient role or ownership' });
+        }
+
         try {
             await blockchainRelay.relayMarkDelivered(req.user.id, trade.tradeId);
         } catch (chainErr) {
@@ -179,6 +207,14 @@ router.post('/:id/complete', auth, async (req, res, next) => {
     try {
         const trade = await Trade.findOne({ tradeId: req.params.id });
         if (!trade) return res.status(404).json({ message: 'Trade not found' });
+
+        if (
+            req.user.role !== 'farmer' || 
+            trade.farmer.toString() !== req.user.id.toString() || 
+            trade.state !== 'DELIVERED'
+        ) {
+            return res.status(403).json({ error: 'Forbidden: insufficient role or ownership' });
+        }
 
         try {
             await blockchainRelay.relayCompleteTrade(req.user.id, trade.tradeId);

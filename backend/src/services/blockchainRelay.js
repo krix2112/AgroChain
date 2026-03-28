@@ -1,30 +1,21 @@
 // backend/src/services/blockchainRelay.js
 const { ethers } = require('ethers');
 
-// ABI for TradeLifecycle contract
-const abi = [
-    "function createTrade(address farmer, address trader, string cropName, uint256 quantity, uint256 price) public returns (uint256)",
-    "function agreeTrade(uint256 tradeId) public",
-    "function assignTransporter(uint256 tradeId, address transporter) public",
-    "function markPickedUp(uint256 tradeId) public",
-    "function markDelivered(uint256 tradeId) public",
-    "function addPaymentProof(uint256 tradeId, bytes32 utrHash) public",
-    "function completeTrade(uint256 tradeId) public",
-    "event TradeCreated(uint256 indexed tradeId, address indexed farmer, address indexed trader)"
-];
+const deployed = require('../../../contracts/deployed.json');
+const CONTRACT_ABI = deployed.abi;
+const CONTRACT_ADDRESS = deployed.address;
 
 const isBlockchainConfigured = () => {
-    return !!(process.env.PRIVATE_KEY && process.env.CONTRACT_ADDRESS &&
-              process.env.PRIVATE_KEY.length > 10 && process.env.CONTRACT_ADDRESS.length > 10);
+    return !!(process.env.RELAY_PRIVATE_KEY && process.env.RELAY_PRIVATE_KEY.length > 10);
 };
 
 const getContract = async () => {
     if (!isBlockchainConfigured()) {
-        throw new Error('Blockchain not configured — set PRIVATE_KEY and CONTRACT_ADDRESS in .env to enable on-chain relay.');
+        throw new Error('Blockchain not configured — set RELAY_PRIVATE_KEY in .env to enable on-chain relay.');
     }
     const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
-    const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-    const contract = new ethers.Contract(process.env.CONTRACT_ADDRESS, abi, signer);
+    const signer = new ethers.Wallet(process.env.RELAY_PRIVATE_KEY, provider);
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
     return { contract, signer };
 };
 
@@ -33,7 +24,6 @@ const relayCreateTrade = async (farmerAddress, traderAddress, cropName, quantity
         const { contract } = await getContract();
         
         const tx = await contract.createTrade(
-            farmerAddress,
             traderAddress,
             cropName,
             quantity,

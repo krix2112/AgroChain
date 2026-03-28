@@ -97,6 +97,10 @@ contract TradeAgreement {
 
     function completeTrade(uint256 tradeId) public onlyFarmer(tradeId) {
         require(trades[tradeId].state == State.DELIVERED, "Invalid state");
+        require(
+            bytes(trades[tradeId].utrHash).length > 0,
+            "Payment proof required before completion"
+        );
         trades[tradeId].state = State.COMPLETED;
         emit StateUpdated(tradeId, State.COMPLETED, msg.sender);
     }

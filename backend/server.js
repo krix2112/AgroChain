@@ -23,7 +23,6 @@ app.use(express.json());
 app.use('/api/auth', require('./src/routes/auth'));
 app.use('/api/trade', require('./src/routes/trade'));
 app.use('/api/payment', require('./src/routes/payment'));
-app.use('/api/debug', require('./src/routes/debug'));
 
 // Health Check
 app.get('/health', (req, res) => {
