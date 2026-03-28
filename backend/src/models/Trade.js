@@ -43,6 +43,23 @@ const tradeSchema = new mongoose.Schema({
         enum: ['DIRECT', 'MARKETPLACE', 'REVERSE_REQUEST'],
         default: 'DIRECT'
     },
+    // --- Smart Route Bundling fields ---
+    fromCity: {
+        type: String,
+        trim: true
+    },
+    toCity: {
+        type: String,
+        trim: true
+    },
+    deliveryDate: {
+        type: Date
+    },
+    bundleId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'DeliveryBundle',
+        default: null
+    },
 }, {
     timestamps: true
 });

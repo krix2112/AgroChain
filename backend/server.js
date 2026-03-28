@@ -26,6 +26,7 @@ app.use('/api/trade', require('./src/routes/trade'));
 app.use('/api/payment', require('./src/routes/payment'));
 app.use('/api/listing', require('./src/routes/listing'));
 app.use('/api/request', require('./src/routes/cropRequest'));
+app.use('/api/bundle', require('./src/routes/bundle'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Health Check

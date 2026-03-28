@@ -20,4 +20,44 @@ export interface Trade {
   pickedUpAt?: string;
   deliveredAt?: string;
   completedAt?: string;
+  // Smart Route Bundling fields
+  fromCity?: string;
+  toCity?: string;
+  deliveryDate?: string;
+  bundleId?: string | null;
+}
+
+// ─── Smart Route Bundling Types ─────────────────────────────────────────────
+
+export interface BundleCostBreakdown {
+  baseCost: number;
+  numberOfTrades: number;
+  bundledCostPerTrade: number;
+  soloCost: number;
+  savingsPercent: number;
+}
+
+export interface BundleSuggestion {
+  routeKey: string;
+  fromCity: string;
+  toCity: string;
+  deliveryDate: string;
+  trades: Trade[];
+  totalWeight: number;
+  cost: BundleCostBreakdown;
+}
+
+export interface DeliveryBundle {
+  id: string;
+  trades: string[];          // trade IDs
+  fromCity: string;
+  toCity: string;
+  deliveryDate: string;
+  transporter?: string;      // user ID
+  totalWeight: number;
+  costPerTrade: number;
+  baseCost: number;
+  state: 'SUGGESTED' | 'CONFIRMED' | 'REJECTED';
+  createdAt?: string;
+  updatedAt?: string;
 }
