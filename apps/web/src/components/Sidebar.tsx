@@ -18,7 +18,8 @@ const Sidebar = ({ user, activePath }: { user: any, activePath: string }) => {
         {[
           { name: 'Overview', path: '/dashboard' },
           { name: 'Marketplace', path: '/marketplace' },
-          { name: 'Inventory', path: '/inventory' },
+          { name: 'My Listings', path: '/inventory' },
+          { name: 'Open Requests', path: '/requests' },
           { name: 'Wallet', path: '/wallet' },
           { name: 'Settings', path: '/settings' }
         ].map((item, idx) => (

@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  transpilePackages: [
+    '@agrochain/ui',
+    '@agrochain/api',
+    '@agrochain/store',
+    '@agrochain/blockchain',
+  ],
 };
 
 export default nextConfig;
