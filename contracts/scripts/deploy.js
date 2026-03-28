@@ -17,6 +17,9 @@ async function main() {
     const Artifact = await hre.artifacts.readArtifact("TradeAgreement");
     const deployedData = {
         address: address,
+        network: "Shardeum Mezame Testnet",
+        chainId: 8119,
+        deployedAt: new Date().toISOString().split('T')[0],
         abi: Artifact.abi
     };
 

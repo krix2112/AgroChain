@@ -15,6 +15,11 @@ export default {
       url: "https://api-mezame.shardeum.org",
       chainId: 8119,
       accounts: process.env.RELAY_PRIVATE_KEY && process.env.RELAY_PRIVATE_KEY.length >= 64 ? [process.env.RELAY_PRIVATE_KEY] : []
+    },
+    mezame: {
+      url: "https://api-mezame.shardeum.org",
+      chainId: 8119,
+      accounts: process.env.RELAY_PRIVATE_KEY && process.env.RELAY_PRIVATE_KEY.length >= 64 ? [process.env.RELAY_PRIVATE_KEY] : []
     }
   },
   paths: {
