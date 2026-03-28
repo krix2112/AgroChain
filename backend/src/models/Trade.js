@@ -38,6 +38,11 @@ const tradeSchema = new mongoose.Schema({
     },
     utrHash: String,
     txHash: String,
+    source: {
+        type: String,
+        enum: ['DIRECT', 'MARKETPLACE', 'REVERSE_REQUEST'],
+        default: 'DIRECT'
+    },
 }, {
     timestamps: true
 });

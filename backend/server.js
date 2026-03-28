@@ -1,6 +1,7 @@
 // backend/server.js
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const connectDB = require('./src/config/database');
 const errorHandler = require('./src/middleware/error');
@@ -23,6 +24,9 @@ app.use(express.json());
 app.use('/api/auth', require('./src/routes/auth'));
 app.use('/api/trade', require('./src/routes/trade'));
 app.use('/api/payment', require('./src/routes/payment'));
+app.use('/api/listing', require('./src/routes/listing'));
+app.use('/api/request', require('./src/routes/cropRequest'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Health Check
 app.get('/health', (req, res) => {
