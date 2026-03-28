@@ -29,6 +29,21 @@ router.post('/create', auth, async (req, res, next) => {
 
         const validated = createRequestSchema.parse(req.body);
 
+        let txHash = null;
+        let requestId = null;
+        try {
+            const tx = await blockchainRelay.relayCreateCropRequest(
+                req.user._id,
+                validated.cropName,
+                validated.quantity,
+                validated.preferredPrice
+            );
+            txHash = tx.txHash;
+            requestId = tx.requestId;
+        } catch (chainErr) {
+            console.warn('[blockchain] relayCreateCropRequest skipped:', chainErr.message);
+        }
+
         const cropRequest = new CropRequest({
             trader: req.user._id,
             cropName: validated.cropName,
@@ -38,11 +53,13 @@ router.post('/create', auth, async (req, res, next) => {
                 city: validated.deliveryCity,
                 state: validated.deliveryState
             },
-            deliveryDate: validated.deliveryDate
+            deliveryDate: validated.deliveryDate,
+            requestId: requestId,
+            txHash: txHash
         });
 
         await cropRequest.save();
-        res.status(201).json({ success: true, request: cropRequest });
+        res.status(201).json({ success: true, request: cropRequest, requestId, txHash });
     } catch (err) {
         if (err instanceof z.ZodError) {
             return res.status(400).json({ success: false, message: err.errors[0].message });
@@ -103,11 +120,22 @@ router.post('/:id/accept', auth, async (req, res, next) => {
         // Mark request as accepted
         cropRequest.state = 'ACCEPTED';
 
-        // Create trade from crop request
-        const tradeCount = await Trade.countDocuments();
-        const tradeId = 2000 + tradeCount;
+        // Call proper relay for reverse requests
+        let txHash = null;
+        let contractTradeId = null;
+        try {
+            const tx = await blockchainRelay.relayAcceptCropRequest(
+                req.user._id,
+                cropRequest.requestId
+            );
+            txHash = tx.txHash;
+            if (tx.tradeId != null) contractTradeId = tx.tradeId;
+        } catch (chainErr) {
+            console.warn('[blockchain] relayAcceptCropRequest skipped:', chainErr.message);
+        }
 
-        // Get trader's wallet address for blockchain relay
+        const tradeId = contractTradeId || (2000 + await Trade.countDocuments());
+
         const trader = await User.findById(cropRequest.trader);
 
         const trade = new Trade({
@@ -118,33 +146,14 @@ router.post('/:id/accept', auth, async (req, res, next) => {
             quantity: cropRequest.quantity,
             price: cropRequest.preferredPrice * cropRequest.quantity,
             state: 'CREATED',
-            source: 'REVERSE_REQUEST'
+            source: 'REVERSE_REQUEST',
+            txHash: txHash
         });
-
-        // TODO: blockchainRelay.relayCreateTrade() — blockchain wiring
-        // Wrap in try/catch so trade still saves even if blockchain is unavailable
-        let txHash = null;
-        try {
-            const tx = await blockchainRelay.relayCreateTrade(
-                req.user.walletAddress || '0x0000000000000000000000000000000000000000',
-                trader?.walletAddress || '0x0000000000000000000000000000000000000000',
-                cropRequest.cropName,
-                cropRequest.quantity,
-                cropRequest.preferredPrice * cropRequest.quantity
-            );
-            txHash = tx.txHash;
-            trade.txHash = txHash;
-            if (tx.tradeId != null) trade.tradeId = tx.tradeId;
-        } catch (chainErr) {
-            console.warn('[blockchain] relay skipped (no contract):', chainErr.message);
-        }
-
-        cropRequest.requestId = txHash;
 
         await cropRequest.save();
         await trade.save();
 
-        res.status(201).json({ success: true, trade, txHash });
+        res.status(201).json({ success: true, trade, tradeId, txHash });
     } catch (err) {
         next(err);
     }

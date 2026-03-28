@@ -6,6 +6,8 @@ const auth = require('../middleware/auth');
 const { uploadSingle } = require('../middleware/upload');
 const Listing = require('../models/Listing');
 const Trade = require('../models/Trade');
+const User = require('../models/User');
+const blockchainRelay = require('../services/blockchainRelay');
 
 // --- Zod Schemas ---
 const createListingSchema = z.object({
@@ -155,9 +157,26 @@ router.post('/:id/buy', auth, async (req, res, next) => {
         // Mark listing as sold
         listing.state = 'SOLD';
 
-        // Create trade from listing
-        const tradeCount = await Trade.countDocuments();
-        const tradeId = 2000 + tradeCount;
+        // Inject Blockchain Relay
+        const farmer = await User.findById(listing.farmer);
+        let contractTradeId = null;
+        let txHash = null;
+
+        try {
+            const tx = await blockchainRelay.relayCreateTrade(
+                farmer?.walletAddress || '0x0000000000000000000000000000000000000000',
+                req.user.walletAddress || '0x0000000000000000000000000000000000000000',
+                listing.cropName,
+                listing.quantity,
+                listing.price * listing.quantity
+            );
+            txHash = tx.txHash;
+            if (tx.tradeId != null) contractTradeId = tx.tradeId;
+        } catch (chainErr) {
+            console.warn('[blockchain] relayCreateTrade skipped:', chainErr.message);
+        }
+
+        const tradeId = contractTradeId || (2000 + await Trade.countDocuments());
 
         const trade = new Trade({
             tradeId,
@@ -167,13 +186,14 @@ router.post('/:id/buy', auth, async (req, res, next) => {
             quantity: listing.quantity,
             price: listing.price * listing.quantity,
             state: 'CREATED',
-            source: 'MARKETPLACE'
+            source: 'MARKETPLACE',
+            txHash: txHash
         });
 
         await listing.save();
         await trade.save();
 
-        res.status(201).json({ success: true, trade, message: 'Trade created from listing' });
+        res.status(201).json({ success: true, trade, tradeId, txHash, message: 'Trade created from listing' });
     } catch (err) {
         next(err);
     }
