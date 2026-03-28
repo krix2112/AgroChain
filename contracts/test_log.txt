@@ -1,0 +1,34 @@
+
+
+  TradeAgreement
+    ✔ Should create a trade correctly (67ms)
+    ✔ Should allow trader to agree to the trade
+    ✔ Should fail if non-trader tries to agree (84ms)
+    ✔ Should allow trader to assign transporter (45ms)
+    ✔ Should flow through the delivery states (55ms)
+    ✔ Should allow adding payment proof after delivery (47ms)
+    1) Should allow farmer to complete the trade after delivery
+    CropRequest Feature
+      ✔ Test 1: trader can createCropRequest
+      ✔ Test 2: farmer can acceptCropRequest
+      ✔ Test 3: cannot accept same request twice
+      ✔ Test 4: getAllOpenRequests returns only OPEN ones (70ms)
+
+
+  10 passing (3s)
+  1 failing
+
+  1) TradeAgreement
+       Should allow farmer to complete the trade after delivery:
+     Error: VM Exception while processing transaction: reverted with reason string 'Payment proof required before completion'
+    at TradeAgreement.completeTrade (contracts/TradeAgreement.sol:119)
+    at EdrProviderWrapper.request (node_modules\hardhat\src\internal\hardhat-network\provider\provider.ts:453:41)
+    at HardhatEthersSigner.sendTransaction (node_modules\@nomicfoundation\hardhat-ethers\src\signers.ts:185:18)
+    at send (node_modules\ethers\src.ts\contract\contract.ts:313:20)
+    at Proxy.completeTrade (node_modules\ethers\src.ts\contract\contract.ts:352:16)
+    at waitForPendingTransaction (node_modules\@nomicfoundation\hardhat-chai-matchers\src\internal\emit.ts:28:17)
+    at Context.<anonymous> (file:///F:/AgroChain-Projects/AgroChain/contracts/test/TradeAgreement.test.js:98:5)
+  
+
+
+

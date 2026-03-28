@@ -28,10 +28,12 @@ export default function LoginPage() {
         await register(formData);
         // After registration, log them in
         const res = await login({ phone: formData.phone });
-        localStorage.setItem('token', res.token);
+        localStorage.setItem('agrochain_token', res.token);
+        localStorage.setItem('agrochain_user', JSON.stringify(res.user));
       } else {
         const res = await login({ phone: formData.phone });
-        localStorage.setItem('token', res.token);
+        localStorage.setItem('agrochain_token', res.token);
+        localStorage.setItem('agrochain_user', JSON.stringify(res.user));
       }
       router.push('/dashboard');
     } catch (err: any) {
