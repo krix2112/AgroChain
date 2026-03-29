@@ -176,7 +176,6 @@ export function SellCropStep2({ language, onBack, onNext }: SellCropStep2Props) 
 
                     {/* Selected crop sub-card */}
                     <SelectedCropCard
-                        cropEmoji="🍅"
                         cropNameEn="Tomato"
                         cropNameHi="टमाटर"
                         quantity={quantity}

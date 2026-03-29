@@ -13,7 +13,7 @@ import {
     Package,
     Navigation2,
 } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+
 
 const font = "'Noto Sans', 'Noto Sans Devanagari', sans-serif";
 const serif = "'Noto Serif', serif";
@@ -446,7 +446,7 @@ function TrackOrderModal({
                             marginBottom: 16,
                         }}
                     >
-                        <ImageWithFallback
+                        <img
                             src={order.cropImage}
                             alt={order.cropName}
                             style={{
@@ -747,7 +747,7 @@ function OrderCard({
                             transition={{ duration: 0.2, ease }}
                             style={{ flexShrink: 0 }}
                         >
-                            <ImageWithFallback
+                            <img
                                 src={order.cropImage}
                                 alt={order.cropName}
                                 style={{

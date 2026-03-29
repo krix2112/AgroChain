@@ -7,7 +7,7 @@ import {
     CheckCircle2,
     Circle,
 } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+
 
 interface MyOrdersProps {
     language: 'en' | 'hi';
@@ -260,7 +260,7 @@ function OrderCard({
             {/* Top Row */}
             <div className="flex items-start gap-4 mb-4">
                 {/* Crop Thumbnail */}
-                <ImageWithFallback
+                <img
                     src={order.cropImage}
                     alt={order.cropName}
                     style={{

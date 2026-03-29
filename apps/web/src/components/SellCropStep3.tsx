@@ -290,7 +290,6 @@ export function SellCropStep3({ language, onBack, onNext }: SellCropStep3Props) 
 
                     {/* Selected crop sub-card */}
                     <SelectedCropCard
-                        cropEmoji="🍅"
                         cropNameEn="Tomato"
                         cropNameHi="टमाटर"
                         quantity={2000}

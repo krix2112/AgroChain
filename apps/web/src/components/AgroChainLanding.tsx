@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'motion/react';
 import { Wheat, HelpCircle, ChevronRight, ArrowRight, Phone, Menu, X } from 'lucide-react';
 
@@ -23,7 +23,7 @@ function AnimatedCounter({ target, prefix = '', suffix = '' }: { target: string;
 }
 
 /* â”€â”€ Section fade-in wrapper â”€â”€ */
-function FadeIn({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
+function FadeIn({ children, delay = 0, className = '', style }: { children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
   return (
@@ -33,6 +33,7 @@ function FadeIn({ children, delay = 0, className = '' }: { children: React.React
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay, ease: 'easeOut' }}
       className={className}
+      style={style}
     >
       {children}
     </motion.div>

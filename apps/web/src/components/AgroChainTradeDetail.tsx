@@ -865,7 +865,7 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
             BUNDLE SUGGESTION CARD (shown when AGREED)
         ══════════════════════════════════════════ */}
         <AnimatePresence>
-          {trade.status === 'AGREED' && bundleSuggestion && !bundleDismissed && (
+          {trade.state === 'AGREED' && bundleSuggestion && !bundleDismissed && (
             <motion.div
               initial={{ opacity: 0, y: 18, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}

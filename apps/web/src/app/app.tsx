@@ -238,7 +238,7 @@ export default function App() {
             {!hideDefaultNavbar && (
                 <div className="fixed inset-0 z-0">
                     <motion.img
-                        src={bgImage}
+                        src={bgImage.src}
                         alt=""
                         className="absolute inset-0 w-full h-full object-cover object-center"
                         draggable={false}

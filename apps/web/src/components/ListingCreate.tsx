@@ -299,7 +299,7 @@ export function ListingCreate({ language, onBack, onSuccess }: Props) {
                                                         onClick={() => { setCropName(c.en); setCropDropOpen(false); }}
                                                         style={{
                                                             display: 'block', width: '100%', textAlign: 'left',
-                                                            padding: '10px 14px', border: 'none', background: 'none',
+                                                            padding: '10px 14px', border: 'none',
                                                             cursor: 'pointer', fontFamily: font, fontSize: 13,
                                                             color: cropName === c.en ? '#15803d' : '#374151',
                                                             background: cropName === c.en ? '#f0fdf4' : 'none',

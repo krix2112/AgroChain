@@ -73,7 +73,7 @@ export function SignUpScreen({ onBack, onSignUp }: SignUpScreenProps) {
             {/* ── Full-bleed Background ── */}
             <div style={{ position: 'fixed', inset: 0, zIndex: 0 }}>
                 <img
-                    src={bgAsset}
+                    src={bgAsset.src}
                     alt=""
                     style={{
                         width: '100%',

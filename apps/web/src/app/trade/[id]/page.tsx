@@ -130,6 +130,11 @@ export default function TradeDetail() {
     fetchTrade();
   }, [fetchTrade, router]);
 
+  const myRole    = currentUser?.role;
+  const curIdx    = trade ? statusIndex(trade.state) : -1;
+  const totalVal  = trade ? (trade.quantity * trade.price).toLocaleString('en-IN') : '0';
+  const tradeUrl  = trade ? `https://agrochain.app/trade/${trade.tradeId}` : '';
+
   // ── Fetch bundle suggestion ──────────────────────────────────────────
 
   useEffect(() => {
@@ -242,10 +247,7 @@ export default function TradeDetail() {
     );
   }
 
-  const tradeUrl  = `https://agrochain.app/trade/${trade.tradeId}`;
-  const myRole    = currentUser?.role;
-  const curIdx    = statusIndex(trade.state);
-  const totalVal  = (trade.quantity * trade.price).toLocaleString('en-IN');
+
 
   // ─── Render ────────────────────────────────────────────────────────────────
 

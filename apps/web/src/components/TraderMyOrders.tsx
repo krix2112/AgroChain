@@ -202,7 +202,7 @@ export function TraderMyOrders({ onBack, onViewDetails }: Props) {
             {/* Background */}
             <div className="fixed inset-0 z-0">
                 <motion.img
-                    src={bgImage}
+                    src={bgImage.src}
                     alt=""
                     className="absolute inset-0 w-full h-full object-cover object-center"
                     style={{ filter: 'blur(10px)', transform: 'scale(1.02)' }}

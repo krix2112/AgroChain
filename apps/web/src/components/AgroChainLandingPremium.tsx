@@ -11,7 +11,7 @@ import {
   GlobeIcon,
   MoneyIcon,
   HandshakeIcon 
-} from './CropIcons';
+} from './cropicons';
 
 const font = "'Noto Sans', 'Noto Sans Devanagari', sans-serif";
 const serif = "'Noto Serif', serif";
@@ -605,7 +605,7 @@ export function AgroChainLandingPremium({ onLogin, onRegister }: Props) {
             }}
           >
             <img
-              src={farmBg}
+              src={farmBg.src}
               alt=""
               style={{
                 width: '100%',

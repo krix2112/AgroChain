@@ -66,7 +66,7 @@ export function LoginScreen({ onLogin, onRegister }: LoginScreenProps) {
             {/* ── Full-bleed Background ── */}
             <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
                 <img
-                    src={bgAsset}
+                    src={bgAsset.src}
                     alt=""
                     style={{
                         width: '100%',
