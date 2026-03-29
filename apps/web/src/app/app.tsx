@@ -3,15 +3,14 @@ import { motion } from 'motion/react';
 import { AgroChainLandingPremium } from '../components/AgroChainLandingPremium';
 import { AgroChainLogin } from '../components/AgroChainLogin';
 import { AgroChainRegister } from '../components/AgroChainRegister';
-import { AgroChainFarmerDashboard } from '../components/AgroChainFarmerDashboard';
-import { AgroChainCreateTrade } from '../components/AgroChainCreateTrade';
+import { HomeDashboard } from '../components/homedashboard';
 import { AgroChainTradeDetail } from '../components/AgroChainTradeDetail';
 import { SellCropStep1 } from '../components/SellCropStep1';
 import { SellCropStep2 } from '../components/SellCropStep2';
 import { SellCropStep3 } from '../components/SellCropStep3';
 import { SellCropStep4 } from '../components/SellCropStep4';
-import { BuyerOffers } from '../components/BuyerOffers';
-import { BuyerDetail } from '../components/BuyerDetail';
+import { BuyerOffers } from '../components/buyeroffers';
+import { BuyerDetail } from '../components/buyerdetail';
 import { Marketplace } from '../components/Marketplace';
 import { MyOrdersPremium } from '../components/MyOrdersPremium';
 import { OrderTracking } from '../components/OrderTracking';
@@ -20,17 +19,17 @@ import { Success } from '../components/Success';
 import { ProfileNotifications } from '../components/ProfileNotifications';
 import { AgroChainMyTrades } from '../components/AgroChainMyTrades';
 import { Navbar } from '../components/Navbar';
-import { Footer } from '../components/Footer';
-import { LanguageModal } from '../components/LanguageModal';
+import { Footer } from '../components/footer';
+import { LanguageModal } from '../components/languagemodal';
 import { MobileBottomNav, type BottomNavTab } from '../components/MobileBottomNav';
 import { PublicListingsMarketplace } from '../components/PublicListingsMarketplace';
 import { ListingCreate } from '../components/ListingCreate';
 import { OpenRequests } from '../components/OpenRequests';
 import { RequestCreate } from '../components/RequestCreate';
 import { TraderDashboardNew } from '../components/TraderDashboardNew';
-import { BrowseListings } from '../components/BrowseListings';
+import { BrowseListings } from '../components/browselistings';
 import { TraderMyOrders } from '../components/TraderMyOrders';
-import { FarmerProfileDashboard } from '../components/FarmerProfileDashboard';
+import { FarmerProfileDashboard } from '../components/farmerprofiledashboard';
 import { TraderProfileDashboard } from '../components/TraderProfileDashboard';
 
 // Lush green rice paddy field at golden sunrise (provided asset)
@@ -182,7 +181,7 @@ export default function App() {
     const handleBottomNavTap = (tab: BottomNavTab) => {
         switch (tab) {
             case 'home': navigate('home'); break;
-            case 'sell': navigate('create-trade'); break;
+            case 'sell': navigate('sell-step1'); break;
             case 'orders': navigate('my-orders'); break;
             case 'profile': {
                 // Route to appropriate profile based on user role
@@ -280,26 +279,15 @@ export default function App() {
             {/* ── Page Content ── */}
             <div className="relative z-10 flex-1">
                 {currentScreen === 'home' && (
-                    <AgroChainFarmerDashboard
-                        farmerName="Ramesh"
+                    <HomeDashboard
                         language={language}
-                        onListCrop={() => navigate('create-trade')}
-                        onViewTrade={(id) => { setActiveTradeId(id); navigate('trade-detail'); }}
-                        onLogout={() => { setIsLoggedIn(false); setCurrentScreen('landing'); }}
-                        onProfile={() => navigate('profile')}
+                        onSellCrop={() => navigate('sell-step1')}
+                        onViewOffers={() => navigate('buyer-offers')}
+                        onMarketplace={() => navigate('marketplace')}
                         onMyOrders={() => navigate('my-orders')}
-                        onViewMyTrades={() => navigate('my-trades')}
-                        onBrowseRequests={() => navigate('requests')}
                     />
                 )}
-                {currentScreen === 'create-trade' && (
-                    <AgroChainCreateTrade
-                        language={language}
-                        onBack={() => navigate('home')}
-                        onViewTrade={(id) => { setActiveTradeId(id); navigate('trade-detail'); }}
-                        onBackToDash={() => navigate('home')}
-                    />
-                )}
+
                 {currentScreen === 'trade-detail' && (
                     <AgroChainTradeDetail
                         tradeId={activeTradeId}
@@ -437,7 +425,7 @@ export default function App() {
                         onBack={() => navigate('trader-dashboard')}
                         onStartTrade={(farmer, crop, price) => {
                             // Could pre-fill trade creation form with these values in the future
-                            navigate('create-trade');
+                            navigate('sell-step1');
                         }}
                         onLogout={() => { setIsLoggedIn(false); setCurrentScreen('landing'); }}
                     />
