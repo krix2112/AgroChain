@@ -408,13 +408,13 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
           <p style={{ color: '#374151', fontWeight: 600, fontSize: 14, margin: 0 }}>
             {language === 'hi' ? 'लोड हो रहा है...' : 'Loading trade details...'}
           </p>
-          <style>{\`@keyframes spin { to { transform: rotate(360deg); } }\`}</style>
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </motion.div>
       </div>
     );
   }
 
-  const tradeUrl  = \`https://agrochain.app/trade/\${trade.tradeId}\`;
+  const tradeUrl  = `https://agrochain.app/trade/${trade.tradeId}`;
   const curIdx    = stateIndex(trade.state);
   const totalVal  = (trade.quantity * trade.price).toLocaleString('en-IN');
   const statusCfg = STATUS_CFG[trade.state] ?? STATUS_CFG.CREATED;
@@ -422,7 +422,7 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
   return (
     <div style={{ minHeight: '100vh', fontFamily: font, paddingTop: 64 }}>
 
-      <style>{\`
+      <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
         @media (max-width: 900px) {
           .td-two-col { grid-template-columns: 1fr !important; }
@@ -432,7 +432,7 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
           .td-three-col { grid-template-columns: 1fr !important; }
           .td-summary-row { flex-direction: column !important; gap: 12px !important; }
         }
-      \`}</style>
+      `}</style>
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '28px 24px 80px' }}>
 
@@ -521,7 +521,7 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
                   display: 'inline-flex', alignItems: 'center', gap: 7,
                   background: statusCfg.bg,
                   color: statusCfg.color,
-                  border: \`1.5px solid \${statusCfg.border}\`,
+                  border: `1.5px solid ${statusCfg.border}`,
                   borderRadius: 20,
                   padding: '6px 16px',
                   fontSize: 13, fontWeight: 700,
@@ -768,7 +768,7 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
 
               {/* Button — View on Shardeum */}
               <a
-                href={\`https://explorer-sphinx.shardeum.org/trade/\${trade.tradeId}\`}
+                href={`https://explorer-sphinx.shardeum.org/trade/${trade.tradeId}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -838,7 +838,7 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
               </div>
 
               <a
-                href={\`https://explorer-sphinx.shardeum.org/tx/\${trade.txHash}\`}
+                href={`https://explorer-sphinx.shardeum.org/tx/${trade.txHash}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 onMouseEnter={() => setExplorerHovered(true)}
@@ -918,8 +918,8 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
                         </div>
                         <div style={{ fontSize: 13, color: '#166534', fontFamily: font, lineHeight: 1.5 }}>
                           {language === 'hi'
-                            ? \`Trade #\${bundleSuggestion.similarTradeId} के साथ बंडल किया गया। आप ₹\${bundleSuggestion.savings.toLocaleString('en-IN')} बचाएंगे।\`
-                            : \`Bundled with Trade #\${bundleSuggestion.similarTradeId}. You'll save ₹\${bundleSuggestion.savings.toLocaleString('en-IN')} on delivery.\`
+                            ? `Trade #${bundleSuggestion.similarTradeId} के साथ बंडल किया गया। आप ₹${bundleSuggestion.savings.toLocaleString('en-IN')} बचाएंगे।`
+                            : `Bundled with Trade #${bundleSuggestion.similarTradeId}. You'll save ₹${bundleSuggestion.savings.toLocaleString('en-IN')} on delivery.`
                           }
                         </div>
                       </>
@@ -941,8 +941,8 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
                         </div>
                         <div style={{ fontFamily: font, fontSize: 15, fontWeight: 600, color: '#14532d', marginBottom: 6, lineHeight: 1.4 }}>
                           {language === 'hi'
-                            ? \`हमने एक मिलती-जुलती डिलीवरी पाई! Trade #\${bundleSuggestion.similarTradeId} के साथ बंडल करके ₹\${bundleSuggestion.savings.toLocaleString('en-IN')} बचाएं।\`
-                            : \`We found a similar delivery! Save ₹\${bundleSuggestion.savings.toLocaleString('en-IN')} by bundling with Trade #\${bundleSuggestion.similarTradeId}.\`
+                            ? `हमने एक मिलती-जुलती डिलीवरी पाई! Trade #${bundleSuggestion.similarTradeId} के साथ बंडल करके ₹${bundleSuggestion.savings.toLocaleString('en-IN')} बचाएं।`
+                            : `We found a similar delivery! Save ₹${bundleSuggestion.savings.toLocaleString('en-IN')} by bundling with Trade #${bundleSuggestion.similarTradeId}.`
                           }
                         </div>
                         <div style={{ fontSize: 12, color: '#166534', fontFamily: font }}>
