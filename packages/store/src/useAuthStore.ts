@@ -27,23 +27,33 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 
       setToken: (token) => {
         set({ token });
-        localStorage.setItem('agrochain_token', token);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('agrochain_token', token);
+        }
       },
 
       logout: () => {
         set({ user: null, token: null, isAuthenticated: false });
-        localStorage.clear();
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('agrochain_token');
+          localStorage.removeItem('agrochain_user');
+          // Don't use clear() as it might wipe other app data
+        }
       },
 
       loadFromStorage: async () => {
-        const token = localStorage.getItem('agrochain_token');
-        if (token) {
-          set({ token });
-          try {
-            const response = await authAPI.getMe();
-            set({ user: response.data, isAuthenticated: true });
-          } catch (error) {
-            get().logout();
+        if (typeof window !== 'undefined') {
+          const token = localStorage.getItem('agrochain_token');
+          if (token) {
+            set({ token });
+            try {
+              const response = await authAPI.getMe();
+              if (response.data && response.data.user) {
+                set({ user: response.data.user, isAuthenticated: true });
+              }
+            } catch (error) {
+              get().logout();
+            }
           }
         }
       }

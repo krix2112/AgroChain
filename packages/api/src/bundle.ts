@@ -24,3 +24,7 @@ export const getBundle = (id: string) =>
 /** GET /bundle — list all bundles */
 export const getBundles = () =>
   client.get('/bundle')
+
+/** GET /bundle/my/all — list bundles assigned to current transporter */
+export const getMyBundles = () =>
+  client.get('/bundle/my/all')

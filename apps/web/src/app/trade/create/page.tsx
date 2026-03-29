@@ -119,6 +119,9 @@ export default function CreateTradePage() {
   const [moisture,      setMoisture]      = useState<'<10%'|'10-12%'|'12-14%'>('10-12%');
   const [foreignMatter, setForeignMatter] = useState<'<1%'|'1-2%'|'>2%'>('<1%');
   const [comments,      setComments]      = useState('');
+  const [fromCity,      setFromCity]      = useState('');
+  const [toCity,        setToCity]        = useState('');
+  const [deliveryDate,  setDeliveryDate]  = useState('');
 
   // ── Submit state ─────────────────────────────────────────────────────────
   const [loading,  setLoading]  = useState(false);
@@ -127,7 +130,7 @@ export default function CreateTradePage() {
 
   // ── Auth ─────────────────────────────────────────────────────────────────
   useEffect(() => {
-    if (!localStorage.getItem('token')) router.push('/login');
+    if (!localStorage.getItem('agrochain_token')) router.push('/login');
   }, [router]);
 
   // ── Helpers ──────────────────────────────────────────────────────────────
@@ -157,6 +160,9 @@ export default function CreateTradePage() {
         cropName:    cropName.trim(),
         quantity:    Number(quantity),
         price:       Number(price),
+        fromCity:    fromCity.trim(),
+        toCity:      toCity.trim(),
+        deliveryDate: deliveryDate
       });
       setSuccess({ tradeId: data.tradeId ?? data.id ?? 'N/A', txHash: data.txHash });
       setStep(4);
@@ -168,12 +174,12 @@ export default function CreateTradePage() {
   }
 
   function handleLogout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem('agrochain_token');
+    localStorage.removeItem('agrochain_user');
     router.push('/');
   }
 
-  const userRaw = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
+  const userRaw = typeof window !== 'undefined' ? localStorage.getItem('agrochain_user') : null;
   const user    = userRaw ? JSON.parse(userRaw) : null;
 
   // ─── Render ────────────────────────────────────────────────────────────────
@@ -438,6 +444,35 @@ export default function CreateTradePage() {
                   value={foreignMatter} 
                   onChange={(v: any) => setForeignMatter(v)} 
                 />
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <Label className="text-lg font-bold">Source City (Farmer)</Label>
+                    <Input 
+                      placeholder="e.g., Sangrur, Punjab"
+                      value={fromCity}
+                      onChange={(e: any) => setFromCity(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-4">
+                    <Label className="text-lg font-bold">Destination City (Trader)</Label>
+                    <Input 
+                      placeholder="e.g., Mumbai, Maharashtra"
+                      value={toCity}
+                      onChange={(e: any) => setToCity(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <Label className="text-lg font-bold">Target Delivery Date</Label>
+                  <Input 
+                    type="date"
+                    value={deliveryDate}
+                    onChange={(e: any) => setDeliveryDate(e.target.value)}
+                  />
+                  <p className="text-xs text-muted-foreground italic">Required for logistics bundling suggestions.</p>
+                </div>
 
                 <div className="space-y-4">
                   <Label className="text-lg font-bold">Farmer's Remarks (Optional)</Label>

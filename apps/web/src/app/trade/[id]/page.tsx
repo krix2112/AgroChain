@@ -7,8 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { bundleAPI } from "@agrochain/api";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+
 
 interface TradeUser {
   name: string;
@@ -21,7 +23,7 @@ interface Trade {
   cropName: string;
   quantity: number;
   price: number;
-  status: 'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
+  state: 'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
   farmer:      TradeUser;
   trader:      TradeUser;
   transporter?: TradeUser;
@@ -41,7 +43,18 @@ interface CurrentUser {
   walletAddress?: string;
 }
 
+interface BundleSuggestion {
+  tradeIds: string[];
+  totalWeight: number;
+  cost: {
+    soloCostPerTrade: number;
+    bundledCostPerTrade: number;
+    savingsPercent: number;
+  };
+}
+
 // ─── Status order (for timeline logic) ───────────────────────────────────────
+
 
 const STATUS_ORDER = ['CREATED', 'AGREED', 'IN_DELIVERY', 'DELIVERED', 'COMPLETED'];
 
@@ -56,7 +69,7 @@ const DUMMY_TRADE: Trade = {
   cropName:    'Wheat',
   quantity:    50,
   price:       2000,
-  status:      'IN_DELIVERY',
+  state:      'IN_DELIVERY',
   farmer:      { name: 'Ramesh Kumar',  phone: '9876543210', walletAddress: '0x3f4a...8b2c' },
   trader:      { name: 'Raj Traders',   phone: '9123456780', walletAddress: '0xab12...cd34' },
   transporter: { name: 'Suresh Logistics', phone: '9988776655' },
@@ -85,6 +98,9 @@ export default function TradeDetail() {
   const [utrNumber,        setUtrNumber]        = useState('');
   const [showTransporterInput, setShowTransporterInput] = useState(false);
   const [showUtrInput,         setShowUtrInput]         = useState(false);
+  const [suggestion, setSuggestion] = useState<BundleSuggestion | null>(null);
+  const [suggestionLoading, setSuggestionLoading] = useState(false);
+
 
   // ── Auth + fetch ─────────────────────────────────────────────────────────
 
@@ -114,7 +130,31 @@ export default function TradeDetail() {
     fetchTrade();
   }, [fetchTrade, router]);
 
+  // ── Fetch bundle suggestion ──────────────────────────────────────────
+
+  useEffect(() => {
+    async function checkBundle() {
+      if (myRole === 'trader' && trade?.state === 'AGREED' && !trade.transporter) {
+        setSuggestionLoading(true);
+        try {
+          // In a real scenario, the trade object from getTrade should include bundleId
+          // If suggestion is only for non-bundled AGREED trades:
+          const res = await bundleAPI.checkBundle(id);
+          if (res.data?.suggestion) {
+            setSuggestion(res.data.suggestion);
+          }
+        } catch (e) {
+          console.error('Bundle suggestion error:', e);
+        } finally {
+          setSuggestionLoading(false);
+        }
+      }
+    }
+    if (trade) checkBundle();
+  }, [id, trade, myRole]);
+
   // ── Generic action caller ─────────────────────────────────────────────────
+
 
   async function callAction(endpoint: string, body?: object, actionLabel = '') {
     const token = localStorage.getItem('agrochain_token');
@@ -154,6 +194,41 @@ export default function TradeDetail() {
     }
   }
 
+  // ── Bundle handlers ───────────────────────────────────────────────────────
+
+  async function handleConfirmBundle() {
+    if (!suggestion) return;
+    setActionLoading('bundling');
+    try {
+      await bundleAPI.confirmBundle({
+        tradeIds: suggestion.tradeIds,
+        fromCity: 'Source', // Should be dynamic in full implementation
+        toCity: 'Destination',
+        deliveryDate: new Date().toISOString().split('T')[0]
+      });
+      setActionSuccess('🎉 Bundle confirmed! Logistics costs reduced.');
+      setSuggestion(null);
+      await fetchTrade();
+    } catch (err: any) {
+      setActionError(err.message || 'Failed to confirm bundle');
+    } finally {
+      setActionLoading('');
+    }
+  }
+
+  async function handleRejectBundle() {
+    setActionLoading('rejecting');
+    try {
+      await bundleAPI.rejectBundle(id);
+      setSuggestion(null);
+      setActionSuccess('Proceeding with solo delivery.');
+    } catch (err: any) {
+      setActionError(err.message || 'Failed to opt out of bundling');
+    } finally {
+      setActionLoading('');
+    }
+  }
+
   // ─── Loading ───────────────────────────────────────────────────────────────
 
   if (loading || !trade) {
@@ -169,7 +244,7 @@ export default function TradeDetail() {
 
   const tradeUrl  = `https://agrochain.app/trade/${trade.tradeId}`;
   const myRole    = currentUser?.role;
-  const curIdx    = statusIndex(trade.status);
+  const curIdx    = statusIndex(trade.state);
   const totalVal  = (trade.quantity * trade.price).toLocaleString('en-IN');
 
   // ─── Render ────────────────────────────────────────────────────────────────
@@ -204,7 +279,7 @@ export default function TradeDetail() {
                         Trade #{trade.tradeId}
                     </h1>
                     <div className="mt-1">
-                        <StatusBadge status={trade.status} />
+                        <StatusBadge state={trade.state} />
                     </div>
                 </div>
               </div>
@@ -352,7 +427,7 @@ export default function TradeDetail() {
               <div className="flex flex-col gap-4">
 
                 {/* TRADER: CREATED → Agree */}
-                {myRole === 'trader' && trade.status === 'CREATED' && (
+                {myRole === 'trader' && trade.state === 'CREATED' && (
                   <ActionButton
                     label="🤝 Agree to Trade"
                     loading={actionLoading === 'agree'}
@@ -362,7 +437,7 @@ export default function TradeDetail() {
                 )}
 
                 {/* TRADER: AGREED → Assign Transporter */}
-                {myRole === 'trader' && trade.status === 'AGREED' && (
+                {myRole === 'trader' && trade.state === 'AGREED' && (
                   <>
                     {!showTransporterInput ? (
                       <ActionButton
@@ -405,7 +480,7 @@ export default function TradeDetail() {
                 )}
 
                 {/* TRADER: DELIVERED → Payment proof */}
-                {myRole === 'trader' && trade.status === 'DELIVERED' && (
+                {myRole === 'trader' && trade.state === 'DELIVERED' && (
                   <>
                     {!showUtrInput ? (
                       <ActionButton
@@ -445,7 +520,7 @@ export default function TradeDetail() {
                 )}
 
                 {/* TRANSPORTER: AGREED → Mark Picked Up */}
-                {myRole === 'transporter' && trade.status === 'AGREED' && (
+                {myRole === 'transporter' && trade.state === 'AGREED' && (
                   <ActionButton
                     label="📦 Mark Picked Up"
                     loading={actionLoading === 'pickup'}
@@ -455,7 +530,7 @@ export default function TradeDetail() {
                 )}
 
                 {/* TRANSPORTER: IN_DELIVERY → Mark Delivered */}
-                {myRole === 'transporter' && trade.status === 'IN_DELIVERY' && (
+                {myRole === 'transporter' && trade.state === 'IN_DELIVERY' && (
                   <ActionButton
                     label="🚛 Mark Delivered"
                     loading={actionLoading === 'deliver'}
@@ -465,7 +540,7 @@ export default function TradeDetail() {
                 )}
 
                 {/* FARMER: DELIVERED → Confirm Completion */}
-                {myRole === 'farmer' && trade.status === 'DELIVERED' && (
+                {myRole === 'farmer' && trade.state === 'DELIVERED' && (
                   <ActionButton
                     label="✅ Confirm Completion"
                     loading={actionLoading === 'complete'}
@@ -475,11 +550,11 @@ export default function TradeDetail() {
                 )}
 
                 {/* No action available */}
-                {!hasAction(myRole, trade.status) && (
+                {!hasAction(myRole, trade.state) && (
                   <div className="text-center py-6">
                     <div className="text-4xl mb-3">📍</div>
                     <p className="text-zinc-400 font-bold text-sm">
-                      {trade.status === 'COMPLETED'
+                      {trade.state === 'COMPLETED'
                         ? 'Trade Successfully Concluded 🎉'
                         : 'Waiting for subsequent action...'}
                     </p>
@@ -488,23 +563,68 @@ export default function TradeDetail() {
 
               </div>
             </Card>
+
+            {/* Smart Route Bundling Suggestion */}
+            {suggestion && myRole === 'trader' && (
+              <Card className="bg-gradient-to-br from-[#1B4332] to-[#2D6A4F] border-none rounded-[32px] p-8 shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-10 text-8xl">📦</div>
+                <div className="relative z-10">
+                  <Badge className="mb-4 bg-green-400 text-[#1B4332] font-black text-[10px] uppercase border-none px-3 py-1">
+                    Smart Route Suggestion
+                  </Badge>
+                  <h3 className="text-xl font-black text-white mb-2 tracking-tight">Save {suggestion.cost.savingsPercent}% on delivery</h3>
+                  <p className="text-green-100/70 text-sm font-bold mb-6">
+                    We found {suggestion.tradeIds.length - 1} other trade(s) heading the same way. Bundle them for extra profit!
+                  </p>
+                  
+                  <div className="bg-white/10 rounded-2xl p-5 border border-white/10 mb-6">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-[10px] font-black text-green-200 uppercase tracking-widest">Solo Cost</span>
+                      <span className="text-sm font-bold text-white line-through opacity-50">₹{suggestion.cost.soloCostPerTrade}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-[10px] font-black text-green-200 uppercase tracking-widest">Bundled Price</span>
+                      <span className="text-xl font-black text-white">₹{suggestion.cost.bundledCostPerTrade}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <Button 
+                      onClick={handleConfirmBundle}
+                      disabled={!!actionLoading}
+                      className="w-full h-12 bg-white text-[#1B4332] hover:bg-green-50 font-black rounded-xl"
+                    >
+                      {actionLoading === 'bundling' ? 'Processing...' : 'Accept Bundling'}
+                    </Button>
+                    <Button 
+                      onClick={handleRejectBundle}
+                      variant="ghost"
+                      className="w-full text-white/70 hover:text-white hover:bg-white/10 font-bold"
+                    >
+                      No thanks, deliver solo
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            )}
           </div>
         </div>
       </main>
+
     </div>
   );
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function hasAction(role?: string, status?: string) {
-  if (!role || !status) return false;
+function hasAction(role?: string, state?: string) {
+  if (!role || !state) return false;
   const map: Record<string, string[]> = {
     trader:      ['CREATED', 'AGREED', 'DELIVERED'],
     transporter: ['AGREED', 'IN_DELIVERY'],
     farmer:      ['DELIVERED'],
   };
-  return map[role]?.includes(status) ?? false;
+  return map[role]?.includes(state) ?? false;
 }
 
 const TIMELINE_STEPS = [
@@ -517,7 +637,7 @@ const TIMELINE_STEPS = [
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({ state }: { state: string }) {
   const map: Record<string, string> = {
     CREATED:     'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400',
     AGREED:      'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
@@ -530,8 +650,8 @@ function StatusBadge({ status }: { status: string }) {
     DELIVERED: 'Delivered', COMPLETED: 'Completed',
   };
   return (
-    <Badge variant="secondary" className={`${map[status] ?? ''} text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full border-none`}>
-      {label[status] ?? status}
+    <Badge variant="secondary" className={`${map[state] ?? ''} text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full border-none`}>
+      {label[state] ?? state}
     </Badge>
   );
 }

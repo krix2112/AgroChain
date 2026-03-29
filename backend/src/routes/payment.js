@@ -42,12 +42,15 @@ router.post('/webhook', async (req, res) => {
             // Hash UTR for privacy/security
             const utrHash = '0x' + crypto.createHash('sha256').update(utr).digest('hex');
 
-            const trade = await Trade.findOne({ tradeId: tradeId });
+            const trade = await Trade.findOne({ tradeId: tradeId }).populate('trader');
             if (trade) {
-                // Store and relay hashed UTR
-                await blockchainRelay.relayAddPaymentProof(trade.trader, tradeId, utrHash);
+                const traderId = trade.trader._id ? trade.trader._id.toString() : trade.trader.toString();
+                // Store and relay hashed UTR (convert ObjectId to string)
+                await blockchainRelay.relayAddPaymentProof(traderId, tradeId, utrHash);
                 trade.utrHash = utrHash;
                 await trade.save();
+            } else {
+                return res.status(404).json({ success: false, message: 'Trade not found' });
             }
         }
 

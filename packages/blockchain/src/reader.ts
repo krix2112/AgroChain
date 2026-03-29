@@ -55,22 +55,47 @@ export function parseTrade(tradeData: any): Trade {
   };
 }
 
-export async function getTrade(id: number): Promise<Trade> {
-  const contract = getContract();
-  const tradeData = await contract.getTrade(id);
-  return parseTrade(tradeData);
+export async function getTrade(id: number): Promise<Trade | null> {
+  try {
+    const contract = getContract();
+    const tradeData = await contract.getTrade(id);
+    return parseTrade(tradeData);
+  } catch (error) {
+    console.error(`getTrade error for ID ${id}:`, error);
+    return null;
+  }
 }
 
-export async function getTradesByFarmer(address: string): Promise<Trade[]> {
-  const contract = getContract();
-  const tradesData = await contract.getTradesByFarmer(address);
-  return tradesData.map(parseTrade);
+export async function getTradesByFarmer(
+  address: string
+): Promise<Trade[]> {
+  try {
+    const contract = getContract()
+    const tradeIds: bigint[] = await contract.getTradesByFarmer(address)
+    const trades = await Promise.all(
+      tradeIds.map(id => getTrade(Number(id)))
+    )
+    return trades.filter(t => t !== null) as Trade[]
+  } catch (error) {
+    console.error('getTradesByFarmer error:', error)
+    return []
+  }
 }
 
-export async function getTradesByTrader(address: string): Promise<Trade[]> {
-  const contract = getContract();
-  const tradesData = await contract.getTradesByTrader(address);
-  return tradesData.map(parseTrade);
+export async function getTradesByTrader(
+  address: string
+): Promise<Trade[]> {
+  try {
+    const contract = getContract()
+    const tradeIds: bigint[] = await contract.getTradesByTrader(address)
+    const trades = await Promise.all(
+      tradeIds.map(id => getTrade(Number(id)))
+    )
+    return trades.filter(t => t !== null) as Trade[]
+  } catch (error) {
+    console.error('getTradesByTrader error:', error)
+    return []
+  }
 }
 
 export async function getTradeState(id: number): Promise<string> {

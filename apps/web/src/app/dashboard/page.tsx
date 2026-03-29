@@ -19,6 +19,8 @@ export default function DashboardRouter() {
           router.push('/dashboard/farmer');
         } else if (user.role === 'trader') {
           router.push('/dashboard/trader');
+        } else if (user.role === 'transporter') {
+          router.push('/dashboard/transporter');
         } else {
           // Fallback for other roles or generic access
           router.push('/marketplace');

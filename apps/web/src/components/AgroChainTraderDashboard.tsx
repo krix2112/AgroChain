@@ -18,7 +18,7 @@ interface Trade {
   cropName:     string;
   quantity:     number;
   price:        number;
-  status:       'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
+  state:        'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
   farmer:       TradeUser;
   trader:       TradeUser;
   transporter?: TradeUser;
@@ -37,21 +37,21 @@ interface CurrentUser {
 const DUMMY_TRADES: Trade[] = [
   {
     tradeId: '1042', cropName: 'Wheat', quantity: 50, price: 2000,
-    status: 'CREATED',
+    state: 'CREATED',
     farmer: { name: 'Ramesh Kumar', phone: '9876543210' },
     trader: { name: 'Raj Traders',  phone: '9123456780' },
     createdAt: '2024-04-22T09:00:00Z',
   },
   {
     tradeId: '1041', cropName: 'Tomato', quantity: 200, price: 4800,
-    status: 'AGREED',
+    state: 'AGREED',
     farmer: { name: 'Suresh Patel', phone: '9876500000' },
     trader: { name: 'Raj Traders',  phone: '9123456780' },
     createdAt: '2024-04-20T11:00:00Z',
   },
   {
     tradeId: '1040', cropName: 'Onion', quantity: 80, price: 1600,
-    status: 'IN_DELIVERY',
+    state: 'IN_DELIVERY',
     farmer: { name: 'Mohan Singh', phone: '9812345678' },
     trader: { name: 'Raj Traders', phone: '9123456780' },
     transporter: { name: 'Suresh Logistics', phone: '9988776655' },
@@ -59,14 +59,14 @@ const DUMMY_TRADES: Trade[] = [
   },
   {
     tradeId: '1039', cropName: 'Rice', quantity: 100, price: 5000,
-    status: 'COMPLETED',
+    state: 'COMPLETED',
     farmer: { name: 'Vijay Kumar', phone: '9823456789' },
     trader: { name: 'Raj Traders', phone: '9123456780' },
     createdAt: '2024-04-15T10:00:00Z',
   },
   {
     tradeId: '1038', cropName: 'Potato', quantity: 150, price: 2250,
-    status: 'COMPLETED',
+    state: 'COMPLETED',
     farmer: { name: 'Raju Verma', phone: '9834567890' },
     trader: { name: 'Raj Traders', phone: '9123456780' },
     createdAt: '2024-04-10T07:00:00Z',
@@ -171,9 +171,9 @@ export function AgroChainTraderDashboard({ language, onViewTrade, onLogout, onBr
 
   // ── Derived ────────────────────────────────────────────────────────────────
 
-  const waiting        = trades.filter(t => t.status === 'CREATED');
-  const active         = trades.filter(t => ['AGREED', 'IN_DELIVERY', 'DELIVERED'].includes(t.status));
-  const completed      = trades.filter(t => t.status === 'COMPLETED');
+  const waiting        = trades.filter(t => t.state === 'CREATED');
+  const active         = trades.filter(t => ['AGREED', 'IN_DELIVERY', 'DELIVERED'].includes(t.state));
+  const completed      = trades.filter(t => t.state === 'COMPLETED');
   const completedValue = completed.reduce((s, t) => s + t.quantity * t.price, 0);
 
   // ── Loading ────────────────────────────────────────────────────────────────
@@ -657,7 +657,7 @@ function TradeCard({
   delayBase: number;
   children?: React.ReactNode;
 }) {
-  const s     = STATUS_STYLE[trade.status] ?? STATUS_STYLE.CREATED;
+  const s     = STATUS_STYLE[trade.state] ?? STATUS_STYLE.CREATED;
   const total = (trade.quantity * trade.price).toLocaleString('en-IN');
 
   return (

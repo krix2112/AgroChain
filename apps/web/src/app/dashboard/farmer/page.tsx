@@ -20,7 +20,7 @@ interface Trade {
   cropName: string;
   quantity: number;
   price: number;
-  status: 'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
+  state: 'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
   trader?: { name: string };
   createdAt?: string;
 }
@@ -30,11 +30,11 @@ type ModalType = 'sell' | 'offers' | 'orders' | null;
 // ─── Dummy data ───────────────────────────────────────────────────────────────
 
 const DUMMY_TRADES: Trade[] = [
-  { tradeId: '1042', cropName: 'Wheat',  quantity: 50,  price: 2000, status: 'COMPLETED',  trader: { name: 'Raj Traders'   }, createdAt: '2024-04-22' },
-  { tradeId: '1041', cropName: 'Tomato', quantity: 200, price: 4800, status: 'IN_DELIVERY', trader: { name: 'Vinay Grains'  }, createdAt: '2024-04-20' },
-  { tradeId: '1040', cropName: 'Onion',  quantity: 80,  price: 1600, status: 'AGREED',      trader: { name: 'Patel Agro'   }, createdAt: '2024-04-18' },
-  { tradeId: '1039', cropName: 'Rice',   quantity: 100, price: 5000, status: 'CREATED',     trader: { name: 'Sharma Foods' }, createdAt: '2024-04-15' },
-  { tradeId: '1038', cropName: 'Potato', quantity: 150, price: 2250, status: 'COMPLETED',   trader: { name: 'Goyal Fresh'  }, createdAt: '2024-04-10' },
+  { tradeId: '1042', cropName: 'Wheat',  quantity: 50,  price: 2000, state: 'COMPLETED',  trader: { name: 'Raj Traders'   }, createdAt: '2024-04-22' },
+  { tradeId: '1041', cropName: 'Tomato', quantity: 200, price: 4800, state: 'IN_DELIVERY', trader: { name: 'Vinay Grains'  }, createdAt: '2024-04-20' },
+  { tradeId: '1040', cropName: 'Onion',  quantity: 80,  price: 1600, state: 'AGREED',      trader: { name: 'Patel Agro'   }, createdAt: '2024-04-18' },
+  { tradeId: '1039', cropName: 'Rice',   quantity: 100, price: 5000, state: 'CREATED',     trader: { name: 'Sharma Foods' }, createdAt: '2024-04-15' },
+  { tradeId: '1038', cropName: 'Potato', quantity: 150, price: 2250, state: 'COMPLETED',   trader: { name: 'Goyal Fresh'  }, createdAt: '2024-04-10' },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -168,8 +168,8 @@ export default function FarmerDashboard() {
   // ── Derived stats ────────────────────────────────────────────────────────
 
   const total     = trades.length;
-  const active    = trades.filter(t => ['CREATED','AGREED','IN_DELIVERY','DELIVERED'].includes(t.status)).length;
-  const completed = trades.filter(t => t.status === 'COMPLETED').length;
+  const active    = trades.filter(t => ['CREATED','AGREED','IN_DELIVERY','DELIVERED'].includes(t.state)).length;
+  const completed = trades.filter(t => t.state === 'COMPLETED').length;
 
   if (loading) return <LoadingScreen />;
 
@@ -454,7 +454,7 @@ function StatCard({ icon, iconBg, value, label }: {
 }
 
 function TradeCard({ trade, onView }: { trade: Trade; onView: () => void }) {
-  const status = STATUS_STYLE[trade.status] ?? STATUS_STYLE.CREATED;
+  const statusStyle = STATUS_STYLE[trade.state] ?? STATUS_STYLE.CREATED;
   return (
     <div className="bg-white dark:bg-zinc-900/50 border border-zinc-100 dark:border-zinc-800 rounded-[28px] px-6 py-5 shadow-sm hover:shadow-xl hover:border-green-200 dark:hover:border-green-500/30 transition-all flex flex-col sm:flex-row sm:items-center gap-6 group">
       <div className="flex items-center gap-4 flex-1 min-w-0">
@@ -479,8 +479,8 @@ function TradeCard({ trade, onView }: { trade: Trade; onView: () => void }) {
         <div className="text-[11px] font-medium text-zinc-500 mt-1">{formatDate(trade.createdAt)}</div>
       </div>
       <div className="flex items-center gap-4 flex-shrink-0">
-        <Badge variant="secondary" className={`${status.bg} ${status.text} font-black text-[10px] uppercase tracking-wider px-4 py-1.5 rounded-full border-none`}>
-          {status.label}
+        <Badge variant="secondary" className={`${statusStyle.bg} ${statusStyle.text} font-black text-[10px] uppercase tracking-wider px-4 py-1.5 rounded-full border-none`}>
+          {statusStyle.label}
         </Badge>
         <Button
           onClick={onView}

@@ -262,6 +262,26 @@ router.post('/reject', auth, async (req, res, next) => {
     }
 });
 
+// ─── GET /api/bundle/my — list bundles assigned to current transporter ──────
+router.get('/my/all', auth, async (req, res, next) => {
+    try {
+        const bundles = await DeliveryBundle.find({ transporter: req.user.id })
+            .populate({
+                path: 'trades',
+                populate: [
+                    { path: 'farmer', select: 'name phone' },
+                    { path: 'trader', select: 'name phone' },
+                ],
+            })
+            .populate('transporter', 'name phone')
+            .sort('-createdAt');
+
+        res.json(bundles);
+    } catch (err) {
+        next(err);
+    }
+});
+
 // ─── GET /api/bundle/:id ────────────────────────────────────────────────────
 // Get a bundle by its MongoDB _id.
 

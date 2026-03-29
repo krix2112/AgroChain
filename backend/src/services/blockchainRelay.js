@@ -4,6 +4,7 @@ const { ethers } = require('ethers');
 const deployed = require('../../../contracts/deployed.json');
 const walletManager = require('./walletManager');
 const CONTRACT_ABI = deployed.abi;
+console.log(`[blockchain] Loaded ABI with ${CONTRACT_ABI.length} entries.`);
 // Three-tier fallback: env var → deployed.json → placeholder (prevents startup crash)
 const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || deployed.address || 'PENDING_DEPLOYMENT';
 // RPC pointing to Shardeum Mezame (falls back to env RPC_URL)

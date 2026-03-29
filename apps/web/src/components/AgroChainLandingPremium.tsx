@@ -1626,7 +1626,7 @@ export function AgroChainLandingPremium({ onLogin, onRegister }: Props) {
       }}
     >
       <style>
-        {\`
+        {`
           @keyframes gradient-shift {
             0%, 100% { 
               background-position: 0% 50%;
@@ -1666,7 +1666,7 @@ export function AgroChainLandingPremium({ onLogin, onRegister }: Props) {
               margin-top: 40px;
             }
           }
-        \`}
+        `}
       </style>
 
       {Header}

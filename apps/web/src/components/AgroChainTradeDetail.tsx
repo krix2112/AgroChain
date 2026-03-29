@@ -19,7 +19,7 @@ interface Trade {
   cropName:     string;
   quantity:     number;
   price:        number;
-  status:       'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
+  state:        'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
   farmer:       TradeUser;
   trader:       TradeUser;
   transporter?: TradeUser;
@@ -39,7 +39,7 @@ const DUMMY_TRADE: Trade = {
   cropName:    'Wheat',
   quantity:    50,
   price:       2000,
-  status:      'IN_DELIVERY',
+  state:       'IN_DELIVERY',
   farmer:      { name: 'Ramesh Kumar',     phone: '9876543210', walletAddress: '0x3f4a8b2c9d1e5f7a' },
   trader:      { name: 'Raj Traders',      phone: '9123456780', walletAddress: '0xab12cd34ef567890' },
   transporter: { name: 'Suresh Logistics', phone: '9988776655' },
@@ -53,7 +53,7 @@ const DUMMY_TRADE: Trade = {
 
 const STATUS_ORDER = ['CREATED', 'AGREED', 'IN_DELIVERY', 'DELIVERED', 'COMPLETED'];
 
-function statusIndex(s: string) {
+function stateIndex(s: string) {
   return STATUS_ORDER.indexOf(s);
 }
 
@@ -340,7 +340,7 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
 
   // ── Bundle check — triggers when status is AGREED ──────────────────────────
   useEffect(() => {
-    if (!trade || trade.status !== 'AGREED' || bundleDismissed) return;
+    if (!trade || trade.state !== 'AGREED' || bundleDismissed) return;
     const token = localStorage.getItem('agrochain_token');
     (async () => {
       try {
@@ -363,7 +363,7 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
         setBundleSuggestion({ similarTradeId: '1039', savings: 850 });
       }
     })();
-  }, [trade?.status, bundleDismissed]);
+  }, [trade?.state, bundleDismissed]);
 
   async function handleBundle() {
     setBundlePending(true);
@@ -415,9 +415,9 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
   }
 
   const tradeUrl  = \`https://agrochain.app/trade/\${trade.tradeId}\`;
-  const curIdx    = statusIndex(trade.status);
+  const curIdx    = stateIndex(trade.state);
   const totalVal  = (trade.quantity * trade.price).toLocaleString('en-IN');
-  const statusCfg = STATUS_CFG[trade.status] ?? STATUS_CFG.CREATED;
+  const statusCfg = STATUS_CFG[trade.state] ?? STATUS_CFG.CREATED;
 
   return (
     <div style={{ minHeight: '100vh', fontFamily: font, paddingTop: 64 }}>

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { bundleAPI } from "@agrochain/api";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -19,13 +20,24 @@ interface Trade {
   cropName: string;
   quantity: number;
   price: number;
-  status: 'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
+  state: 'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
   farmer: TradeUser;
   trader: TradeUser;
   transporter?: TradeUser;
   createdAt?: string;
   pickedAt?: string;
   deliveredAt?: string;
+  bundleId?: string;
+}
+
+interface Bundle {
+  _id: string;
+  trades: Trade[];
+  fromCity: string;
+  toCity: string;
+  deliveryDate: string;
+  state: 'SUGGESTED' | 'CONFIRMED' | 'REJECTED';
+  totalWeight: number;
 }
 
 interface CurrentUser {
@@ -40,7 +52,7 @@ interface CurrentUser {
 const DUMMY_TRADES: Trade[] = [
   {
     tradeId: '1044', cropName: 'Wheat', quantity: 50, price: 2000,
-    status: 'AGREED',
+    state: 'AGREED',
     farmer: { name: 'Ramesh Kumar', phone: '9876543210' },
     trader: { name: 'Raj Traders',  phone: '9123456780' },
     transporter: { name: 'Suresh Logistics', phone: '9988776655' },
@@ -48,7 +60,7 @@ const DUMMY_TRADES: Trade[] = [
   },
   {
     tradeId: '1043', cropName: 'Tomato', quantity: 200, price: 24,
-    status: 'IN_DELIVERY',
+    state: 'IN_DELIVERY',
     farmer: { name: 'Mohan Patel', phone: '9823456789' },
     trader: { name: 'Vinay Grains', phone: '9812345678' },
     transporter: { name: 'Suresh Logistics', phone: '9988776655' },
@@ -57,7 +69,7 @@ const DUMMY_TRADES: Trade[] = [
   },
   {
     tradeId: '1041', cropName: 'Onion', quantity: 80, price: 20,
-    status: 'COMPLETED',
+    state: 'COMPLETED',
     farmer: { name: 'Vijay Singh', phone: '9811234567' },
     trader: { name: 'Patel Agro',  phone: '9800000001' },
     transporter: { name: 'Suresh Logistics', phone: '9988776655' },
@@ -67,7 +79,7 @@ const DUMMY_TRADES: Trade[] = [
   },
   {
     tradeId: '1038', cropName: 'Rice', quantity: 100, price: 50,
-    status: 'COMPLETED',
+    state: 'COMPLETED',
     farmer: { name: 'Raju Verma', phone: '9834567890' },
     trader: { name: 'Sharma Foods', phone: '9800000002' },
     transporter: { name: 'Suresh Logistics', phone: '9988776655' },
@@ -104,6 +116,7 @@ export default function TransporterDashboard() {
 
   const [user,   setUser]   = useState<CurrentUser | null>(null);
   const [trades, setTrades] = useState<Trade[]>([]);
+  const [bundles, setBundles] = useState<Bundle[]>([]);
   const [loading,        setLoading]        = useState(true);
   const [actionLoading,  setActionLoading]  = useState<string>('');
   const [actionSuccess,  setActionSuccess]  = useState<string>('');
@@ -112,14 +125,27 @@ export default function TransporterDashboard() {
 
   const fetchTrades = useCallback(async (token: string) => {
     try {
-      const res = await fetch('http://localhost:5000/api/trade/my/all', {
+      // Fetch trades and bundles in parallel; bundles are optional — failure is non-fatal
+      const tRes = await fetch('http://localhost:5000/api/trade/my/all', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!res.ok) throw new Error('API error');
-      const data = await res.json();
-      setTrades(Array.isArray(data) ? data : data.trades ?? DUMMY_TRADES);
-    } catch {
+
+      if (!tRes.ok) throw new Error(`Trades API ${tRes.status}`);
+      const tData = await tRes.json();
+      setTrades(Array.isArray(tData) ? tData : tData.trades ?? []);
+
+      // Bundles are best-effort
+      try {
+        const bRes = await bundleAPI.getMyBundles();
+        const bData = bRes.data;
+        setBundles(Array.isArray(bData) ? bData : bData.bundles ?? []);
+      } catch {
+        setBundles([]);
+      }
+    } catch (err) {
+      console.error('Fetch error:', err);
       setTrades(DUMMY_TRADES);
+      setBundles([]);
     } finally {
       setLoading(false);
     }
@@ -166,10 +192,13 @@ export default function TransporterDashboard() {
 
   // ── Derived ──────────────────────────────────────────────────────────────
 
-  const readyForPickup = trades.filter(t => t.status === 'AGREED');
-  const inDelivery     = trades.filter(t => t.status === 'IN_DELIVERY');
-  const completed      = trades.filter(t => t.status === 'COMPLETED' || t.status === 'DELIVERED');
-  const totalDeliveries = completed.length;
+  const soloTrades = trades.filter(t => !t.bundleId);
+  const readyForPickup = soloTrades.filter(t => t.state === 'AGREED');
+  const inDelivery     = soloTrades.filter(t => t.state === 'IN_DELIVERY');
+  const completed      = soloTrades.filter(t => t.state === 'COMPLETED' || t.state === 'DELIVERED');
+  
+  const activeBundles = bundles.filter(b => b.state === 'CONFIRMED');
+  const totalDeliveries = completed.length + bundles.filter(b => b.trades.every(t => t.state === 'COMPLETED')).length;
 
   // ─── Loading ───────────────────────────────────────────────────────────────
 
@@ -240,6 +269,17 @@ export default function TransporterDashboard() {
           emptyIcon="📦"
         >
           <div className="flex flex-col gap-4">
+            {/* Bundles First */}
+            {activeBundles.filter(b => b.trades.some(t => t.state === 'AGREED')).map(bundle => (
+              <BundleCard 
+                key={bundle._id} 
+                bundle={bundle} 
+                actionLoading={actionLoading}
+                onAction={(end) => bundle.trades.forEach(t => callAction(t.tradeId, end))}
+              />
+            ))}
+            
+            {/* Then Solo Trades */}
             {readyForPickup.map(trade => (
               <DeliveryCard key={trade.tradeId} trade={trade}>
                 <div className="flex items-center gap-3 mt-5">
@@ -284,6 +324,17 @@ export default function TransporterDashboard() {
           emptyIcon="🚛"
         >
           <div className="flex flex-col gap-4">
+            {/* Bundles In Transit */}
+            {activeBundles.filter(b => b.trades.some(t => t.state === 'IN_DELIVERY')).map(bundle => (
+              <BundleCard 
+                key={bundle._id} 
+                bundle={bundle} 
+                actionLoading={actionLoading}
+                onAction={(end) => bundle.trades.forEach(t => callAction(t.tradeId, end))}
+                highlight
+              />
+            ))}
+
             {inDelivery.map(trade => (
               <DeliveryCard key={trade.tradeId} trade={trade} highlight>
                 {/* Location info */}
@@ -439,7 +490,7 @@ function DeliveryCard({
     DELIVERED:   { bg: 'bg-orange-100 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-400', label: 'At Destination' },
     COMPLETED:   { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-400', label: 'Done' },
   };
-  const status = STATUS_STYLE[trade.status] ?? { bg: 'bg-zinc-100', text: 'text-zinc-600', label: trade.status };
+  const statusStyle = STATUS_STYLE[trade.state] ?? { bg: 'bg-zinc-100', text: 'text-zinc-600', label: trade.state };
   const total  = (trade.quantity * trade.price).toLocaleString('en-IN');
 
   return (
@@ -465,11 +516,76 @@ function DeliveryCard({
           </div>
         </div>
         {/* Right */}
-        <Badge variant="secondary" className={`${status.bg} ${status.text} text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full border-none self-start sm:self-center`}>
-          {status.label}
+        <Badge variant="secondary" className={`${statusStyle.bg} ${statusStyle.text} text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full border-none self-start sm:self-center`}>
+          {statusStyle.label}
         </Badge>
       </div>
       {children}
+    </div>
+  );
+}
+
+function BundleCard({ 
+  bundle, highlight, actionLoading, onAction 
+}: { 
+  bundle: Bundle; highlight?: boolean; actionLoading: string; onAction: (end: string) => void 
+}) {
+  const isAgreed = bundle.trades.every(t => t.state === 'AGREED');
+  const isInTransit = bundle.trades.some(t => t.state === 'IN_DELIVERY');
+  
+  return (
+    <div className={`bg-gradient-to-br from-[#1B4332] to-[#2D6A4F] rounded-[32px] px-8 py-6 shadow-xl relative overflow-hidden group mb-4 ${
+      highlight ? 'ring-4 ring-yellow-400/50' : ''
+    }`}>
+      <div className="absolute top-0 right-0 p-4 opacity-10 text-6xl">📦</div>
+      <div className="relative z-10">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <Badge className="bg-green-400 text-[#1B4332] font-black text-[10px] uppercase border-none px-3 py-1 mb-2">
+              Smart Bundle ({bundle.trades.length} Trades)
+            </Badge>
+            <h3 className="text-xl font-black text-white tracking-tight">
+              {bundle.fromCity} → {bundle.toCity}
+            </h3>
+            <p className="text-green-100/70 text-xs font-bold mt-1">
+              Total Weight: {bundle.totalWeight} kg · Deliver by {formatDate(bundle.deliveryDate)}
+            </p>
+          </div>
+          <Badge className="bg-white/20 text-white font-bold text-[10px] uppercase border-none px-3 py-1">
+            {isAgreed ? 'Ready for Pickup' : isInTransit ? 'In Transit' : 'Mixed State'}
+          </Badge>
+        </div>
+
+        <div className="space-y-2 mb-6">
+          {bundle.trades.map(t => (
+            <div key={t.tradeId} className="flex justify-between text-xs text-white/80 font-medium bg-white/5 px-3 py-2 rounded-lg">
+              <span>{t.cropName} ({t.quantity}kg)</span>
+              <span>{t.farmer.name} → {t.trader.name}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex gap-3">
+          {isAgreed && (
+             <Button
+                onClick={() => onAction('pickup')}
+                disabled={!!actionLoading}
+                className="flex-1 bg-white text-[#1B4332] hover:bg-green-50 font-black h-11 rounded-xl"
+             >
+                {actionLoading.includes('pickup') ? 'Syncing...' : '📦 Mark Bundle Picked Up'}
+             </Button>
+          )}
+          {isInTransit && (
+             <Button
+                onClick={() => onAction('deliver')}
+                disabled={!!actionLoading}
+                className="flex-1 bg-white text-[#1B4332] hover:bg-green-50 font-black h-11 rounded-xl"
+             >
+                {actionLoading.includes('deliver') ? 'Syncing...' : '🚛 Mark Bundle Delivered'}
+             </Button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

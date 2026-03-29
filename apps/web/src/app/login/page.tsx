@@ -24,18 +24,21 @@ export default function LoginPage() {
     setError('');
 
     try {
+      let authResponse;
       if (isRegister) {
         await register(formData);
-        // After registration, log them in
-        const res = await login({ phone: formData.phone });
-        localStorage.setItem('agrochain_token', res.token);
-        localStorage.setItem('agrochain_user', JSON.stringify(res.user));
+        authResponse = await login({ phone: formData.phone });
       } else {
-        const res = await login({ phone: formData.phone });
-        localStorage.setItem('agrochain_token', res.token);
-        localStorage.setItem('agrochain_user', JSON.stringify(res.user));
+        authResponse = await login({ phone: formData.phone });
       }
-      router.push('/dashboard');
+
+      if (authResponse && authResponse.token && authResponse.user) {
+        localStorage.setItem('agrochain_token', authResponse.token);
+        localStorage.setItem('agrochain_user', JSON.stringify(authResponse.user));
+        
+        const role = authResponse.user.role?.toLowerCase();
+        router.push(`/dashboard/${role}`);
+      }
     } catch (err: any) {
       setError(err?.message || 'Authentication failed');
     } finally {

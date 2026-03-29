@@ -19,7 +19,7 @@ interface Trade {
   cropName: string;
   quantity: number;
   price: number;
-  status: 'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
+  state: 'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
   farmer: TradeUser;
   trader: TradeUser;
   transporter?: TradeUser;
@@ -38,21 +38,21 @@ interface CurrentUser {
 const DUMMY_TRADES: Trade[] = [
   {
     tradeId: '1042', cropName: 'Wheat', quantity: 50, price: 2000,
-    status: 'CREATED',
+    state: 'CREATED',
     farmer: { name: 'Ramesh Kumar', phone: '9876543210' },
     trader: { name: 'Raj Traders',  phone: '9123456780' },
     createdAt: '2024-04-22T09:00:00Z',
   },
   {
     tradeId: '1041', cropName: 'Tomato', quantity: 200, price: 4800,
-    status: 'AGREED',
+    state: 'AGREED',
     farmer: { name: 'Suresh Patel', phone: '9876500000' },
     trader: { name: 'Raj Traders',  phone: '9123456780' },
     createdAt: '2024-04-20T11:00:00Z',
   },
   {
     tradeId: '1040', cropName: 'Onion', quantity: 80, price: 1600,
-    status: 'IN_DELIVERY',
+    state: 'IN_DELIVERY',
     farmer: { name: 'Mohan Singh', phone: '9812345678' },
     trader: { name: 'Raj Traders', phone: '9123456780' },
     transporter: { name: 'Suresh Logistics', phone: '9988776655' },
@@ -60,14 +60,14 @@ const DUMMY_TRADES: Trade[] = [
   },
   {
     tradeId: '1039', cropName: 'Rice', quantity: 100, price: 5000,
-    status: 'COMPLETED',
+    state: 'COMPLETED',
     farmer: { name: 'Vijay Kumar', phone: '9823456789' },
     trader: { name: 'Raj Traders', phone: '9123456780' },
     createdAt: '2024-04-15T10:00:00Z',
   },
   {
     tradeId: '1038', cropName: 'Potato', quantity: 150, price: 2250,
-    status: 'COMPLETED',
+    state: 'COMPLETED',
     farmer: { name: 'Raju Verma', phone: '9834567890' },
     trader: { name: 'Raj Traders', phone: '9123456780' },
     createdAt: '2024-04-10T07:00:00Z',
@@ -106,6 +106,8 @@ export default function TraderDashboard() {
   const [loading,       setLoading]       = useState(true);
   const [agreeLoading,  setAgreeLoading]  = useState<string>('');
   const [agreeSuccess,  setAgreeSuccess]  = useState<string>('');
+  const [utrInputs,     setUtrInputs]     = useState<Record<string, string>>({});
+  const [payLoading,    setPayLoading]    = useState<string>('');
 
   // ── Auth + fetch ─────────────────────────────────────────────────────────
 
@@ -158,7 +160,29 @@ export default function TraderDashboard() {
     }
   }
 
-  // ── Logout ───────────────────────────────────────────────────────────────
+  // ── Payment Proof ────────────────────────────────────────────────────────
+
+  async function handlePaymentProof(tradeId: string) {
+    const token = localStorage.getItem('agrochain_token');
+    const utrHash = utrInputs[tradeId];
+    if (!token || !utrHash) return;
+
+    setPayLoading(tradeId);
+    try {
+      const res = await fetch(`http://localhost:5000/api/trade/${tradeId}/payment-proof`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ utrHash })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.message ?? 'Failed.');
+      await fetchTrades(token);
+    } catch { /* fail */ }
+    finally { setPayLoading(''); }
+  }
 
   function handleLogout() {
     localStorage.removeItem('agrochain_token');
@@ -168,9 +192,9 @@ export default function TraderDashboard() {
 
   // ── Derived lists ────────────────────────────────────────────────────────
 
-  const waiting   = trades.filter(t => t.status === 'CREATED');
-  const active    = trades.filter(t => ['AGREED', 'IN_DELIVERY', 'DELIVERED'].includes(t.status));
-  const completed = trades.filter(t => t.status === 'COMPLETED');
+  const waiting   = trades.filter(t => t.state === 'CREATED');
+  const active    = trades.filter(t => ['AGREED', 'IN_DELIVERY', 'DELIVERED'].includes(t.state));
+  const completed = trades.filter(t => t.state === 'COMPLETED');
   const completedValue = completed.reduce((sum, t) => sum + t.quantity * t.price, 0);
 
   // ─── Loading ───────────────────────────────────────────────────────────────
@@ -289,11 +313,30 @@ export default function TraderDashboard() {
           <div className="flex flex-col gap-3">
             {active.map(trade => (
               <TradeCard key={trade.tradeId} trade={trade}>
-                <div className="mt-4">
+                <div className="mt-4 flex flex-col gap-3">
+                  {trade.state === 'DELIVERED' && (
+                    <div className="flex items-center gap-2 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+                      <input 
+                        type="text"
+                        placeholder="Enter UTR Number"
+                        value={utrInputs[trade.tradeId] || ''}
+                        onChange={(e) => setUtrInputs(prev => ({ ...prev, [trade.tradeId]: e.target.value }))}
+                        className="flex-1 bg-transparent text-sm font-bold border-none focus:ring-0 outline-none px-2"
+                      />
+                      <Button
+                        size="sm"
+                        onClick={() => handlePaymentProof(trade.tradeId)}
+                        disabled={payLoading === trade.tradeId || !utrInputs[trade.tradeId]}
+                        className="bg-[#1B4332] hover:bg-[#2D6A4F] text-white font-bold rounded-xl h-9"
+                      >
+                        {payLoading === trade.tradeId ? '...' : 'Submit UTR'}
+                      </Button>
+                    </div>
+                  )}
                   <Button
                     variant="outline"
                     onClick={() => router.push(`/trade/${trade.tradeId}`)}
-                    className="border-green-100 dark:border-zinc-800 text-[#2D6A4F] dark:text-green-400 hover:bg-green-50 dark:hover:bg-zinc-800 rounded-xl h-11 px-6 font-bold"
+                    className="border-green-100 dark:border-zinc-800 text-[#2D6A4F] dark:text-green-400 hover:bg-green-50 dark:hover:bg-zinc-800 rounded-xl h-11 px-6 font-bold self-start"
                   >
                     View Details →
                   </Button>
@@ -403,7 +446,7 @@ function TradeCard({
     DELIVERED:   { bg: 'bg-orange-100 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-400', label: 'Arrived' },
     COMPLETED:   { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-400', label: 'Closed' },
   };
-  const status = STATUS_STYLE[trade.status] ?? STATUS_STYLE.CREATED;
+  const statusStyle = STATUS_STYLE[trade.state] ?? STATUS_STYLE.CREATED;
   const total  = (trade.quantity * trade.price).toLocaleString('en-IN');
 
   return (
@@ -438,8 +481,8 @@ function TradeCard({
             <div className="text-[10px] font-black text-zinc-300 uppercase tracking-widest">Trade #{trade.tradeId}</div>
             <div className="text-[10px] font-bold text-zinc-400">{formatDate(trade.createdAt)}</div>
           </div>
-          <Badge variant="secondary" className={`${status.bg} ${status.text} text-[10px] font-black uppercase tracking-wider px-4 py-1.5 rounded-full border-none`}>
-            {status.label}
+          <Badge variant="secondary" className={`${statusStyle.bg} ${statusStyle.text} text-[10px] font-black uppercase tracking-wider px-4 py-1.5 rounded-full border-none`}>
+            {statusStyle.label}
           </Badge>
         </div>
       </div>
