@@ -16,7 +16,10 @@ export default function FPOLogin() {
       setLoading(true);
       setError('');
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/auth/send-otp`, {
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+        const apiUrl = baseUrl.endsWith('/api') ? baseUrl : `${baseUrl}/api`;
+        
+        const res = await fetch(`${apiUrl}/auth/send-otp`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ phone: phoneNumber }),
@@ -45,7 +48,10 @@ export default function FPOLogin() {
       setLoading(true);
       setError('');
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/auth/verify-otp`, {
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+        const apiUrl = baseUrl.endsWith('/api') ? baseUrl : `${baseUrl}/api`;
+        
+        const res = await fetch(`${apiUrl}/auth/verify-otp`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ phone: phoneNumber, otp }),
