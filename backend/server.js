@@ -20,11 +20,20 @@ connectDB().then(async () => {
 
 // Middleware
 app.use(cors({
-    origin: true,
+    origin: (origin, callback) => {
+        // Allow all origins for now to fix deployment issues
+        callback(null, true);
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+    credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204
 }));
+
+// Manual CORS fallback for preflight
+app.options('*', cors());
+
 app.use(express.json());
 
 // Routes
