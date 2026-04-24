@@ -30,49 +30,53 @@ const getContract = async () => {
     return { contract, signer };
 };
 
-const relayCreateTrade = async (farmerAddress, traderAddress, cropName, quantity, price) => {
+/**
+ * FPO Trade Creation
+ * @param {number|string} tradeId  - Used as metadata; contract auto-assigns its own ID
+ * @param {string} fpoId           - MongoDB FPO user id (unused on-chain, for logging)
+ * @param {string} crop            - Crop name (e.g. "Paddy")
+ * @param {number} quantity        - Quantity in kg
+ * @param {number} pricePerKg      - Price per kg in ₹
+ */
+const relayCreateTrade = async (tradeId, fpoId, crop, quantity, pricePerKg) => {
     try {
-        const { contract } = await getContract();
-        
+        const { contract, signer } = await getContract();
+
+        // For FPO demo: relay wallet acts as both farmer and trader on-chain
+        const relayAddress = await signer.getAddress();
+
         const tx = await contract.createTrade(
-            traderAddress,
-            cropName,
-            quantity,
-            price
+            relayAddress,             // traderAddr (buyer side)
+            crop,                     // cropName
+            BigInt(quantity),         // quantity (uint256)
+            BigInt(pricePerKg)        // price (uint256)
         );
-        
+
+        console.log(`[relay] createTrade tx sent: ${tx.hash}`);
         const receipt = await tx.wait();
-        
-        const event = receipt.logs.find(log => {
-            try {
-                const parsed = contract.interface.parseLog(log);
-                return parsed && parsed.name === 'TradeCreated';
-            } catch (e) {
-                return false;
-            }
-        });
+        console.log(`[relay] createTrade mined in block ${receipt.blockNumber}`);
 
-        let tradeId = null;
-        if (event) {
-            const parsedEvent = contract.interface.parseLog(event);
-            tradeId = Number(parsedEvent.args.tradeId);
-        }
-
-        return { txHash: receipt.hash, tradeId };
+        return { txHash: receipt.hash, blockNumber: receipt.blockNumber };
     } catch (error) {
-        console.error('Blockchain Relay Error (createTrade):', error);
+        console.error('Blockchain Relay Error (relayCreateTrade):', error.message);
         throw error;
     }
 };
 
-const relayAgreeTrade = async (userId, tradeId) => {
+/**
+ * FPO Trade Agreement
+ * @param {number|BigInt} tradeId - On-chain trade ID (from contract's tradeCount)
+ */
+const relayAgreeTrade = async (tradeId) => {
     try {
         const { contract } = await getContract();
-        const tx = await contract.agreeTrade(tradeId);
+        const tx = await contract.agreeTrade(BigInt(tradeId));
+        console.log(`[relay] agreeTrade tx sent: ${tx.hash}`);
         const receipt = await tx.wait();
-        return { txHash: receipt.hash };
+        console.log(`[relay] agreeTrade mined in block ${receipt.blockNumber}`);
+        return { txHash: receipt.hash, blockNumber: receipt.blockNumber };
     } catch (error) {
-        console.error('Blockchain Relay Error (agreeTrade):', error);
+        console.error('Blockchain Relay Error (relayAgreeTrade):', error.message);
         throw error;
     }
 };

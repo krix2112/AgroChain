@@ -1,5 +1,2 @@
-'use client';
-import { redirect } from 'next/navigation';
-export default function LoginPage() {
-  redirect('/');
-}
+import FPOLogin from '@/components/figma/FPOLogin';
+export default function Page() { return <FPOLogin />; }

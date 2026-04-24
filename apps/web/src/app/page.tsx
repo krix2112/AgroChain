@@ -1,7 +1,5 @@
-'use client';
-
-import App from './app';
+import Homepage from '@/components/figma/Homepage';
 
 export default function Page() {
-  return <App />;
+  return <Homepage />;
 }

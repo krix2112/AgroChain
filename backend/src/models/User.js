@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['farmer', 'trader', 'transporter'],
+        enum: ['farmer', 'trader', 'transporter', 'fpo_manager'],
         required: true
     },
     walletAddress: {
@@ -28,6 +28,11 @@ const userSchema = new mongoose.Schema({
     location: {
         type: String // e.g., 'Indore, MP'
     },
+    organizationName: String,
+    district: String,
+    state: String,
+    totalMembers: Number,
+    source: String,
     createdAt: {
         type: Date,
         default: Date.now

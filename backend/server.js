@@ -13,12 +13,16 @@ connectDB().then(async () => {
     if (process.env.MONGODB_URI && process.env.MONGODB_URI.includes('127.0.0.1')) {
         const seedLib = require('./scripts/demo-seed-lib');
         await seedLib();
+        const seedFpo = require('./src/scripts/seedDemo');
+        await seedFpo();
     }
 });
 
 // Middleware
 app.use(cors({
     origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://127.0.0.1:5173'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
 app.use(express.json());
@@ -30,6 +34,7 @@ app.use('/api/payment', require('./src/routes/payment'));
 app.use('/api/listing', require('./src/routes/listing'));
 app.use('/api/request', require('./src/routes/cropRequest'));
 app.use('/api/bundle', require('./src/routes/bundle'));
+app.use('/api/fpo', require('./src/routes/fpo'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Health Check

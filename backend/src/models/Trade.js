@@ -9,7 +9,7 @@ const tradeSchema = new mongoose.Schema({
     farmer: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: false
     },
     trader: {
         type: mongoose.Schema.Types.ObjectId,
@@ -21,26 +21,42 @@ const tradeSchema = new mongoose.Schema({
     },
     cropName: {
         type: String,
-        required: true
+        required: false
     },
     quantity: {
         type: Number,
-        required: true
+        required: false
     },
     price: {
         type: Number,
-        required: true
+        required: false
     },
     state: {
         type: String,
         enum: ['CREATED', 'AGREED', 'IN_DELIVERY', 'DELIVERED', 'COMPLETED'],
         default: 'CREATED'
     },
+    status: {
+        type: String
+    },
+    buyer: {
+        type: String
+    },
+    amount: {
+        type: Number
+    },
+    contractAddress: {
+        type: String
+    },
+    lotId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Lot'
+    },
     utrHash: String,
     txHash: String,
     source: {
         type: String,
-        enum: ['DIRECT', 'MARKETPLACE', 'REVERSE_REQUEST'],
+        enum: ['DIRECT', 'MARKETPLACE', 'REVERSE_REQUEST', 'demo', 'live'],
         default: 'DIRECT'
     },
     // --- Smart Route Bundling fields ---

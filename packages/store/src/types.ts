@@ -2,7 +2,7 @@ export interface User {
   id: string;
   name: string;
   phone: string;
-  role: 'farmer' | 'trader' | 'transporter';
+  role: 'fpo_manager' | 'buyer' | 'transporter' | 'farmer';
   walletAddress: string;
 }
 

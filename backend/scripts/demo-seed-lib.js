@@ -23,7 +23,7 @@ module.exports = async () => {
         await WalletKey.deleteMany({});
 
         const users = [
-            { name: 'Ramesh Singh', phone: '9876543210', role: 'farmer', email: 'ramesh@example.com' },
+            { name: 'Ramesh Singh', phone: '9876543211', role: 'farmer', email: 'ramesh@example.com' },
             { name: 'Suresh Kumar', phone: '9123456780', role: 'trader', email: 'suresh@example.com' },
             { name: 'Vinod Logistics', phone: '9988776655', role: 'transporter', email: 'vinod@example.com' }
         ];

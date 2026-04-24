@@ -11,7 +11,7 @@ const connectDB = async () => {
         // In-memory fallback for seamless local demo experience
         if (!uri || uri.includes('localhost:27017')) {
             console.log('⚠️ Local MongoDB not found. Starting in-memory instance for demo...');
-            mongod = await MongoMemoryServer.create();
+            mongod = await MongoMemoryServer.create({ instance: { launchTimeout: 60000 } });
             uri = mongod.getUri();
             // Update env for other scripts if needed
             process.env.MONGODB_URI = uri;
