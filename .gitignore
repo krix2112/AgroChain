@@ -1,5 +1,8 @@
 node_modules
 .env
+backend/.env
+apps/web/.env
+packages/*/.env
 contracts/.env
 /contracts/artifacts
 /contracts/cache

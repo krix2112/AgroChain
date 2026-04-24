@@ -21,9 +21,19 @@ export default function FPOLogin() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ phone: phoneNumber }),
         });
-        setOtpSent(true);
-      } catch {
-        setOtpSent(true); // allow mock flow
+        const data = await res.json();
+        if (res.ok) {
+          setOtpSent(true);
+          // For dev convenience, show dummy code if returned
+          if (data.dummyCode) {
+            console.log("DEV: OTP is", data.dummyCode);
+          }
+        } else {
+          setError(data.error || 'Failed to send OTP');
+        }
+      } catch (err) {
+        setError('Network error. Please try again.');
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -41,18 +51,18 @@ export default function FPOLogin() {
           body: JSON.stringify({ phone: phoneNumber, otp }),
         });
         const data = await res.json();
-        if (data.token) {
+        
+        if (res.ok && data.token) {
           localStorage.setItem('agrochain_token', data.token);
-          localStorage.setItem('userRole', 'fpo');
+          localStorage.setItem('agrochain_user', JSON.stringify(data.user));
+          localStorage.setItem('userRole', data.user.role || 'fpo');
           router.push('/dashboard');
         } else {
-          // fallback for mock/dev
-          localStorage.setItem('userRole', 'fpo');
-          router.push('/dashboard');
+          setError(data.error || 'Invalid OTP');
         }
-      } catch {
-        localStorage.setItem('userRole', 'fpo');
-        router.push('/dashboard');
+      } catch (err) {
+        setError('Verification failed. Please try again.');
+        console.error(err);
       } finally {
         setLoading(false);
       }
