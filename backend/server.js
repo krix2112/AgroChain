@@ -2,7 +2,6 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
-const cors = require('cors');
 const connectDB = require('./src/config/database');
 const errorHandler = require('./src/middleware/error');
 
@@ -18,21 +17,19 @@ connectDB().then(async () => {
     }
 });
 
-// Middleware
-app.use(cors({
-    origin: (origin, callback) => {
-        // Allow all origins for now to fix deployment issues
-        callback(null, true);
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
-    credentials: true,
-    preflightContinue: false,
-    optionsSuccessStatus: 204
-}));
-
-// Manual CORS fallback for preflight
-app.options('*', cors());
+// Global Brute-Force CORS (Placed before ALL other middleware)
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    
+    if (req.method === 'OPTIONS') {
+        return res.status(204).end();
+    }
+    next();
+});
 
 app.use(express.json());
 

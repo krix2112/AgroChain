@@ -16,7 +16,10 @@ export default function FPOLogin() {
       setLoading(true);
       setError('');
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+        let baseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').trim();
+        // Remove trailing slash if present
+        if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
+        // Ensure /api is at the end
         const apiUrl = baseUrl.endsWith('/api') ? baseUrl : `${baseUrl}/api`;
         
         const res = await fetch(`${apiUrl}/auth/send-otp`, {
