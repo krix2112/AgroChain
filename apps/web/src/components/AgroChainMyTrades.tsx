@@ -7,14 +7,14 @@ const serif = "'Noto Serif', serif";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type TradeState = 'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
+type TradeStatus = 'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
 
 interface Trade {
   tradeId:   string;
   cropName:  string;
   quantity:  number;
   price:     number;
-  state:    TradeState;
+  status:    TradeStatus;
   traderName: string;
   date:      string;
 }
@@ -22,16 +22,16 @@ interface Trade {
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const TRADES: Trade[] = [
-  { tradeId: '1042', cropName: 'Wheat',  quantity: 50,  price: 2000, state: 'COMPLETED',  traderName: 'Raj Traders',   date: '22 Apr 2024' },
-  { tradeId: '1041', cropName: 'Tomato', quantity: 200, price: 4800, state: 'IN_DELIVERY', traderName: 'Vinay Grains',  date: '20 Apr 2024' },
-  { tradeId: '1040', cropName: 'Onion',  quantity: 80,  price: 1600, state: 'AGREED',      traderName: 'Patel Agro',    date: '18 Apr 2024' },
-  { tradeId: '1039', cropName: 'Rice',   quantity: 100, price: 5000, state: 'CREATED',     traderName: 'Sharma Foods',  date: '15 Apr 2024' },
-  { tradeId: '1038', cropName: 'Potato', quantity: 150, price: 2250, state: 'COMPLETED',   traderName: 'Goyal Fresh',   date: '10 Apr 2024' },
+  { tradeId: '1042', cropName: 'Wheat',  quantity: 50,  price: 2000, status: 'COMPLETED',  traderName: 'Raj Traders',   date: '22 Apr 2024' },
+  { tradeId: '1041', cropName: 'Tomato', quantity: 200, price: 4800, status: 'IN_DELIVERY', traderName: 'Vinay Grains',  date: '20 Apr 2024' },
+  { tradeId: '1040', cropName: 'Onion',  quantity: 80,  price: 1600, status: 'AGREED',      traderName: 'Patel Agro',    date: '18 Apr 2024' },
+  { tradeId: '1039', cropName: 'Rice',   quantity: 100, price: 5000, status: 'CREATED',     traderName: 'Sharma Foods',  date: '15 Apr 2024' },
+  { tradeId: '1038', cropName: 'Potato', quantity: 150, price: 2250, status: 'COMPLETED',   traderName: 'Goyal Fresh',   date: '10 Apr 2024' },
 ];
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
-const STATUS_CONFIG: Record<TradeState, {
+const STATUS_CONFIG: Record<TradeStatus, {
   label:     string;
   emoji:     string;
   color:     string;
@@ -95,7 +95,7 @@ interface Props {
 function TradeRow({ trade, onView }: { trade: Trade; onView: () => void }) {
   const [hovered, setHovered]       = useState(false);
   const [btnHovered, setBtnHovered] = useState(false);
-  const s    = STATUS_CONFIG[trade.state];
+  const s    = STATUS_CONFIG[trade.status];
   const crop = getCropConfig(trade.cropName);
 
   return (
@@ -254,17 +254,17 @@ function TradeRow({ trade, onView }: { trade: Trade; onView: () => void }) {
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export function AgroChainMyTrades({ language, onViewTrade, onBack }: Props) {
-  const [activeFilter, setActiveFilter] = useState<TradeState | 'ALL'>('ALL');
+  const [activeFilter, setActiveFilter] = useState<TradeStatus | 'ALL'>('ALL');
 
   const total     = TRADES.length;
-  const active    = TRADES.filter(t => ['CREATED', 'AGREED', 'IN_DELIVERY'].includes(t.state)).length;
-  const completed = TRADES.filter(t => t.state === 'COMPLETED').length;
+  const active    = TRADES.filter(t => ['CREATED', 'AGREED', 'IN_DELIVERY'].includes(t.status)).length;
+  const completed = TRADES.filter(t => t.status === 'COMPLETED').length;
 
   const filtered = activeFilter === 'ALL'
     ? TRADES
-    : TRADES.filter(t => t.state === activeFilter);
+    : TRADES.filter(t => t.status === activeFilter);
 
-  const TABS: Array<{ key: TradeState | 'ALL'; label: string }> = [
+  const TABS: Array<{ key: TradeStatus | 'ALL'; label: string }> = [
     { key: 'ALL',         label: 'All Trades' },
     { key: 'CREATED',     label: 'Created'    },
     { key: 'AGREED',      label: 'Agreed'     },

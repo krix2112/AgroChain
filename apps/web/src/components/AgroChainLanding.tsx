@@ -13,7 +13,7 @@ interface Props {
   onRegister: () => void;
 }
 
-/* â”€â”€ Animated counter â”€â”€ */
+/* ── Animated counter ── */
 function AnimatedCounter({ target, prefix = '', suffix = '' }: { target: string; prefix?: string; suffix?: string }) {
   return (
     <span>
@@ -22,7 +22,7 @@ function AnimatedCounter({ target, prefix = '', suffix = '' }: { target: string;
   );
 }
 
-/* â”€â”€ Section fade-in wrapper â”€â”€ */
+/* ── Section fade-in wrapper ── */
 function FadeIn({ children, delay = 0, className = '', style }: { children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
@@ -33,7 +33,6 @@ function FadeIn({ children, delay = 0, className = '', style }: { children: Reac
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay, ease: 'easeOut' }}
       className={className}
-      style={style}
     >
       {children}
     </motion.div>
@@ -51,7 +50,7 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  /* â”€â”€ HEADER â”€â”€ */
+  /* ── HEADER ── */
   const Header = (
     <header
       style={{
@@ -228,7 +227,7 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
     </header>
   );
 
-  /* â”€â”€ HERO â”€â”€ */
+  /* ── HERO ── */
   const Hero = (
     <section
       className="at-landing-hero"
@@ -295,7 +294,7 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
           }}
         >
           AgroChain connects farmers directly with verified buyers. List your
-          crops, get the best price, and track delivery â€” all in one place.
+          crops, get the best price, and track delivery — all in one place.
         </p>
 
         {/* CTA Buttons */}
@@ -321,7 +320,7 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
               transition: 'box-shadow 0.2s',
             }}
           >
-            ðŸŒ± Start Selling
+            🌱 Start Selling
           </motion.button>
           <motion.button
             whileHover={{ background: '#f0fdf4', borderColor: '#052e16' }}
@@ -343,7 +342,7 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
               transition: 'background 0.2s, border-color 0.2s',
             }}
           >
-            ðŸ›’ Find Crops
+            🛒 Find Crops
           </motion.button>
         </div>
 
@@ -364,7 +363,7 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
                 fontWeight: 500,
               }}
             >
-              <span style={{ fontSize: 15 }}>âœ…</span> {t}
+              <span style={{ fontSize: 15 }}>✅</span> {t}
             </span>
           ))}
         </div>
@@ -379,7 +378,7 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
               padding: '24px 28px',
             }}
           >
-            <div style={{ textAlign: 'center', fontSize: 32, marginBottom: 10 }}>ðŸŒ¾</div>
+            <div style={{ textAlign: 'center', fontSize: 32, marginBottom: 10 }}>🌾</div>
             <p style={{ textAlign: 'center', fontSize: 20, fontWeight: 700, color: '#052e16', marginBottom: 4 }}>
               50,000+ farmers
             </p>
@@ -389,9 +388,9 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
             <div style={{ height: 1, background: '#d1fae5', marginBottom: 14 }} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {[
-                'âœ…  â‚¹2.4 Cr+ in trades completed',
-                'âœ…  1,200+ verified buyers',
-                'âœ…  Available in Hindi & English',
+                '✅  ₹2.4 Cr+ in trades completed',
+                '✅  1,200+ verified buyers',
+                '✅  Available in Hindi & English',
               ].map((s, i) => (
                 <p key={i} style={{ margin: 0, fontSize: 13, color: '#052e16', fontWeight: 500 }}>
                   {s}
@@ -463,7 +462,7 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
             }}
           >
             {/* Wheat emoji */}
-            <div style={{ textAlign: 'center', fontSize: 44, marginBottom: 14 }}>ðŸŒ¾</div>
+            <div style={{ textAlign: 'center', fontSize: 44, marginBottom: 14 }}>🌾</div>
 
             {/* Main stat */}
             <p
@@ -498,9 +497,9 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
             {/* Stats rows */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {[
-                'âœ…  â‚¹2.4 Cr+ in trades completed',
-                'âœ…  1,200+ verified buyers',
-                'âœ…  Available in Hindi & English',
+                '✅  ₹2.4 Cr+ in trades completed',
+                '✅  1,200+ verified buyers',
+                '✅  Available in Hindi & English',
               ].map((s, i) => (
                 <p
                   key={i}
@@ -526,20 +525,20 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
     </section>
   );
 
-  /* â”€â”€ FEATURES â”€â”€ */
+  /* ── FEATURES ── */
   const features = [
     {
-      icon: 'ðŸŒ¾',
+      icon: '🌾',
       title: 'List Your Harvest',
       body: 'Upload your crop details, set your price, and go live in under 3 minutes.',
     },
     {
-      icon: 'ðŸ’¬',
+      icon: '💬',
       title: 'Receive Buyer Offers',
       body: 'Verified buyers contact you directly. Compare offers and negotiate the best deal.',
     },
     {
-      icon: 'ðŸšš',
+      icon: '🚚',
       title: 'Track Every Delivery',
       body: 'Real-time delivery updates from your farm to the buyer\'s warehouse.',
     },
@@ -626,7 +625,7 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
     </section>
   );
 
-  /* â”€â”€ HOW IT WORKS â”€â”€ */
+  /* ── HOW IT WORKS ── */
   const steps = [
     {
       num: '1',
@@ -636,7 +635,7 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
     {
       num: '2',
       title: 'List Your Crop',
-      body: 'Add your harvest details â€” crop type, quantity, price, quality.',
+      body: 'Add your harvest details — crop type, quantity, price, quality.',
     },
     {
       num: '3',
@@ -645,36 +644,36 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
     },
   ];
 
-  // â”€â”€ ROLE CARDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── ROLE CARDS ────────────────────────────────────────────────────────────
   const roles = [
     {
-      emoji: 'ðŸŒ¾',
+      emoji: '🌾',
       title: 'Farmer',
-      titleHi: 'à¤•à¤¿à¤¸à¤¾à¤¨',
-      body: 'List your crops and get fair prices directly from traders â€” no middlemen cutting your earnings.',
-      bodyHi: 'à¤…à¤ªà¤¨à¥€ à¤«à¤¸à¤² à¤²à¤¿à¤¸à¥à¤Ÿ à¤•à¤°à¥‡à¤‚ à¤”à¤° à¤µà¥à¤¯à¤¾à¤ªà¤¾à¤°à¤¿à¤¯à¥‹à¤‚ à¤¸à¥‡ à¤¸à¥€à¤§à¥‡ à¤‰à¤šà¤¿à¤¤ à¤®à¥‚à¤²à¥à¤¯ à¤ªà¤¾à¤à¤‚à¥¤',
-      cta: 'Join as Farmer â†’',
-      ctaHi: 'à¤•à¤¿à¤¸à¤¾à¤¨ à¤•à¥‡ à¤°à¥‚à¤ª à¤®à¥‡à¤‚ à¤œà¥à¤¡à¤¼à¥‡à¤‚ â†’',
+      titleHi: 'किसान',
+      body: 'List your crops and get fair prices directly from traders — no middlemen cutting your earnings.',
+      bodyHi: 'अपनी फसल लिस्ट करें और व्यापारियों से सीधे उचित मूल्य पाएं।',
+      cta: 'Join as Farmer →',
+      ctaHi: 'किसान के रूप में जुड़ें →',
       accent: '#4ade80',
     },
     {
-      emoji: 'ðŸ¤',
+      emoji: '🤝',
       title: 'Trader',
-      titleHi: 'à¤µà¥à¤¯à¤¾à¤ªà¤¾à¤°à¥€',
+      titleHi: 'व्यापारी',
       body: 'Browse verified crop listings and negotiate directly with farmers at transparent prices.',
-      bodyHi: 'à¤¸à¤¤à¥à¤¯à¤¾à¤ªà¤¿à¤¤ à¤«à¤¸à¤² à¤²à¤¿à¤¸à¥à¤Ÿà¤¿à¤‚à¤— à¤¦à¥‡à¤–à¥‡à¤‚ à¤”à¤° à¤•à¤¿à¤¸à¤¾à¤¨à¥‹à¤‚ à¤¸à¥‡ à¤¸à¥€à¤§à¥‡ à¤¸à¥Œà¤¦à¤¾ à¤•à¤°à¥‡à¤‚à¥¤',
-      cta: 'Join as Trader â†’',
-      ctaHi: 'à¤µà¥à¤¯à¤¾à¤ªà¤¾à¤°à¥€ à¤•à¥‡ à¤°à¥‚à¤ª à¤®à¥‡à¤‚ à¤œà¥à¤¡à¤¼à¥‡à¤‚ â†’',
+      bodyHi: 'सत्यापित फसल लिस्टिंग देखें और किसानों से सीधे सौदा करें।',
+      cta: 'Join as Trader →',
+      ctaHi: 'व्यापारी के रूप में जुड़ें →',
       accent: '#34d399',
     },
     {
-      emoji: 'ðŸš›',
+      emoji: '🚛',
       title: 'Transporter',
-      titleHi: 'à¤Ÿà¥à¤°à¤¾à¤‚à¤¸à¤ªà¥‹à¤°à¥à¤Ÿà¤°',
+      titleHi: 'ट्रांसपोर्टर',
       body: 'Find delivery jobs near you and get paid automatically on successful completion.',
-      bodyHi: 'à¤…à¤ªà¤¨à¥‡ à¤¨à¤œà¤¦à¥€à¤•à¥€ à¤¡à¤¿à¤²à¥€à¤µà¤°à¥€ à¤•à¤¾à¤® à¤–à¥‹à¤œà¥‡à¤‚ à¤”à¤° à¤¸à¤«à¤² à¤¡à¤¿à¤²à¥€à¤µà¤°à¥€ à¤ªà¤° à¤­à¥à¤—à¤¤à¤¾à¤¨ à¤ªà¤¾à¤à¤‚à¥¤',
-      cta: 'Join as Transporter â†’',
-      ctaHi: 'à¤Ÿà¥à¤°à¤¾à¤‚à¤¸à¤ªà¥‹à¤°à¥à¤Ÿà¤° à¤•à¥‡ à¤°à¥‚à¤ª à¤®à¥‡à¤‚ à¤œà¥à¤¡à¤¼à¥‡à¤‚ â†’',
+      bodyHi: 'अपने नजदीकी डिलीवरी काम खोजें और सफल डिलीवरी पर भुगतान पाएं।',
+      cta: 'Join as Transporter →',
+      ctaHi: 'ट्रांसपोर्टर के रूप में जुड़ें →',
       accent: '#6ee7b7',
     },
   ];
@@ -702,7 +701,7 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
           textAlign: 'center', fontSize: 14, color: 'rgba(255,255,255,0.45)',
           fontStyle: 'italic', marginBottom: 10, fontFamily: font,
         }}>
-          {language === 'hi' ? 'à¤†à¤ª à¤•à¥Œà¤¨ à¤¹à¥ˆà¤‚?' : 'Who are you?'}
+          {language === 'hi' ? 'आप कौन हैं?' : 'Who are you?'}
         </p>
         <h2 style={{
           textAlign: 'center', fontFamily: serif,
@@ -710,14 +709,14 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
           color: 'white', marginBottom: 14,
           textShadow: '0 2px 12px rgba(0,0,0,0.30)',
         }}>
-          {language === 'hi' ? 'à¤…à¤ªà¤¨à¤¾ à¤°à¥‹à¤² à¤šà¥à¤¨à¥‡à¤‚' : 'Choose your role'}
+          {language === 'hi' ? 'अपना रोल चुनें' : 'Choose your role'}
         </h2>
         <p style={{
           textAlign: 'center', fontSize: 15, color: 'rgba(255,255,255,0.55)',
           maxWidth: 500, margin: '0 auto 56px', lineHeight: 1.6,
         }}>
           {language === 'hi'
-            ? 'AgroChain à¤ªà¤° à¤¤à¥€à¤¨ à¤ªà¥à¤°à¤•à¤¾à¤° à¤•à¥‡ à¤‰à¤ªà¤¯à¥‹à¤—à¤•à¤°à¥à¤¤à¤¾ à¤¹à¥ˆà¤‚à¥¤ à¤…à¤ªà¤¨à¥€ à¤­à¥‚à¤®à¤¿à¤•à¤¾ à¤•à¥‡ à¤…à¤¨à¥à¤¸à¤¾à¤° à¤¸à¤¾à¤‡à¤¨ à¤…à¤ª à¤•à¤°à¥‡à¤‚à¥¤'
+            ? 'AgroChain पर तीन प्रकार के उपयोगकर्ता हैं। अपनी भूमिका के अनुसार साइन अप करें।'
             : 'AgroChain connects three types of users. Sign up for the role that fits you.'}
         </p>
       </FadeIn>
@@ -901,10 +900,10 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
     </section>
   );
 
-  /* â”€â”€ SOCIAL PROOF BANNER â”€â”€ */
+  /* ── SOCIAL PROOF BANNER ── */
   const stats = [
     { value: '50,000+', label: 'Registered Farmers' },
-    { value: 'â‚¹2.4 Cr+', label: 'Trades Completed' },
+    { value: '₹2.4 Cr+', label: 'Trades Completed' },
     { value: '1,200+', label: 'Verified Buyers' },
   ];
 
@@ -972,7 +971,7 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
     </section>
   );
 
-  /* â”€â”€ FOOTER â”€â”€ */
+  /* ── FOOTER ── */
   const Footer = (
     <footer
       style={{
@@ -1076,7 +1075,7 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
               letterSpacing: '0.02em',
             }}
           >
-            EN &nbsp;|&nbsp; à¤¹à¤¿à¤‚à¤¦à¥€
+            EN &nbsp;|&nbsp; हिंदी
           </span>
           {/* Social circles */}
           <div style={{ display: 'flex', gap: 8 }}>
@@ -1115,16 +1114,16 @@ export function AgroChainLanding({ onLogin, onRegister }: Props) {
         }}
       >
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', margin: '0 0 4px' }}>
-          Â© 2024 AgroChain. All rights reserved.
+          © 2024 AgroChain. All rights reserved.
         </p>
         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.22)', margin: 0 }}>
-          Built on Shardeum Blockchain Â· Hackcraft 3.0
+          Built on Shardeum Blockchain · Hackcraft 3.0
         </p>
       </div>
     </footer>
   );
 
-  /* â”€â”€ FLOATING HELP BUTTON â”€â”€ */
+  /* ── FLOATING HELP BUTTON ── */
   const HelpBtn = (
     <motion.button
       whileHover={{ scale: 1.1, boxShadow: '0 8px 28px rgba(0,0,0,0.35)' }}

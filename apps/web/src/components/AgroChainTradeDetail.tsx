@@ -19,7 +19,7 @@ interface Trade {
   cropName:     string;
   quantity:     number;
   price:        number;
-  state:        'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
+  status:       'CREATED' | 'AGREED' | 'IN_DELIVERY' | 'DELIVERED' | 'COMPLETED';
   farmer:       TradeUser;
   trader:       TradeUser;
   transporter?: TradeUser;
@@ -39,7 +39,7 @@ const DUMMY_TRADE: Trade = {
   cropName:    'Wheat',
   quantity:    50,
   price:       2000,
-  state:       'IN_DELIVERY',
+  status:      'IN_DELIVERY',
   farmer:      { name: 'Ramesh Kumar',     phone: '9876543210', walletAddress: '0x3f4a8b2c9d1e5f7a' },
   trader:      { name: 'Raj Traders',      phone: '9123456780', walletAddress: '0xab12cd34ef567890' },
   transporter: { name: 'Suresh Logistics', phone: '9988776655' },
@@ -53,7 +53,7 @@ const DUMMY_TRADE: Trade = {
 
 const STATUS_ORDER = ['CREATED', 'AGREED', 'IN_DELIVERY', 'DELIVERED', 'COMPLETED'];
 
-function stateIndex(s: string) {
+function statusIndex(s: string) {
   return STATUS_ORDER.indexOf(s);
 }
 
@@ -320,7 +320,7 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
   const fetchTrade = useCallback(async () => {
     const token = localStorage.getItem('agrochain_token');
     try {
-      const res = await fetch(`http://localhost:5000/api/trade/${tradeId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/trade/${tradeId}`, {
         headers: { Authorization: `Bearer ${token ?? ''}` },
         signal: AbortSignal.timeout(3000),
       });
@@ -340,11 +340,11 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
 
   // ── Bundle check — triggers when status is AGREED ──────────────────────────
   useEffect(() => {
-    if (!trade || trade.state !== 'AGREED' || bundleDismissed) return;
+    if (!trade || trade.status !== 'AGREED' || bundleDismissed) return;
     const token = localStorage.getItem('agrochain_token');
     (async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/bundle/check', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/bundle/check`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -363,13 +363,13 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
         setBundleSuggestion({ similarTradeId: '1039', savings: 850 });
       }
     })();
-  }, [trade?.state, bundleDismissed]);
+  }, [trade?.status, bundleDismissed]);
 
   async function handleBundle() {
     setBundlePending(true);
     const token = localStorage.getItem('agrochain_token');
     try {
-      await fetch('http://localhost:5000/api/bundle/create', {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/bundle/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -415,9 +415,9 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
   }
 
   const tradeUrl  = `https://agrochain.app/trade/${trade.tradeId}`;
-  const curIdx    = stateIndex(trade.state);
+  const curIdx    = statusIndex(trade.status);
   const totalVal  = (trade.quantity * trade.price).toLocaleString('en-IN');
-  const statusCfg = STATUS_CFG[trade.state] ?? STATUS_CFG.CREATED;
+  const statusCfg = STATUS_CFG[trade.status] ?? STATUS_CFG.CREATED;
 
   return (
     <div style={{ minHeight: '100vh', fontFamily: font, paddingTop: 64 }}>
@@ -865,7 +865,7 @@ export function AgroChainTradeDetail({ tradeId, language, onBack }: Props) {
             BUNDLE SUGGESTION CARD (shown when AGREED)
         ══════════════════════════════════════════ */}
         <AnimatePresence>
-          {trade.state === 'AGREED' && bundleSuggestion && !bundleDismissed && (
+          {trade.status === 'AGREED' && bundleSuggestion && !bundleDismissed && (
             <motion.div
               initial={{ opacity: 0, y: 18, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}

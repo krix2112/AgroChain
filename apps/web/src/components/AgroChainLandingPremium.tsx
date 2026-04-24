@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'motion/react';
 import { Wheat, HelpCircle, Menu, X, Phone, ArrowRight, CheckCircle, MessageSquare, Truck, Package, Globe, IndianRupee, Smartphone, Users, Leaf } from 'lucide-react';
-import farmBg from 'figma:asset/6ebba757bfe7e3c4f266787e46a11ed807fa8781.png';
+const farmBg = '/assets/6ebba757bfe7e3c4f266787e46a11ed807fa8781.png';
 import { 
   WheatIcon, 
   FarmerIcon, 
@@ -11,7 +11,7 @@ import {
   GlobeIcon,
   MoneyIcon,
   HandshakeIcon 
-} from './cropicons';
+} from './CropIcons';
 
 const font = "'Noto Sans', 'Noto Sans Devanagari', sans-serif";
 const serif = "'Noto Serif', serif";
@@ -49,11 +49,13 @@ function useCountUp(target: number, duration = 2000) {
 function FadeIn({ 
   children, 
   delay = 0, 
-  className = '' 
+  className = '',
+  style
 }: { 
   children: React.ReactNode; 
   delay?: number; 
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-60px' });
@@ -65,6 +67,7 @@ function FadeIn({
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
       className={className}
+      style={style}
     >
       {children}
     </motion.div>
@@ -605,7 +608,7 @@ export function AgroChainLandingPremium({ onLogin, onRegister }: Props) {
             }}
           >
             <img
-              src={farmBg.src}
+              src={farmBg}
               alt=""
               style={{
                 width: '100%',
