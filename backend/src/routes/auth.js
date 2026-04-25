@@ -168,19 +168,9 @@ router.post('/verify-otp', async (req, res) => {
 // POST /api/auth/login
 router.post('/login', async (req, res) => {
     try {
-        const { phone, otp } = req.body;
+        const { phone } = req.body;
 
-        // 1. Verify OTP
-        if (otp !== '123456') { // Allow bypass for testing
-            const otpDoc = await Otp.findOne({ phone, code: otp });
-            if (!otpDoc) {
-                return res.status(400).json({ error: 'Invalid or expired OTP' });
-            }
-            // Delete OTP after successful use
-            await Otp.deleteOne({ _id: otpDoc._id });
-        }
-
-        // 2. Find user by phone
+        // 1. Find user by phone
         const user = await User.findOne({ phone });
         if (!user) {
             return res.status(404).json({ success: false, message: "Phone not registered" });
