@@ -7,17 +7,9 @@ import {
 } from 'recharts';
 import { Search, Check, ChevronDown, Leaf, MapPin, SlidersHorizontal, RefreshCw, AlertCircle } from 'lucide-react';
 
-// ─── API base (no key ever in this file) ────────────────────
-const API_BASE = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api')
-  .replace(/\/api\/?$/, '') // strip trailing /api if present — our routes live at /api/mandi-intelligence
-  + '/api/mandi-intelligence';
-
-async function mandiGet<T>(path: string): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, { cache: 'no-store' });
-  const json = await res.json();
-  if (!res.ok || !json.success) throw new Error(json.error || `Request failed ${res.status}`);
-  return json.data as T;
-}
+import { 
+  fetchMandiDashboard, fetchCommodities, fetchStates, fetchDistricts, fetchMarkets, DashboardData 
+} from '../../services/mandiIntelligenceApi';
 
 // ─── Types ───────────────────────────────────────────────────
 interface LiveMonitor {
@@ -44,18 +36,7 @@ interface SpreadPoint   { date: string; minPrice: number; modalPrice: number; ma
 interface SeasonMonth   { label: string; avgModal: number | null; count: number; }
 interface BarEntry      { market: string; district?: string; state?: string; modalPrice: number; minPrice: number; maxPrice: number; }
 interface HeatmapRow    { label: string; values: (number | null)[]; normalized: (number | null)[]; }
-interface DashboardData {
-  livePriceMonitor: LiveMonitor;
-  sellSignal: SellSignalData;
-  momentum: { available: boolean; series: MomentumPoint[]; direction: string };
-  priceSpreadBand: { available: boolean; series: SpreadPoint[]; avgSpread: number | null };
-  seasonality: { available: boolean; months: SeasonMonth[] };
-  marketComparisonBars: { bars: BarEntry[]; count: number };
-  heatmap: { dates: string[]; matrix: HeatmapRow[]; colorDomain: { min: number; max: number } };
-  trendView: { available: boolean; direction: string; pctChange: number | null };
-  forecastBand: { available: boolean; confidence?: number; direction?: string };
-  meta: { fetchedAt: string; latestRecordDate: string | null; missingDataWarnings: string[] };
-}
+// Imported DashboardData type from API hooks
 
 // ─── CUSTOM SVG ILLUSTRATIONS (preserved exactly) ───────────
 const GrowthIllustration = () => (
@@ -273,12 +254,10 @@ export default function MandiPrices() {
 
   // ── Load dropdown lists on mount ──
   useEffect(() => {
-    mandiGet<string[]>('/commodities')
-      .then(cs => cs.length ? setCommodityOptions(cs.map(c => ({ value: c, label: c }))) : null)
-      .catch(() => {/* keep defaults */});
-    mandiGet<string[]>('/states')
-      .then(ss => ss.length ? setStateOptions(ss.map(s => ({ value: s, label: s }))) : null)
-      .catch(() => {/* keep defaults */});
+    fetchCommodities()
+      .then(cs => cs.length ? setCommodityOptions(cs.map(c => ({ value: c, label: c }))) : null);
+    fetchStates()
+      .then(ss => ss.length ? setStateOptions(ss.map(s => ({ value: s, label: s }))) : null);
   }, []);
 
   // ── Load districts when state changes ──
@@ -286,18 +265,16 @@ export default function MandiPrices() {
     if (!selectedState) return;
     setSelectedDistrict(''); setSelectedMarket('');
     setDistrictOptions([]);  setMarketOptions([]);
-    mandiGet<string[]>(`/districts?state=${encodeURIComponent(selectedState)}`)
-      .then(ds => setDistrictOptions(ds.map(d => ({ value: d, label: d }))))
-      .catch(() => {});
+    fetchDistricts(selectedState)
+      .then(ds => setDistrictOptions(ds.map(d => ({ value: d, label: d }))));
   }, [selectedState]);
 
   // ── Load markets when district changes ──
   useEffect(() => {
     if (!selectedDistrict) return;
     setSelectedMarket(''); setMarketOptions([]);
-    mandiGet<string[]>(`/markets?district=${encodeURIComponent(selectedDistrict)}&state=${encodeURIComponent(selectedState)}`)
-      .then(ms => setMarketOptions(ms.map(m => ({ value: m, label: m }))))
-      .catch(() => {});
+    fetchMarkets({ district: selectedDistrict, state: selectedState })
+      .then(ms => setMarketOptions(ms.map(m => ({ value: m, label: m }))));
   }, [selectedDistrict, selectedState]);
 
   // ── Fetch dashboard ──
@@ -305,15 +282,21 @@ export default function MandiPrices() {
     if (!selectedCommodity) return;
     setLoading(true); setError(null);
 
-    const qs = new URLSearchParams({ commodity: selectedCommodity, range: '30', forecastHorizon: '7' });
-    if (selectedState)    qs.set('state',    selectedState);
-    if (selectedDistrict) qs.set('district', selectedDistrict);
-    if (selectedMarket)   qs.set('market',   selectedMarket);
-    qs.set('compareBy', 'market');
-
-    mandiGet<DashboardData>(`/dashboard?${qs.toString()}`)
-      .then(d => { setDashData(d); setLoading(false); })
-      .catch(e => { setError(e.message || 'Failed to load mandi data.'); setLoading(false); });
+    fetchMandiDashboard({
+      commodity: selectedCommodity,
+      state: selectedState || undefined,
+      district: selectedDistrict || undefined,
+      market: selectedMarket || undefined,
+      range: 30,
+      forecastHorizon: 7,
+      compareBy: 'market'
+    })
+      .then(d => { setDashData(d); setLoading(false); setError(null); })
+      .catch((e: any) => { 
+          // Note: Due to robust fallbacks in mandiIntelligenceApi, this code path generally won't execute locally.
+          setError(e.message || 'Failed to load mandi data.'); 
+          setLoading(false); 
+      });
   }, [selectedCommodity, selectedState, selectedDistrict, selectedMarket]);
 
   useEffect(() => { fetchDashboard(); }, [fetchDashboard]);
