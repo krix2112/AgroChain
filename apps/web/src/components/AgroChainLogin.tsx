@@ -18,15 +18,24 @@ export default function AgroChainLogin() {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/auth/login`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone })
-        }
-      );
-      const data = await response.json();
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+      const loginUrl = `${baseUrl}/auth/login`;
+      
+      console.log('Attempting login at:', loginUrl);
+      
+      const response = await fetch(loginUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone })
+      });
+
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseErr) {
+        console.error('Failed to parse response as JSON:', parseErr);
+        throw new Error('Server returned an invalid response. The backend might be starting up.');
+      }
       
       if (data.success) {
         localStorage.setItem('token', data.token);
@@ -34,10 +43,11 @@ export default function AgroChainLogin() {
         localStorage.setItem('userId', data.user._id);
         localStorage.setItem('name', data.user.name);
         
-        // Also keep store in sync if needed
+        // Also keep store in sync
         useAuthStore.getState().setToken(data.token);
         useAuthStore.getState().setUser(data.user);
 
+        console.log('Login successful, redirecting...');
         if (data.user.role === 'fpo_manager') {
           window.location.href = '/fpo/dashboard';
         } else if (data.user.role === 'trader') {
@@ -48,8 +58,11 @@ export default function AgroChainLogin() {
       } else {
         setError(data.message || 'Login failed');
       }
-    } catch (err) {
-      setError('Cannot connect to server. Try again.');
+    } catch (err: any) {
+      console.error('Login connection error:', err);
+      setError(err.message === 'Failed to fetch' 
+        ? 'Cannot connect to server. The backend might be offline or starting up.' 
+        : (err.message || 'An unexpected error occurred.'));
     } finally {
       setLoading(false);
     }
