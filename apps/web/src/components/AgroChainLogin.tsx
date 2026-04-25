@@ -50,7 +50,7 @@ export default function AgroChainLogin() {
 
         console.log('Login successful, redirecting...');
         if (data.user.role === 'fpo_manager') {
-          window.location.href = '/fpo/dashboard';
+          window.location.href = '/dashboard';
         } else if (data.user.role === 'trader') {
           window.location.href = '/trader/dashboard';
         } else {
