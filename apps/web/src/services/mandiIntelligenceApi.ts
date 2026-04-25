@@ -6,8 +6,8 @@
 // Backend base URL is read from NEXT_PUBLIC_API_URL env variable.
 // ─────────────────────────────────────────────────────────────
 
-const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
-const PREFIX   = `${BASE_URL}/api/mandi-intelligence`;
+const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace(/\/$/, '');
+const PREFIX   = `${BASE_URL}/mandi-intelligence`;
 
 // ─── Types ───────────────────────────────────────────────────
 
