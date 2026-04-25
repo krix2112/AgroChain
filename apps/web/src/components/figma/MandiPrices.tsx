@@ -5,7 +5,7 @@ import {
   BarChart, Bar, Cell, LineChart, Line, ComposedChart,
   PieChart, Pie, Sector
 } from 'recharts';
-import { Search, Check, ChevronDown, Leaf, MapPin } from 'lucide-react';
+import { Search, Check, ChevronDown, Leaf, MapPin, SlidersHorizontal } from 'lucide-react';
 
 // --- CUSTOM SVG ILLUSTRATIONS ---
 const GrowthIllustration = () => (
@@ -172,11 +172,32 @@ const renderActiveShape = (props: any) => {
 };
 
 
-// --- MAIN COMPONENT ---
+// --- MAIN COMPONENT ---const MANDIS = [
+  { name: 'Azadpur Mandi, Delhi', location: 'Delhi', arrivals: '1,200 tons', trend: 'up', volatility: 'Low', status: 'Active' },
+  { name: 'Vashi Mandi, Mumbai', location: 'Maharashtra', arrivals: '850 tons', trend: 'down', volatility: 'High', status: 'Active' },
+  { name: 'Koyambedu, Chennai', location: 'Tamil Nadu', arrivals: '600 tons', trend: 'stable', volatility: 'Medium', status: 'Closed' },
+  { name: 'Lasalgaon Mandi, Nashik', location: 'Maharashtra', arrivals: '2,400 tons', trend: 'up', volatility: 'Medium', status: 'Active' },
+];
+
+const TickerItem = ({ name, price, change }: { name: string, price: string, change: string }) => (
+  <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full whitespace-nowrap">
+    <span className="text-xs font-bold text-white/60">{name}</span>
+    <span className="text-sm font-black text-white">{price}</span>
+    <span className={`text-[10px] font-bold ${change.startsWith('+') ? 'text-green-400' : 'text-red-400'}`}>{change}</span>
+  </div>
+);
+
 export default function MandiPrices() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeMandi, setActiveMandi] = useState<string>('Azadpur Mandi, Delhi');
   const [selectedCommodity, setSelectedCommodity] = useState('wheat');
   const [selectedMandi, setSelectedMandi] = useState('ludhiana');
   const [activePieIndex, setActivePieIndex] = useState(0);
+
+  const filteredMandis = MANDIS.filter(m => 
+    m.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    m.location.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const commodityOptions = [
     { value: 'wheat', label: 'Wheat (Durum)' },
@@ -255,36 +276,51 @@ export default function MandiPrices() {
   };
 
   return (
-    <div className="space-y-8 -mt-6 bg-[#F8F9FB] min-h-screen text-gray-900 p-6 rounded-3xl">
-      
-      {/* --- HERO SECTION --- */}
-      <div className="relative h-80 -mx-6 -mt-6 mb-12 overflow-hidden rounded-t-3xl shadow-sm">
-        {/* Parallax Image & Noise */}
-        <div
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 hover:scale-110 opacity-70"
-          style={{
-            backgroundImage: `url(https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1548&auto=format&fit=crop)`,
-            filter: 'blur(3px)',
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#F8F9FB] via-white/40 to-emerald-900/10" />
+    <div className="space-y-8 animate-in fade-in duration-700 bg-slate-50 min-h-screen -m-6 p-8">
+      {/* Financial Ticker Bar */}
+      <div className="relative -mx-8 -mt-8 overflow-hidden bg-slate-900 py-3 shadow-2xl border-b border-white/5">
+        <div className="flex gap-8 animate-marquee">
+          <TickerItem name="WHEAT/DEL" price="₹2,450" change="+1.2%" />
+          <TickerItem name="ONION/MAH" price="₹1,800" change="-0.5%" />
+          <TickerItem name="TOMATO/KA" price="₹3,200" change="+4.8%" />
+          <TickerItem name="POTATO/UP" price="₹1,200" change="+0.2%" />
+          <TickerItem name="RICE/PB" price="₹4,500" change="+0.8%" />
+          <TickerItem name="MAIZE/BH" price="₹1,950" change="-1.1%" />
+          <TickerItem name="WHEAT/DEL" price="₹2,450" change="+1.2%" />
+          <TickerItem name="ONION/MAH" price="₹1,800" change="-0.5%" />
+        </div>
+      </div>
 
-        <div className="relative h-full max-w-7xl mx-auto px-8 flex items-center justify-start">
-          <div className="backdrop-blur-xl bg-white/70 border border-white/80 rounded-3xl p-10 max-w-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
-            <div className="flex items-start gap-5 mb-4">
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center border border-emerald-100 flex-shrink-0 shadow-sm">
-                <MainChartIllustration />
-              </div>
-              <div>
-                <h1 className="text-5xl font-extrabold text-gray-900 leading-tight tracking-tight">
-                  Mandi Intelligence
-                </h1>
-                <p className="text-xl text-gray-600 mt-2 font-medium">
-                  Real-time market analytics and predictive pricing.
-                </p>
-              </div>
-            </div>
+      {/* --- HERO SECTION --- */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
+        <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-[10px] font-black uppercase tracking-widest mb-3">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+            </span>
+            Real-time Feed
           </div>
+          <h1 className="text-5xl font-black text-slate-900 tracking-tight leading-none">
+            Market Intelligence
+          </h1>
+          <p className="text-slate-500 font-medium mt-3 text-lg">Predictive pricing and logistics momentum for global agri-traders.</p>
+        </div>
+        
+        <div className="flex items-center gap-4 w-full lg:w-auto">
+          <div className="relative flex-1 lg:w-96">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+            <input 
+              type="text" 
+              placeholder="Search mandi, state or commodity..."
+              className="w-full pl-12 pr-4 py-4 bg-white border-2 border-slate-100 rounded-3xl focus:ring-8 focus:ring-blue-500/5 focus:border-blue-500 transition-all shadow-xl shadow-slate-200/50 font-bold"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <button className="p-4 bg-slate-900 text-white rounded-3xl hover:bg-slate-800 transition-all shadow-2xl hover:scale-105 active:scale-95">
+            <SlidersHorizontal size={24} />
+          </button>
         </div>
       </div>
 

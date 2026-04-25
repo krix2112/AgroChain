@@ -18,6 +18,7 @@ interface CropListing {
 
 export default function TraderDashboard() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGrade, setSelectedGrade] = useState<string>('all');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -25,15 +26,11 @@ export default function TraderDashboard() {
   const [showAllOrders, setShowAllOrders] = useState(false);
 
   useEffect(() => {
-    // Client-side query param check
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const tab = params.get('tab');
-      if (tab === 'mandi-prices' || tab === 'my-orders' || tab === 'marketplace') {
-        setActiveTab(tab as any);
-      }
+    const tab = searchParams.get('tab');
+    if (tab === 'mandi-prices' || tab === 'my-orders' || tab === 'marketplace') {
+      setActiveTab(tab as any);
     }
-  }, []);
+  }, [searchParams]);
 
   const dummyOrders = [
     { id: 1, crop: 'Organic Tomatoes', quantity: '500 kg', dealValue: '₹12,500', status: 'In Delivery', date: '2023-10-25', image: 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=400' },
