@@ -84,7 +84,6 @@ router.post('/send-otp', async (req, res) => {
         let smsSent = false;
         if (twilioClient) {
             try {
-                // Ensure number has country code (default to +91 for India if 10 digits)
                 let formattedPhone = phone;
                 if (!phone.startsWith('+')) {
                     formattedPhone = `+91${phone}`;
@@ -95,22 +94,26 @@ router.post('/send-otp', async (req, res) => {
                     messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
                     to: formattedPhone
                 });
-                smsSent = true;
                 console.log(`[Twilio] OTP sent to ${formattedPhone}`);
-            } catch (twilioErr) {
-                console.error('[Twilio Error]', twilioErr.message);
+                return res.json({ message: 'OTP sent successfully' });
+            } catch (twilioError) {
+                console.error('CRITICAL TWILIO ERROR:', twilioError.message);
+                console.log(`[CREDENTIAL CHECK] SID: ${process.env.TWILIO_ACCOUNT_SID ? 'EXISTS' : 'MISSING'}, TOKEN: ${process.env.TWILIO_AUTH_TOKEN ? 'EXISTS' : 'MISSING'}`);
+                console.log(`[TESTING ONLY] SMS failed, verification code for ${phone} is: ${code}`);
+                
+                return res.json({ 
+                    message: 'OTP sent (check server logs if SMS fails)',
+                    dev_note: 'Twilio call failed. Check Render Environment Variables.'
+                });
             }
         }
 
         // 4. Fallback/Dev Log
-        if (!smsSent) {
-            console.log(`[DEV MODE] OTP: ${code} for ${phone}`);
-        }
-
+        console.log(`[DEV MODE] OTP: ${code} for ${phone}`);
         res.json({ 
             message: 'OTP sent successfully', 
-            smsSent,
-            dummyCode: smsSent ? undefined : code // Only send code in response if SMS failed (dev mode)
+            smsSent: false,
+            dummyCode: code
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
