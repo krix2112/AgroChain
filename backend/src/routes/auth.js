@@ -213,4 +213,15 @@ router.get('/me', auth, async (req, res) => {
     });
 });
 
+// POST /api/auth/seed (DEBUG ONLY)
+router.post('/seed', async (req, res) => {
+    try {
+        const seedFpo = require('../scripts/seedDemo');
+        await seedFpo();
+        res.json({ success: true, message: 'Seeding completed' });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 module.exports = router;
