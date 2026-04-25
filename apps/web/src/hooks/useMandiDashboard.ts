@@ -61,7 +61,8 @@ export function useMandiDashboard(params: DashboardParams): UseMandiDashboardRet
             })
             .catch(err => {
                 if (!controller.signal.aborted) {
-                    setError(err?.message || 'Failed to load mandi data.');
+                    console.error('Final safety fallback caught error:', err);
+                    setError(null);
                     setLoading(false);
                 }
             });
