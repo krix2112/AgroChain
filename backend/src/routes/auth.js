@@ -171,7 +171,16 @@ router.post('/login', async (req, res) => {
         const { phone } = req.body;
 
         // 1. Find user by phone
-        const user = await User.findOne({ phone });
+        let user = await User.findOne({ phone });
+        
+        // AUTO-SEED FALLBACK for demo accounts
+        if (!user && (phone === "8178360741" || phone === "7251003723")) {
+            console.log('Demo user not found, triggering auto-seed...');
+            const seedFpo = require('../scripts/seedDemo');
+            await seedFpo();
+            user = await User.findOne({ phone });
+        }
+
         if (!user) {
             return res.status(404).json({ success: false, message: "Phone not registered" });
         }
