@@ -1,9 +1,10 @@
+'use client';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { motion } from 'motion/react';
 
 export function AgroTradeDashboard() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <div className="bg-[#f0f4f0] text-[#1c1c18] font-['Inter'] antialiased min-h-screen flex flex-col">
@@ -11,7 +12,7 @@ export function AgroTradeDashboard() {
       <header className="bg-[#1a4d2e] text-white h-16 flex items-center px-8 sticky top-0 z-50 shadow-lg shadow-black/10">
         <div className="max-w-[1440px] mx-auto w-full flex justify-between items-center">
           {/* Logo */}
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push('/')}>
             <div className="grid grid-cols-3 gap-0.5">
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="w-1 h-1 bg-white rounded-full"></div>
@@ -113,7 +114,7 @@ export function AgroTradeDashboard() {
                 <p className="text-[#1a4d2e]/40 text-sm font-medium leading-relaxed">View mandi prices, compare and list</p>
               </div>
               <button 
-                onClick={() => navigate('/mandi-prices')}
+                onClick={() => router.push('/mandi-prices')}
                 className="bg-white border border-[#1a4d2e]/10 text-[#1a4d2e] px-8 py-3 rounded-full font-bold text-sm hover:bg-[#fcf9f2] transition-all flex items-center gap-2"
               >
                 View prices <span className="material-symbols-outlined text-sm">arrow_forward</span>

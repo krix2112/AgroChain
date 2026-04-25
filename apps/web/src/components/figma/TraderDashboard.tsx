@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Search, SlidersHorizontal, MapPin, Star, TrendingUp, Package, ShoppingCart, LayoutDashboard, LogOut, FileText, BarChart3 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import MandiPrices from './MandiPrices';
 
 interface CropListing {

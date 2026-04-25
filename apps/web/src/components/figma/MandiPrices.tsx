@@ -172,7 +172,8 @@ const renderActiveShape = (props: any) => {
 };
 
 
-// --- MAIN COMPONENT ---const MANDIS = [
+// --- MAIN COMPONENT ---
+const MANDIS = [
   { name: 'Azadpur Mandi, Delhi', location: 'Delhi', arrivals: '1,200 tons', trend: 'up', volatility: 'Low', status: 'Active' },
   { name: 'Vashi Mandi, Mumbai', location: 'Maharashtra', arrivals: '850 tons', trend: 'down', volatility: 'High', status: 'Active' },
   { name: 'Koyambedu, Chennai', location: 'Tamil Nadu', arrivals: '600 tons', trend: 'stable', volatility: 'Medium', status: 'Closed' },
@@ -559,6 +560,7 @@ export default function MandiPrices() {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
+                  // @ts-expect-error - activeIndex is supported by Recharts but types are missing in this version
                   activeIndex={activePieIndex}
                   activeShape={renderActiveShape}
                   data={donutData}

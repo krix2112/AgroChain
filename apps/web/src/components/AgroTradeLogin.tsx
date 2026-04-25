@@ -1,9 +1,10 @@
+'use client';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { motion } from 'motion/react';
 
 export function AgroTradeLogin() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <div className="bg-[#fcf9f2] text-[#1c1c18] font-['Inter'] antialiased">
@@ -14,7 +15,7 @@ export function AgroTradeLogin() {
             {/* Branding Header */}
             <div 
               className="flex items-center gap-3 cursor-pointer" 
-              onClick={() => navigate('/')}
+              onClick={() => router.push('/')}
             >
               <div className="grid grid-cols-3 gap-1">
                 {[...Array(6)].map((_, i) => (
@@ -49,7 +50,7 @@ export function AgroTradeLogin() {
               </div>
 
               <button 
-                onClick={() => navigate('/dashboard')}
+                onClick={() => router.push('/dashboard')}
                 className="w-full bg-[#1a4d2e] text-white h-14 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-[#1a4d2e]/20" 
                 type="button"
               >
@@ -64,7 +65,7 @@ export function AgroTradeLogin() {
               </div>
               
               <button 
-                onClick={() => navigate('/signup')}
+                onClick={() => router.push('/signup')}
                 className="w-full bg-white border border-[#1a4d2e]/10 hover:bg-[#f0eee7] text-[#1a4d2e] h-14 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all" 
                 type="button"
               >
@@ -76,7 +77,7 @@ export function AgroTradeLogin() {
           {/* Bottom Link */}
           <div className="mt-12 text-center lg:text-left">
             <p className="text-sm font-medium text-[#1c1c18]/60">
-              New farmer? <button onClick={() => navigate('/signup')} className="text-[#1a4d2e] font-bold hover:underline decoration-2 underline-offset-4 ml-1">Register here</button>
+              New farmer? <button onClick={() => router.push('/signup')} className="text-[#1a4d2e] font-bold hover:underline decoration-2 underline-offset-4 ml-1">Register here</button>
             </p>
           </div>
         </section>

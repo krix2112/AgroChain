@@ -1,9 +1,10 @@
+'use client';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { motion } from 'motion/react';
 
 export function AgroTradeHomepage() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <div className="bg-[#fcf9f2] text-[#1c1c18] font-['Inter'] antialiased overflow-x-hidden">
@@ -11,7 +12,7 @@ export function AgroTradeHomepage() {
       <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-[#1c1c18]/5 h-[72px]">
         <div className="max-w-[1440px] mx-auto px-8 h-full flex justify-between items-center">
           {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => router.push('/')}>
             <div className="grid grid-cols-3 gap-1">
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="w-1.5 h-1.5 bg-[#1a4d2e] rounded-full"></div>
@@ -28,7 +29,7 @@ export function AgroTradeHomepage() {
               <span className="opacity-50 font-medium">हिंदी</span>
             </div>
             <button 
-              onClick={() => navigate('/login')}
+              onClick={() => router.push('/login')}
               className="bg-[#1a4d2e] text-white px-8 py-2.5 rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-lg shadow-[#1a4d2e]/20"
             >
               login
@@ -71,13 +72,13 @@ export function AgroTradeHomepage() {
             </p>
             <div className="flex flex-wrap gap-6 pt-4">
               <button 
-                onClick={() => navigate('/login')}
+                onClick={() => router.push('/login')}
                 className="bg-[#1a4d2e] text-white px-12 py-5 rounded-full font-bold text-lg hover:bg-[#1a4d2e]/90 transition-all shadow-2xl shadow-black/30"
               >
                 Get Started Now
               </button>
               <button 
-                onClick={() => navigate('/trader/dashboard?tab=mandi-prices')}
+                onClick={() => router.push('/trader/dashboard?tab=mandi-prices')}
                 className="bg-[#D4A853]/20 backdrop-blur-md text-white border border-[#D4A853]/30 px-12 py-5 rounded-full font-bold text-lg hover:bg-[#D4A853]/30 transition-all"
               >
                 View Live Prices
@@ -134,7 +135,7 @@ export function AgroTradeHomepage() {
                 key={idx}
                 whileHover={{ y: -12 }}
                 className="bg-white/10 backdrop-blur-2xl border border-white/10 p-12 rounded-[40px] cursor-pointer group shadow-2xl"
-                onClick={() => navigate('/login')}
+                onClick={() => router.push('/login')}
               >
                 <div className={`${card.color} w-16 h-16 rounded-2xl flex items-center justify-center ${card.text} mb-8 shadow-sm`}>
                   <span className="material-symbols-outlined text-3xl">{card.icon}</span>
@@ -205,7 +206,7 @@ export function AgroTradeHomepage() {
                 Access real-time Mandi prices across 2,000+ locations to make informed trading decisions.
               </p>
               <button 
-                onClick={() => navigate('/trader/dashboard?tab=mandi-prices')}
+                onClick={() => router.push('/trader/dashboard?tab=mandi-prices')}
                 className="mt-auto w-full py-5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-2xl font-bold text-sm transition-all tracking-wider"
               >
                 View Prices Index
@@ -276,7 +277,7 @@ export function AgroTradeHomepage() {
           </div>
           <div className="flex flex-wrap justify-center gap-8 pt-8">
             <button 
-              onClick={() => navigate('/signup')}
+              onClick={() => router.push('/signup')}
               className="bg-[#1a4d2e] text-white px-14 py-6 rounded-[32px] font-bold text-xl hover:scale-105 transition-transform shadow-2xl shadow-[#1a4d2e]/30"
             >
               Register For Free

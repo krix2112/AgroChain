@@ -1,9 +1,10 @@
+'use client';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { motion } from 'motion/react';
 
 export function AgroTradeMandiPrices() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <div className="bg-[#fcf9f2] text-[#1c1c18] font-['Inter'] antialiased min-h-screen">
@@ -11,7 +12,7 @@ export function AgroTradeMandiPrices() {
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-[#1c1c18]/5 h-[72px]">
         <div className="max-w-[1440px] mx-auto px-8 h-full flex justify-between items-center">
           {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => router.push('/')}>
             <div className="grid grid-cols-3 gap-1">
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="w-1.5 h-1.5 bg-[#1a4d2e] rounded-full"></div>
@@ -23,7 +24,7 @@ export function AgroTradeMandiPrices() {
           {/* Actions */}
           <div className="flex items-center gap-6">
             <button 
-              onClick={() => navigate('/dashboard')}
+              onClick={() => router.push('/dashboard')}
               className="text-[#1a4d2e] font-bold text-sm hover:opacity-70 transition-opacity"
             >
               Dashboard
@@ -97,7 +98,7 @@ export function AgroTradeMandiPrices() {
                   ))}
                 </div>
                 <button 
-                  onClick={() => navigate('/login')}
+                  onClick={() => router.push('/login')}
                   className="w-full py-4 bg-[#1a4d2e] text-white rounded-2xl font-bold hover:opacity-90 transition-all shadow-lg shadow-[#1a4d2e]/10"
                 >
                   Sell at this Price

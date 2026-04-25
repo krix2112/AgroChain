@@ -1,9 +1,10 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+'use client';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'motion/react';
 
 export function AgroTradeSignup() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <div className="bg-[#fcf9f2] text-[#1c1c18] font-['Inter'] antialiased">
@@ -14,7 +15,7 @@ export function AgroTradeSignup() {
           <nav className="flex justify-between items-center mb-16">
             <div 
               className="flex items-center gap-3 cursor-pointer" 
-              onClick={() => navigate('/')}
+              onClick={() => router.push('/')}
             >
               <div className="grid grid-cols-3 gap-1">
                 {[...Array(6)].map((_, i) => (
@@ -24,7 +25,7 @@ export function AgroTradeSignup() {
               <span className="text-2xl font-bold text-[#1a4d2e] tracking-tight font-['Plus_Jakarta_Sans']">AgroTrade</span>
             </div>
             <button 
-              onClick={() => navigate('/login')}
+              onClick={() => router.push('/login')}
               className="text-sm font-bold text-[#1a4d2e] hover:opacity-70 transition-opacity flex items-center gap-2"
             >
               <span className="material-symbols-outlined text-lg">arrow_back</span>
@@ -118,7 +119,7 @@ export function AgroTradeSignup() {
 
             {/* Primary Action */}
             <button 
-              onClick={() => navigate('/dashboard')}
+              onClick={() => router.push('/dashboard')}
               className="w-full bg-[#1a4d2e] text-white py-5 rounded-2xl font-bold text-xl flex items-center justify-center gap-3 hover:scale-[1.01] active:scale-[0.99] transition-all shadow-2xl shadow-[#1a4d2e]/20" 
               type="button"
             >
@@ -131,7 +132,7 @@ export function AgroTradeSignup() {
           <footer className="mt-16 text-center max-w-xl">
             <p className="text-sm font-medium text-[#1c1c18]/60">
               Already have an account? 
-              <button onClick={() => navigate('/login')} className="text-[#1a4d2e] font-black ml-2 hover:underline">Login &rarr;</button>
+              <button onClick={() => router.push('/login')} className="text-[#1a4d2e] font-black ml-2 hover:underline">Login &rarr;</button>
             </p>
           </footer>
         </section>
