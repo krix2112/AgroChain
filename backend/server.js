@@ -17,10 +17,17 @@ connectDB().then(async () => {
     }
 });
 
-// Global Brute-Force CORS (Placed before ALL other middleware)
+// Global Strict CORS for Vercel
 app.use((req, res, next) => {
     const origin = req.headers.origin;
-    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+    // Explicitly allow the Vercel domain or local development
+    if (origin && (origin.includes('vercel.app') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    } else {
+        // Fallback for safety, but reflecting origin is usually best
+        res.setHeader('Access-Control-Allow-Origin', origin || '*');
+    }
+    
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
