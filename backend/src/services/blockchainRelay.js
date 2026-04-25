@@ -8,7 +8,7 @@ console.log(`[blockchain] Loaded ABI with ${CONTRACT_ABI.length} entries.`);
 // Three-tier fallback: env var → deployed.json → placeholder (prevents startup crash)
 const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || deployed.address || 'PENDING_DEPLOYMENT';
 // RPC pointing to Shardeum Mezame (falls back to env RPC_URL)
-const RPC_URL = process.env.RPC_URL || 'https://api-mezame.shardeum.org';
+const RPC_URL = process.env.SHARDEUM_RPC || 'https://api-mezame.shardeum.org';
 
 const getSignerWallet = async (userId) => {
     const privateKey = await walletManager.decryptPrivateKey(userId);
@@ -24,7 +24,15 @@ const getContract = async () => {
     if (!isBlockchainConfigured()) {
         throw new Error('Blockchain not configured — set RELAY_PRIVATE_KEY in .env to enable on-chain relay.');
     }
-    const provider = new ethers.JsonRpcProvider(RPC_URL);
+    const provider = new ethers.JsonRpcProvider(
+      process.env.SHARDEUM_RPC || 'https://api-mezame.shardeum.org'
+    );
+
+    const network = await provider.getNetwork();
+    if (network.chainId !== 8119n) {
+      throw new Error(`Wrong network. Expected 8119, got ${network.chainId}`);
+    }
+
     const signer = new ethers.Wallet(process.env.RELAY_PRIVATE_KEY, provider);
     const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
     return { contract, signer };

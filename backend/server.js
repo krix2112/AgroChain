@@ -2,40 +2,34 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
+
 const connectDB = require('./src/config/database');
 const errorHandler = require('./src/middleware/error');
 
 const app = express();
 
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://agro-chain-web.vercel.app'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 200
+}));
+
+// Handle preflight for ALL routes explicitly
+app.options('*', cors());
+
 // Connect to Database
 connectDB().then(async () => {
-    if (process.env.MONGODB_URI && process.env.MONGODB_URI.includes('127.0.0.1')) {
-        const seedLib = require('./scripts/demo-seed-lib');
-        await seedLib();
+    if (process.env.MONGODB_URI) {
+        // Run seeding on startup to ensure demo accounts exist
         const seedFpo = require('./src/scripts/seedDemo');
         await seedFpo();
     }
-});
-
-// Global Strict CORS for Vercel
-app.use((req, res, next) => {
-    const origin = req.headers.origin;
-    // Explicitly allow the Vercel domain or local development
-    if (origin && (origin.includes('vercel.app') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-    } else {
-        // Fallback for safety, but reflecting origin is usually best
-        res.setHeader('Access-Control-Allow-Origin', origin || '*');
-    }
-    
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    
-    if (req.method === 'OPTIONS') {
-        return res.status(204).end();
-    }
-    next();
 });
 
 app.use(express.json());

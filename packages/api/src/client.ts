@@ -1,50 +1,61 @@
-import axios, { type InternalAxiosRequestConfig, type AxiosResponse, type AxiosError } from 'axios'
+import axios from 'axios';
 
-// ─── Platform-safe storage helpers ───────────────────────────────────────────
-const getToken = (): string|null => {
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem('agrochain_token')
-  }
-  return null
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
-const clearStorage = (): void => {
-  if (typeof window !== 'undefined') {
-    localStorage.clear()
-  }
-}
+console.log('API Client initialized with URL:', API_URL); // Debug log
 
-// ─── Axios instance ───────────────────────────────────────────────────────────
-const client = axios.create({
-  baseURL:
-    (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) ||
-    (typeof process !== 'undefined' && process.env.EXPO_PUBLIC_API_URL) ||
-    'http://localhost:5000/api',
-  headers: { 'Content-Type': 'application/json' }
-})
-
-// Request interceptor — attach Bearer token from whichever storage is available
-client.interceptors.request.use(
-  async (config: InternalAxiosRequestConfig) => {
-    const token = getToken()
-    if (token) config.headers.Authorization = `Bearer ${token}`
-    return config
+const apiClient = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
   },
-  (error: AxiosError) => Promise.reject(error)
-)
+  withCredentials: false, // Change to false for CORS
+});
 
-// Response interceptor — clear session on 401; redirect only on web
-client.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  async (error: AxiosError) => {
+// Request interceptor
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = typeof window !== 'undefined' 
+      ? localStorage.getItem('agrochain_token') 
+      : null;
+    
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    
+    console.log('API Request:', config.method?.toUpperCase(), config.url); // Debug
+    return config;
+  },
+  (error) => {
+    console.error('Request interceptor error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor
+apiClient.interceptors.response.use(
+  (response) => {
+    console.log('API Response:', response.status, response.config.url); // Debug
+    return response;
+  },
+  (error) => {
+    console.error('API Error:', {
+      url: error.config?.url,
+      status: error.response?.status,
+      message: error.message,
+      data: error.response?.data
+    });
+    
     if (error.response?.status === 401) {
-      clearStorage()
       if (typeof window !== 'undefined') {
-        window.location.href = '/login'
+        localStorage.removeItem('agrochain_token');
+        localStorage.removeItem('agrochain_user');
+        window.location.href = '/login';
       }
     }
-    return Promise.reject(error)
+    
+    return Promise.reject(error);
   }
-)
+);
 
-export default client
+export default apiClient;

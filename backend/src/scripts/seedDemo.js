@@ -22,16 +22,30 @@ async function seed() {
         await Payout.deleteMany({ source: 'demo' });
 
         // CREATE FPO
-        const fpo = await User.create({
-            name: "Kendrapara Kisan FPO",
-            phone: "9876543210",
-            role: "fpo_manager",
-            organizationName: "Kendrapara Kisan FPO",
-            district: "Kendrapara",
-            state: "Odisha",
-            totalMembers: 142,
-            source: "demo"
-        });
+        const fpo = await User.findOneAndUpdate(
+            { phone: "8178360741" },
+            {
+                name: "Kendrapara Kisan FPO",
+                role: "fpo_manager",
+                organizationName: "Kendrapara Kisan FPO",
+                district: "Kendrapara",
+                state: "Odisha",
+                upiId: "kendraparakisan@upi",
+                source: "demo"
+            },
+            { upsert: true, new: true }
+        );
+
+        // CREATE TRADER
+        await User.findOneAndUpdate(
+            { phone: "7251003723" },
+            {
+                name: "Adani Agri Trader", 
+                role: "trader",
+                source: "demo"
+            },
+            { upsert: true, new: true }
+        );
 
         // CREATE MEMBERS
         const memberData = [

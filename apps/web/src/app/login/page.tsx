@@ -1,2 +1,2 @@
-import FPOLogin from '@/components/figma/FPOLogin';
-export default function Page() { return <FPOLogin />; }
+import AgroChainLogin from '@/components/AgroChainLogin';
+export default function Page() { return <AgroChainLogin />; }

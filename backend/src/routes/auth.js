@@ -183,28 +183,30 @@ router.post('/login', async (req, res) => {
         // 2. Find user by phone
         const user = await User.findOne({ phone });
         if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+            return res.status(404).json({ success: false, message: "Phone not registered" });
         }
 
         // 2. Generate JWT
         const token = jwt.sign(
             { userId: user._id, role: user.role },
             process.env.JWT_SECRET,
-            { expiresIn: process.env.JWT_EXPIRES_IN }
+            { expiresIn: '24h' }
         );
 
         res.json({
+            success: true,
             token,
             user: {
-                id: user._id,
+                _id: user._id,
                 name: user.name,
                 phone: user.phone,
                 role: user.role,
-                walletAddress: user.walletAddress
+                organizationName: user.organizationName || null,
+                walletAddress: user.walletAddress || null
             }
         });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ success: false, message: error.message });
     }
 });
 
