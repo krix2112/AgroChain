@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgroTrade | Premium Agrarian Excellence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Noto+Sans+Devanagari:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#5a3f00",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#e5e2db",
+                        "on-secondary-container": "#00731e",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#414942",
+                        "surface-bright": "#fcf9f2",
+                        "inverse-surface": "#31312c",
+                        "secondary-container": "#91f78e",
+                        "tertiary-fixed": "#ffdea6",
+                        "tertiary-fixed-dim": "#eec068",
+                        "on-background": "#1c1c18",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#002204",
+                        "on-secondary-fixed-variant": "#005313",
+                        "inverse-primary": "#9dd3aa",
+                        "primary": "#00361a",
+                        "surface-dim": "#dcdad3",
+                        "surface-tint": "#366847",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#1c1c18",
+                        "surface-container-high": "#ebe8e1",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#c1c9bf",
+                        "surface-container-low": "#f6f3ec",
+                        "primary-container": "#1a4d2e",
+                        "primary-fixed": "#b8f0c5",
+                        "on-tertiary-container": "#d6aa55",
+                        "secondary-fixed": "#94f990",
+                        "outline": "#717971",
+                        "on-primary-container": "#88bd95",
+                        "on-tertiary-fixed-variant": "#5d4200",
+                        "tertiary": "#3e2a00",
+                        "primary-fixed-dim": "#9dd3aa",
+                        "on-primary-fixed-variant": "#1d5031",
+                        "surface": "#fcf9f2",
+                        "on-tertiary-fixed": "#271900",
+                        "inverse-on-surface": "#f3f0e9",
+                        "background": "#fcf9f2",
+                        "on-primary-fixed": "#00210e",
+                        "surface-container": "#f0eee7",
+                        "surface-container-highest": "#e5e2db",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#78dc77",
+                        "secondary": "#006e1c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "20px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "64px",
+                        "unit": "4px",
+                        "container-max": "1280px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "h3": ["Plus Jakarta Sans"],
+                        "label-hindi": ["Noto Sans Devanagari"],
+                        "h2": ["Plus Jakarta Sans"],
+                        "button": ["Inter"],
+                        "h1": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h3": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "label-hindi": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "h2": ["48px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "button": ["16px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "h1": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .deep-shadow {
+            box-shadow: 0 24px 60px rgba(26, 77, 46, 0.08);
+        }
+        .soft-glow-ring {
+            box-shadow: 0 0 20px rgba(0, 110, 28, 0.4);
+        }
+        .hero-gradient {
+            background: linear-gradient(180deg, rgba(0, 33, 14, 0.6) 0%, rgba(0, 33, 14, 0.8) 100%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav { border-bottom: 2px solid #D4A853; padding-bottom: 4px; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased">
+<!-- TopNavBar -->
+<nav class="sticky top-0 w-full z-50 bg-stone-50/70 backdrop-blur-xl border-b border-white/20 h-[68px] shadow-[0_8px_32px_rgba(26,77,46,0.08)]">
+<div class="flex justify-between items-center px-8 h-full max-w-screen-2xl mx-auto">
+<!-- Brand -->
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-3xl" data-icon="wheat">grain</span>
+<span class="text-2xl font-black text-primary-container tracking-tighter font-['Plus_Jakarta_Sans']">AgroTrade</span>
+</div>
+<!-- Links (Desktop) -->
+<div class="hidden md:flex items-center gap-8 font-['Plus_Jakarta_Sans'] text-sm font-semibold">
+<a class="text-primary-container border-b-2 border-tertiary-fixed-dim pb-1" href="#">Marketplace</a>
+<a class="text-primary-container/70 hover:text-primary-container transition-colors" href="#">Logistics</a>
+<a class="text-primary-container/70 hover:text-primary-container transition-colors" href="#">Finance</a>
+<a class="text-primary-container/70 hover:text-primary-container transition-colors" href="#">Insights</a>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 text-primary-container font-semibold text-sm cursor-pointer hover:opacity-80">
+<span class="font-body-md">EN</span>
+<span class="w-px h-4 bg-primary-container/20"></span>
+<span class="font-label-hindi text-label-hindi">हिंदी</span>
+</div>
+<button class="bg-primary-container text-on-primary px-6 py-2.5 rounded-full font-button text-button soft-glow-ring hover:scale-105 transition-transform active:scale-95">
+                    Register
+                </button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative min-h-[calc(100vh-68px)] flex items-center overflow-hidden">
+<!-- Background Parallax Image -->
+<div class="absolute inset-0 z-0">
+<img alt="Golden hour farm" class="w-full h-full object-cover" data-alt="expansive golden wheat field at sunset with warm orange light and soft cinematic depth of field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCVXx415MgXBZZQ_JgaePlyPGolw3_1U75VkLVgVIHQn6aTchwAvrWBcRnHt5_93uf_Vy3Vkr7t8C9jl17jkMoX7yfAS5suEk1Q-hF7ZcrV3nbnaAOulIBxpAgjIZGhAk7FeHs9rZXGVQ48D_2YkbPsoolpIP0ipqZ_xYMu5ZcnjPAqPMIVgCvE-JTWHecyY5MeoFrZGw7mkR7uKoc_quNbeFq9JsGJzB3lDsFvKep1IvDdYtE6pPlMnJ5FvT4DX8Lli-eNaBH-lk"/>
+<div class="absolute inset-0 hero-gradient"></div>
+</div>
+<div class="relative z-10 max-w-screen-2xl mx-auto px-8 w-full py-20">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<!-- Hero Content -->
+<div class="space-y-8">
+<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border-white/30 text-tertiary-fixed-dim font-semibold tracking-wide">
+<span class="material-symbols-outlined text-sm" data-icon="agriculture">agriculture</span>
+<span class="uppercase text-xs">🌾 Kisan ka Digital Bazaar</span>
+</div>
+<h1 class="font-h1 text-h1 text-white max-w-xl">
+                        India's trusted platform for 
+                        <span class="relative inline-block">
+                            farm-to-buyer
+                            <span class="absolute -bottom-2 left-0 w-full h-1.5 bg-tertiary-fixed-dim/80 rounded-full"></span>
+</span> 
+                        trade.
+                    </h1>
+<p class="text-white/80 text-body-lg max-w-lg font-body-lg">
+                        Empowering Indian agriculture with direct market access, secure payments, and premium logistics support.
+                    </p>
+<div class="flex items-center gap-6">
+<button class="bg-primary-container text-on-primary px-10 py-5 rounded-2xl font-button text-button soft-glow-ring hover:bg-on-secondary-container transition-all">
+                            Get Started Now
+                        </button>
+<button class="glass-panel text-white px-10 py-5 rounded-2xl font-button text-button hover:bg-white/10 transition-all">
+                            View Live Prices
+                        </button>
+</div>
+</div>
+<!-- Hero Floating Stats -->
+<div class="relative flex justify-center lg:justify-end">
+<div class="glass-panel p-8 rounded-2xl w-full max-w-md deep-shadow animate-bounce-subtle">
+<div class="space-y-6">
+<div class="flex justify-between items-center border-b border-white/10 pb-4">
+<div>
+<h3 class="text-white text-3xl font-bold font-h3 tracking-tight">50,000+</h3>
+<p class="text-white/60 text-sm">Verified Farmers</p>
+</div>
+<div class="bg-secondary-container/20 p-3 rounded-xl">
+<span class="material-symbols-outlined text-secondary-container" data-icon="groups">groups</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white/5 p-4 rounded-xl border border-white/5">
+<div class="bg-on-secondary-container/20 w-10 h-10 flex items-center justify-center rounded-lg mb-3">
+<span class="material-symbols-outlined text-secondary-container text-sm" data-icon="trending_up">trending_up</span>
+</div>
+<p class="text-white font-bold">₹12.4 Cr</p>
+<p class="text-white/40 text-xs uppercase tracking-wider">Monthly Trade</p>
+</div>
+<div class="bg-white/5 p-4 rounded-xl border border-white/5">
+<div class="bg-tertiary-fixed-dim/20 w-10 h-10 flex items-center justify-center rounded-lg mb-3">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-sm" data-icon="verified_user">verified_user</span>
+</div>
+<p class="text-white font-bold">100%</p>
+<p class="text-white/40 text-xs uppercase tracking-wider">Secure Escrow</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Role Selection Integrated -->
+<div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Farmer Card -->
+<div class="group glass-panel p-8 rounded-2xl border-white/10 hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_0_40px_rgba(212,168,83,0.2)] cursor-pointer">
+<div class="mb-6 bg-tertiary-fixed-dim/20 w-14 h-14 flex items-center justify-center rounded-2xl">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-3xl" data-icon="potted_plant">potted_plant</span>
+</div>
+<h3 class="text-white text-xl font-bold mb-3 font-h3">For Farmers</h3>
+<p class="text-white/60 mb-6 font-body-md">List your harvest and get discovered by premium buyers nationwide.</p>
+<button class="flex items-center gap-2 text-tertiary-fixed-dim font-bold group-hover:gap-4 transition-all">
+                        Continue as Farmer <span class="material-symbols-outlined">arrow_right_alt</span>
+</button>
+</div>
+<!-- Trader Card -->
+<div class="group glass-panel p-8 rounded-2xl border-white/10 hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_0_40px_rgba(212,168,83,0.2)] cursor-pointer">
+<div class="mb-6 bg-secondary-container/20 w-14 h-14 flex items-center justify-center rounded-2xl">
+<span class="material-symbols-outlined text-secondary-container text-3xl" data-icon="storefront">storefront</span>
+</div>
+<h3 class="text-white text-xl font-bold mb-3 font-h3">For Traders</h3>
+<p class="text-white/60 mb-6 font-body-md">Sourced premium quality crops with verified quality certificates.</p>
+<button class="flex items-center gap-2 text-tertiary-fixed-dim font-bold group-hover:gap-4 transition-all">
+                        Continue as Trader <span class="material-symbols-outlined">arrow_right_alt</span>
+</button>
+</div>
+<!-- Transporter Card -->
+<div class="group glass-panel p-8 rounded-2xl border-white/10 hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_0_40px_rgba(212,168,83,0.2)] cursor-pointer">
+<div class="mb-6 bg-white/10 w-14 h-14 flex items-center justify-center rounded-2xl">
+<span class="material-symbols-outlined text-white text-3xl" data-icon="local_shipping">local_shipping</span>
+</div>
+<h3 class="text-white text-xl font-bold mb-3 font-h3">For Transporters</h3>
+<p class="text-white/60 mb-6 font-body-md">Find logistics leads and optimize your agricultural supply routes.</p>
+<button class="flex items-center gap-2 text-tertiary-fixed-dim font-bold group-hover:gap-4 transition-all">
+                        Continue as Transporter <span class="material-symbols-outlined">arrow_right_alt</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works -->
+<section class="py-32 bg-stone-100/50">
+<div class="max-w-screen-2xl mx-auto px-8">
+<div class="text-center mb-20 space-y-4">
+<h2 class="font-h2 text-h2 text-primary">Simple &amp; Transparent</h2>
+<p class="text-body-lg text-primary/60 max-w-2xl mx-auto">Trading with AgroTrade takes less than 3 minutes. Secure, fast, and digital.</p>
+</div>
+<div class="relative flex flex-col md:flex-row justify-between items-center gap-12">
+<!-- Connector Line -->
+<div class="hidden md:block absolute top-1/2 left-0 w-full h-px border-t-2 border-dashed border-primary/20 -translate-y-1/2 z-0"></div>
+<!-- Step 1 -->
+<div class="relative z-10 flex flex-col items-center text-center max-w-[280px]">
+<div class="w-20 h-20 rounded-full bg-white deep-shadow flex items-center justify-center mb-8 border-4 border-stone-100">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="smartphone">smartphone</span>
+</div>
+<h4 class="font-h3 text-xl mb-4">Register Account</h4>
+<p class="text-on-surface-variant">Sign up via OTP and complete your KYC in minutes.</p>
+</div>
+<!-- Step 2 -->
+<div class="relative z-10 flex flex-col items-center text-center max-w-[280px]">
+<div class="w-20 h-20 rounded-full bg-white deep-shadow flex items-center justify-center mb-8 border-4 border-stone-100">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="post_add">post_add</span>
+</div>
+<h4 class="font-h3 text-xl mb-4">List &amp; Negotiate</h4>
+<p class="text-on-surface-variant">Post your requirement and get competitive bids from verified partners.</p>
+</div>
+<!-- Step 3 -->
+<div class="relative z-10 flex flex-col items-center text-center max-w-[280px]">
+<div class="w-20 h-20 rounded-full bg-white deep-shadow flex items-center justify-center mb-8 border-4 border-stone-100">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="payments">payments</span>
+</div>
+<h4 class="font-h3 text-xl mb-4">Instant Settlement</h4>
+<p class="text-on-surface-variant">Receive payments directly to your bank once delivery is confirmed.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Features -->
+<section class="py-32">
+<div class="max-w-screen-2xl mx-auto px-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Feature 1 -->
+<div class="bg-white p-10 rounded-2xl deep-shadow hover:-translate-y-2 transition-transform duration-300">
+<span class="material-symbols-outlined text-secondary text-4xl mb-6" data-icon="security">security</span>
+<h4 class="font-h3 text-2xl mb-4 text-primary">Secure Escrow</h4>
+<p class="text-on-surface-variant leading-relaxed">Protecting every rupee. Funds are held in a secure escrow and released only upon verification.</p>
+</div>
+<!-- Featured Card (Dark Green) -->
+<div class="bg-primary-container p-10 rounded-2xl deep-shadow relative overflow-hidden -translate-y-4">
+<div class="absolute top-6 right-6 px-3 py-1 bg-tertiary-fixed-dim text-tertiary font-bold text-xs rounded-full">RECOMMENDED</div>
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-4xl mb-6" data-icon="analytics">analytics</span>
+<h4 class="font-h3 text-2xl mb-4 text-white">Live Market Insights</h4>
+<p class="text-white/70 leading-relaxed mb-8">Access real-time Mandi prices across 2,000+ locations to make informed trading decisions.</p>
+<button class="w-full py-4 rounded-xl bg-white/10 text-white font-bold border border-white/20 hover:bg-white/20 transition-all">Explore Pricing Index</button>
+</div>
+<!-- Feature 3 -->
+<div class="bg-white p-10 rounded-2xl deep-shadow hover:-translate-y-2 transition-transform duration-300">
+<span class="material-symbols-outlined text-secondary text-4xl mb-6" data-icon="inventory">inventory</span>
+<h4 class="font-h3 text-2xl mb-4 text-primary">Quality Assurance</h4>
+<p class="text-on-surface-variant leading-relaxed">Integrated quality testing partners provide digital certificates for every listing on our platform.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust/Stats Section -->
+<section class="py-32 bg-primary-container relative overflow-hidden">
+<div class="absolute inset-0 opacity-10">
+<img alt="Tractor in field" class="w-full h-full object-cover grayscale" data-alt="silhouetted tractor working in a vast agricultural field under a cloudy atmospheric sky with high contrast" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrecqCrC94fFIRG9itoUd4ZPp3nwEa3XyMfi-H17ktHZIU2NP6q8jPZSLdMrNBYSAeGDclgOR6xZEOB9iaDOU0H1HliYMWdeDT2513fIzoVX3eLp8JWGNg7_23vmZ2D0khXfXbd1lZ0z7KErK-N-rHuoMVoXO3G3xTojj7r2qROf9nRfZ__Zg8EU52T9JvDBP-BaQsVdbi4HgzTQg1j0vPXkKsO3rC8YyQtVxAbGgusWLkhHymAMUrw1Qck_F-JLRp_zvK1If_4hw"/>
+</div>
+<div class="max-w-7xl mx-auto px-8 relative z-10">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-16 items-center text-center md:text-left">
+<div class="md:border-r border-white/10 pr-8">
+<h2 class="text-6xl font-black text-white font-h1 mb-2">₹500 Cr+</h2>
+<p class="text-on-primary-container text-lg tracking-widest uppercase font-bold">Total Trade Volume</p>
+</div>
+<div class="md:border-r border-white/10 px-8">
+<h2 class="text-6xl font-black text-white font-h1 mb-2">2,500+</h2>
+<p class="text-on-primary-container text-lg tracking-widest uppercase font-bold">Trading Clusters</p>
+</div>
+<div class="pl-8">
+<h2 class="text-6xl font-black text-white font-h1 mb-2">24/7</h2>
+<p class="text-on-primary-container text-lg tracking-widest uppercase font-bold">Expert Support</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-32 bg-gradient-to-br from-surface-container-low via-surface-container to-secondary-container/20">
+<div class="max-w-4xl mx-auto px-8 text-center space-y-10">
+<div class="inline-block p-4 rounded-3xl bg-white deep-shadow mb-6">
+<span class="material-symbols-outlined text-secondary text-5xl" data-icon="rocket_launch">rocket_launch</span>
+</div>
+<h2 class="font-h1 text-5xl md:text-6xl text-primary leading-tight">Ready to grow your income with AgroTrade?</h2>
+<p class="text-body-lg text-primary/70">Join thousands of successful farmers and traders today. Modernizing agriculture, one trade at a time.</p>
+<div class="flex flex-wrap justify-center gap-6">
+<button class="px-12 py-6 bg-primary-container text-on-primary rounded-2xl font-button text-lg soft-glow-ring hover:scale-105 transition-transform">
+                    Register For Free
+                </button>
+<button class="px-12 py-6 bg-white text-primary border border-primary/10 rounded-2xl font-button text-lg deep-shadow hover:bg-stone-50 transition-colors">
+                    Contact Sales
+                </button>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-stone-100 py-20 px-8 border-t border-emerald-900/10">
+<div class="max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
+<div class="col-span-1 md:col-span-1 space-y-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-3xl" data-icon="wheat">grain</span>
+<span class="text-xl font-bold text-primary-container tracking-tighter">AgroTrade</span>
+</div>
+<p class="text-on-surface-variant text-sm leading-relaxed">
+                        The definitive digital marketplace for modern Indian agriculture. Empowering millions through technology and transparency.
+                    </p>
+<div class="flex gap-4">
+<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center hover:bg-primary/10 cursor-pointer">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="share">share</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center hover:bg-primary/10 cursor-pointer">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="public">public</span>
+</div>
+</div>
+</div>
+<div>
+<h5 class="font-bold mb-6 text-primary uppercase text-xs tracking-widest">Platform</h5>
+<ul class="space-y-4 text-sm text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">Marketplace</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Logistics Network</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Trade Finance</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Advisory Board</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-6 text-primary uppercase text-xs tracking-widest">Company</h5>
+<ul class="space-y-4 text-sm text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Sustainability Report</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Newsroom</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-6 text-primary uppercase text-xs tracking-widest">Contact</h5>
+<ul class="space-y-4 text-sm text-on-surface-variant">
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm" data-icon="mail">mail</span> support@agrotrade.com</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm" data-icon="call">call</span> 1800-AGRO-TRADE</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span> New Delhi, India</li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-emerald-900/10 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-on-surface-variant">© 2024 AgroTrade. Premium Agrarian Excellence. All Rights Reserved.</p>
+<div class="flex gap-8 text-xs text-on-surface-variant">
+<a class="hover:text-primary" href="#">Terms of Trade</a>
+<a class="hover:text-primary" href="#">Privacy Protocol</a>
+<a class="hover:text-primary" href="#">Cookie Settings</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

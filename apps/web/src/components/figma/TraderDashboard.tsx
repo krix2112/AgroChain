@@ -1,7 +1,8 @@
 'use client';
-import { useState } from 'react';
-import { Search, SlidersHorizontal, MapPin, Star, TrendingUp, Package, ShoppingCart, LayoutDashboard, LogOut, FileText } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, SlidersHorizontal, MapPin, Star, TrendingUp, Package, ShoppingCart, LayoutDashboard, LogOut, FileText, BarChart3 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import MandiPrices from './MandiPrices';
 
 interface CropListing {
   id: number;
@@ -20,6 +21,31 @@ export default function TraderDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGrade, setSelectedGrade] = useState<string>('all');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'marketplace' | 'my-orders' | 'mandi-prices'>('marketplace');
+  const [showAllOrders, setShowAllOrders] = useState(false);
+
+  useEffect(() => {
+    // Client-side query param check
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab');
+      if (tab === 'mandi-prices' || tab === 'my-orders' || tab === 'marketplace') {
+        setActiveTab(tab as any);
+      }
+    }
+  }, []);
+
+  const dummyOrders = [
+    { id: 1, crop: 'Organic Tomatoes', quantity: '500 kg', dealValue: '₹12,500', status: 'In Delivery', date: '2023-10-25', image: 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=400' },
+    { id: 2, crop: 'Premium Wheat', quantity: '2,000 kg', dealValue: '₹49,000', status: 'Completed', date: '2023-10-22', image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400' },
+    { id: 3, crop: 'Red Onions', quantity: '800 kg', dealValue: '₹15,120', status: 'Agreed', date: '2023-10-24', image: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400' },
+    { id: 4, crop: 'Golden Maize', quantity: '1,500 kg', dealValue: '₹31,500', status: 'Completed', date: '2023-10-20', image: 'https://images.unsplash.com/photo-1603569283847-aa295f0d016a?w=400' },
+    { id: 5, crop: 'Basmati Rice', quantity: '3,000 kg', dealValue: '₹1,14,000', status: 'In Delivery', date: '2023-10-26', image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' },
+    { id: 6, crop: 'Desi Chickpea', quantity: '400 kg', dealValue: '₹16,400', status: 'Completed', date: '2023-10-18', image: 'https://images.unsplash.com/photo-1626349351768-94a510988af3?w=400' },
+    { id: 7, crop: 'Mustard Seeds', quantity: '600 kg', dealValue: '₹28,800', status: 'Agreed', date: '2023-10-27', image: 'https://images.unsplash.com/photo-1715289718087-66a61b7b4c0d?w=400' },
+    { id: 8, crop: 'Sugarcane', quantity: '5,000 kg', dealValue: '₹40,000', status: 'Completed', date: '2023-10-15', image: 'https://images.unsplash.com/photo-1590487988256-9ed24133863e?w=400' },
+  ];
+  const displayedOrders = showAllOrders ? dummyOrders : dummyOrders.slice(0, 4);
 
   const cropListings: CropListing[] = [
     {
@@ -116,18 +142,19 @@ export default function TraderDashboard() {
           </div>
         </div>
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-[#2E7D32] to-[#388E3C] text-white shadow-md">
+          <button onClick={() => setActiveTab('marketplace')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'marketplace' ? 'bg-gradient-to-r from-[#2E7D32] to-[#388E3C] text-white shadow-md' : 'text-gray-700 hover:bg-gray-100'}`}>
             <LayoutDashboard size={20} />
             <span className="font-medium">Marketplace</span>
-          </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-all">
+          </button>
+          <button onClick={() => setActiveTab('my-orders')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'my-orders' ? 'bg-gradient-to-r from-[#2E7D32] to-[#388E3C] text-white shadow-md' : 'text-gray-700 hover:bg-gray-100'}`}>
             <FileText size={20} />
             <span className="font-medium">My Orders</span>
-          </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-all">
-            <TrendingUp size={20} />
-            <span className="font-medium">Analytics</span>
-          </a>
+          </button>
+          <button onClick={() => setActiveTab('mandi-prices')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'mandi-prices' ? 'bg-gradient-to-r from-[#2E7D32] to-[#388E3C] text-white shadow-md' : 'text-gray-700 hover:bg-gray-100'}`}>
+            <BarChart3 size={20} />
+            <span className="font-medium">Mandi Prices</span>
+          </button>
+
         </nav>
         <div className="p-4 border-t border-gray-200">
           <button onClick={handleLogout} className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all">
@@ -152,7 +179,9 @@ export default function TraderDashboard() {
           <span className="font-bold text-lg text-gray-900">AgroTrade</span>
         </div>
 
-        {/* Hero Header */}
+        {activeTab === 'marketplace' && (
+          <>
+            {/* Hero Header */}
         <div className="relative h-64 overflow-hidden">
           <div
             className="absolute inset-0 bg-cover bg-center"
@@ -352,6 +381,69 @@ export default function TraderDashboard() {
             </div>
           )}
         </div>
+          </>
+        )}
+        {activeTab === 'my-orders' && (
+          <div className="w-full bg-[#F5F7FA] min-h-screen">
+            <div className="max-w-6xl mx-auto px-4 py-8">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+                <div>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-2">{showAllOrders ? 'All Activity' : 'Recent Trades'}</h1>
+                  <p className="text-gray-600">Track and manage your produce procurement.</p>
+                </div>
+                <button 
+                  onClick={() => setShowAllOrders(!showAllOrders)} 
+                  className="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-[#2E7D32] rounded-xl font-semibold shadow-sm hover:shadow-md hover:border-[#2E7D32]/50 transition-all"
+                >
+                  {showAllOrders ? 'Back to Recent' : 'See All Activity'} <TrendingUp size={18} />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {displayedOrders.map((order) => (
+                  <div key={order.id} className="group backdrop-blur-md bg-white rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden shadow-inner flex-shrink-0">
+                      <img src={order.image} alt={order.crop} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    </div>
+                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-4 gap-4 sm:gap-6 w-full">
+                      <div>
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Crop</p>
+                        <p className="font-bold text-gray-900 text-lg">{order.crop}</p>
+                        <p className="text-sm text-gray-500">{order.date}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Quantity</p>
+                        <p className="font-bold text-gray-800 text-lg">{order.quantity}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Deal Value</p>
+                        <p className="font-bold text-gray-900 text-lg">{order.dealValue}</p>
+                      </div>
+                      <div className="flex items-center">
+                        <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 ${
+                          order.status === 'In Delivery' ? 'bg-blue-50 text-blue-700 border border-blue-200 shadow-[0_0_15px_rgba(59,130,246,0.15)]' :
+                          order.status === 'Completed' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-[0_0_15px_rgba(16,185,129,0.15)]' :
+                          'bg-amber-50 text-amber-700 border border-amber-200 shadow-[0_0_15px_rgba(245,158,11,0.15)]'
+                        }`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${order.status === 'In Delivery' ? 'bg-blue-600 animate-pulse' : order.status === 'Completed' ? 'bg-emerald-600' : 'bg-amber-500'}`}></span>
+                          {order.status}
+                        </span>
+                      </div>
+                    </div>
+                    <button className="w-full sm:w-auto px-6 py-2.5 bg-gray-50 border border-gray-200 text-[#2E7D32] rounded-xl font-bold hover:bg-[#2E7D32] hover:text-white hover:shadow-lg hover:shadow-[#2E7D32]/30 transition-all whitespace-nowrap">
+                      View Details
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+        {activeTab === 'mandi-prices' && (
+          <div className="w-full bg-[#F5F7FA] min-h-screen py-8 px-4 sm:px-8 max-w-7xl mx-auto">
+            <MandiPrices />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgroChain - Set Quantity &amp; Price</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c1c8bf",
+                        "tertiary-container": "#3a2200",
+                        "surface-tint": "#40674a",
+                        "surface-bright": "#f0fdf4",
+                        "inverse-primary": "#a6d1ad",
+                        "inverse-surface": "#27332d",
+                        "on-primary-container": "#6f9877",
+                        "secondary": "#2e6a41",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "tertiary": "#1e0f00",
+                        "secondary-fixed-dim": "#96d5a3",
+                        "surface-container-high": "#deebe3",
+                        "secondary-container": "#b1f2be",
+                        "on-primary-fixed": "#00210d",
+                        "outline": "#727971",
+                        "surface-container": "#e4f1e8",
+                        "primary-fixed": "#c1edc8",
+                        "on-secondary-container": "#347047",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-secondary-fixed": "#00210d",
+                        "primary-container": "#052e16",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#e7f4eb",
+                        "surface-container-highest": "#d9e6dd",
+                        "surface": "#f0fdf4",
+                        "surface-variant": "#d9e6dd",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "primary-fixed-dim": "#a6d1ad",
+                        "on-tertiary-container": "#c77e00",
+                        "on-background": "#131e19",
+                        "background": "#f0fdf4",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface-container-low": "#eaf7ee",
+                        "on-surface": "#131e19",
+                        "on-surface-variant": "#424942",
+                        "primary": "#001707",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#d0ddd5",
+                        "secondary-fixed": "#b1f2be",
+                        "on-secondary-fixed-variant": "#12512c",
+                        "on-primary-fixed-variant": "#284f33"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "split-ratio": "45/55",
+                        "gutter": "1.5rem",
+                        "stack-gap": "1rem",
+                        "container-padding": "2.5rem"
+                    },
+                    "fontFamily": {
+                        "h1": ["Plus Jakarta Sans"],
+                        "h3": ["Plus Jakarta Sans"],
+                        "button": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "h2": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h1": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "h3": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "button": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-sm": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "h2": ["30px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-body-md text-on-surface min-h-screen flex flex-col">
+<!-- Background Layer -->
+<div class="fixed inset-0 z-[-1]">
+<div class="absolute inset-0 bg-primary-container/50 z-10"></div>
+<img class="w-full h-full object-cover blur-sm" data-alt="blurred vast emerald paddy field stretching to the horizon under a soft hazy sky with deep green cinematic overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdBF25c0ZzeblEGa12jsEqLvXCx3g_np3H7wTB6Z8f6XkDOvdAqWdpeLcpn3ab1H4B8MlFLUiyHu-tgJgWc5PVMl74COlG7AMGs6pMEsG1aiBed-CljtxzMZBFMvn59v4DWegpR9Gn4tBKIF9H_nR-OWYd0kooLl4azGMK9qQHi7_rrLuv0LJCcp7gI5oEi83CO2o4i3cVwAnBKsdUiikZGAbDKPxreKVWVtwoKnSEvu6MdtXf71QdXlJ2kmq5OSbFWKV0qCqBnts"/>
+</div>
+<!-- Top Navigation Bar -->
+<header class="bg-emerald-50/80 dark:bg-emerald-950/80 backdrop-blur-md border-b border-emerald-100/50 dark:border-emerald-800/50 docked full-width top-0 z-50 flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold text-emerald-950 dark:text-emerald-50 tracking-tight font-h1">AgroChain</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-emerald-700/70 dark:text-emerald-300/70 font-label-sm hover:bg-emerald-100/50 dark:hover:bg-emerald-800/50 transition-colors px-2 py-1" href="#">Marketplace</a>
+<a class="text-emerald-900 dark:text-emerald-100 font-semibold border-b-2 border-emerald-900 dark:border-emerald-100 font-label-sm px-2 py-1" href="#">My Harvest</a>
+<a class="text-emerald-700/70 dark:text-emerald-300/70 font-label-sm hover:bg-emerald-100/50 dark:hover:bg-emerald-800/50 transition-colors px-2 py-1" href="#">Contracts</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-2 font-label-sm text-emerald-950">
+<span class="font-bold">EN</span>
+<span class="text-emerald-950/40">|</span>
+<span>हिंदी</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-label-sm text-emerald-950">Namaste, <span class="font-bold">Ramesh</span></span>
+<div class="w-10 h-10 rounded-full bg-emerald-200 flex items-center justify-center">
+<span class="material-symbols-outlined text-emerald-800">account_circle</span>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow flex items-center justify-center p-6">
+<div class="w-full max-w-2xl">
+<!-- Step Bar -->
+<div class="flex items-center justify-between mb-8 px-4">
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<span class="text-white font-label-sm">Select Produce</span>
+</div>
+<div class="flex-grow h-[2px] bg-white/20 mx-4 -mt-6">
+<div class="h-full bg-secondary w-1/2"></div>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-white text-secondary flex items-center justify-center font-bold border-2 border-secondary shadow-lg">
+                        2
+                    </div>
+<span class="text-white font-bold font-label-sm">Quantity &amp; Price</span>
+</div>
+<div class="flex-grow h-[2px] bg-white/20 mx-4 -mt-6"></div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-white/30 text-white/50 flex items-center justify-center font-bold">
+                        3
+                    </div>
+<span class="text-white/50 font-label-sm">Confirm</span>
+</div>
+</div>
+<!-- Glass Card Content -->
+<div class="glass-card rounded-[2rem] p-8 text-white shadow-2xl">
+<!-- Summary Row -->
+<div class="flex justify-between items-center mb-6">
+<div class="flex items-center gap-4">
+<div class="bg-red-500/20 p-2 rounded-xl">
+<span class="material-symbols-outlined text-red-400" data-icon="nutrition">nutrition</span>
+</div>
+<div>
+<h2 class="font-h2 text-white">Tomato</h2>
+<p class="font-body-md text-white/60">Current Selection | 2000 Kg</p>
+</div>
+</div>
+<img class="w-12 h-12 rounded-xl object-cover border-2 border-white/20" data-alt="high quality close up of several ripe red organic vine tomatoes on a rustic surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWBHOm1Afp06pG1YJOr3408E-L_HqpScS3p8s61-VjtlSCEt2Xa1x69ZmONXagJF0QGXJpnqVFAz5q3ujRo1QzjhpCeOCJ1_5CeI2_EnQfqTQJFs775VSKiYky-J5ZwjC-crZOzsL08OslvGZfIsezUuVFywB4m0X-R3Uio2DKBl78Ct4y5Jl-W_4tDH8yeBSEqIX0aSkrOUeCCs_tTlLPCX4BNqM-P7VX21uqgPKHQp1OlxLQvYUqtBFrIbyMqK4y_MD6nN3dR7Q"/>
+</div>
+<div class="h-px bg-white/10 w-full mb-8"></div>
+<div class="space-y-8">
+<!-- Quantity Section -->
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<label class="font-h3 text-lg text-white">Quantity</label>
+<span class="bg-amber-400/20 text-amber-300 text-xs font-bold px-3 py-1 rounded-full border border-amber-400/30">
+                                Market Price: ₹18/kg
+                            </span>
+</div>
+<div class="flex items-center justify-between bg-white/5 rounded-2xl p-4 border border-white/10">
+<div class="flex items-center gap-6">
+<button class="w-11 h-11 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center hover:scale-105 transition-transform">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<div class="text-center">
+<span class="font-h1 text-3xl">2000</span>
+</div>
+<button class="w-11 h-11 rounded-full bg-primary-container text-white flex items-center justify-center hover:scale-105 transition-transform">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<span class="font-h3 text-white/60">Kg</span>
+</div>
+</div>
+<!-- Expected Price Section -->
+<div class="space-y-3">
+<label class="font-h3 text-lg text-white">Expected Price / Kg</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 font-h3">₹</span>
+<input class="w-full bg-white text-on-surface font-h3 text-2xl pl-10 pr-4 py-4 rounded-xl border-2 border-secondary-container focus:ring-2 focus:ring-secondary focus:outline-none" type="text" value="24"/>
+</div>
+</div>
+<!-- Total Price Highlight -->
+<div class="bg-surface-bright border-l-4 border-secondary rounded-xl px-6 py-4 flex flex-col">
+<span class="text-on-surface-variant font-label-sm uppercase tracking-wider mb-1">Total Expected Value</span>
+<span class="font-h1 text-secondary text-4xl">₹ 48,000</span>
+</div>
+<!-- Dispatch Time -->
+<div class="space-y-3">
+<div class="flex items-center gap-2">
+<label class="font-h3 text-lg text-white">Ready to Dispatch</label>
+<span class="material-symbols-outlined text-white/40 text-sm">info</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center bg-white rounded-xl border border-white/20 w-32 overflow-hidden">
+<input class="w-full text-center py-3 text-on-surface font-bold text-xl border-none focus:ring-0" type="number" value="2"/>
+</div>
+<span class="font-h3 text-white">Days</span>
+</div>
+<p class="font-label-sm text-white/50 italic">Buyers prefer produce ready within 3 days</p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex gap-4 mt-10">
+<button class="flex-1 py-4 rounded-xl border-2 border-white/20 text-white font-button hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">arrow_back</span>
+                        Back
+                    </button>
+<button class="flex-[2] py-4 rounded-xl bg-primary-container text-white font-button hover:opacity-90 transition-all shadow-xl flex items-center justify-center gap-2">
+                        Review Offer
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-emerald-50 dark:bg-emerald-950 border-t border-emerald-100 dark:border-emerald-800 w-full py-8 mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 w-full max-w-7xl mx-auto gap-4">
+<p class="font-['Plus_Jakarta_SANS'] text-xs uppercase tracking-widest text-emerald-700/60 dark:text-emerald-300/60">
+                © 2024 AgroChain. Prestigious Stewardship &amp; Digital Harvesting.
+            </p>
+<div class="flex gap-8">
+<a class="font-['Plus_Jakarta_SANS'] text-xs uppercase tracking-widest text-emerald-700/60 dark:text-emerald-300/60 hover:text-emerald-950 dark:hover:text-emerald-50 underline" href="#">Terms of Service</a>
+<a class="font-['Plus_Jakarta_SANS'] text-xs uppercase tracking-widest text-emerald-700/60 dark:text-emerald-300/60 hover:text-emerald-950 dark:hover:text-emerald-50 underline" href="#">Privacy Policy</a>
+<a class="font-['Plus_Jakarta_SANS'] text-xs uppercase tracking-widest text-emerald-700/60 dark:text-emerald-300/60 hover:text-emerald-950 dark:hover:text-emerald-50 underline" href="#">Supply Chain Data</a>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#717971",
+                        "on-tertiary-fixed": "#271900",
+                        "on-background": "#1c1c18",
+                        "tertiary-fixed": "#ffdea6",
+                        "surface-tint": "#366847",
+                        "on-secondary-fixed": "#002204",
+                        "secondary-container": "#91f78e",
+                        "on-primary-fixed": "#00210e",
+                        "primary-container": "#1a4d2e",
+                        "primary": "#00361a",
+                        "on-secondary-fixed-variant": "#005313",
+                        "surface-container-high": "#ebe8e1",
+                        "secondary-fixed-dim": "#78dc77",
+                        "background": "#fcf9f2",
+                        "surface-container": "#f0eee7",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#006e1c",
+                        "tertiary": "#3e2a00",
+                        "surface-variant": "#e5e2db",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#5a3f00",
+                        "surface": "#fcf9f2",
+                        "outline-variant": "#c1c9bf",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f3f0e9",
+                        "inverse-primary": "#9dd3aa",
+                        "surface-bright": "#fcf9f2",
+                        "inverse-surface": "#31312c",
+                        "on-primary-fixed-variant": "#1d5031",
+                        "on-surface": "#1c1c18",
+                        "on-tertiary-fixed-variant": "#5d4200",
+                        "tertiary-fixed-dim": "#eec068",
+                        "on-tertiary-container": "#d6aa55",
+                        "primary-fixed": "#b8f0c5",
+                        "surface-container-low": "#f6f3ec",
+                        "secondary-fixed": "#94f990",
+                        "on-secondary-container": "#00731e",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#88bd95",
+                        "surface-dim": "#dcdad3",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#9dd3aa",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#e5e2db",
+                        "on-surface-variant": "#414942"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "margin-desktop": "64px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "h1": ["Plus Jakarta Sans"],
+                        "h2": ["Plus Jakarta Sans"],
+                        "h3": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "button": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h1": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h2": ["48px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "h3": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "button": ["16px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.20);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .deep-shadow {
+            shadow-[0_24px_60px_-15px_rgba(26,77,46,0.08)];
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md">
+<!-- TopAppBar Section -->
+<header class="sticky top-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-white/70 dark:bg-emerald-950/70 backdrop-blur-lg border-b border-emerald-900/10 shadow-[0_24px_60px_-15px_rgba(26,77,46,0.08)]">
+<div class="flex items-center gap-2">
+<span class="text-xl font-bold text-emerald-900 dark:text-emerald-50 tracking-tighter font-['Plus_Jakarta_Sans']">AgroTrade</span>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-emerald-800/60 dark:text-emerald-200/60 font-['Plus_Jakarta_Sans'] font-semibold tracking-tight hover:bg-emerald-50/50 transition-colors px-3 py-2 rounded-lg" href="#">Market</a>
+<a class="text-emerald-900 dark:text-emerald-50 font-bold border-b-2 border-emerald-900 font-['Plus_Jakarta_Sans'] tracking-tight px-3 py-2" href="#">My Listings</a>
+<a class="text-emerald-800/60 dark:text-emerald-200/60 font-['Plus_Jakarta_Sans'] font-semibold tracking-tight hover:bg-emerald-50/50 transition-colors px-3 py-2 rounded-lg" href="#">Insights</a>
+<a class="text-emerald-800/60 dark:text-emerald-200/60 font-['Plus_Jakarta_Sans'] font-semibold tracking-tight hover:bg-emerald-50/50 transition-colors px-3 py-2 rounded-lg" href="#">Profile</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-emerald-50/50 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-emerald-900">notifications</span>
+</button>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-emerald-100 shadow-sm">
+<img alt="Farmer Profile" data-alt="Close-up portrait of a weathered, smiling farmer wearing a traditional hat in soft outdoor lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5mw-HMraGTiHxd8Ewp7Dxei0GxTa_KibmFK6gPhKpIEqwxZGSKKyao6hkyeHlLvnU5V1MQx4zqP0PbVFHzN4UQJTX2wOKTdG-dqd4vHz6419P8fpDo1xMBXhJy6HXjRUb9koOG2-rqaI0aFZ8w7OzwPAo2o_KtNy03uFWie3VKmEIeCpAxKqMlquzzXkgVeyeiroOTZyLS8urSRkoedOsb8fWDPx_3iaz0gnV1vSUVPSfKMCRWc46Dc8hfHXl9yciHPq1rGRVdz8"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Hero Header -->
+<section class="relative w-full h-[320px] flex flex-col justify-end px-margin-desktop pb-12 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover" data-alt="Wide expansive view of a lush green agricultural field at sunrise with morning mist and soft golden lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6_bUuigqlhrKlqFD556VcoyoNNQzjXLqxG-PkdNBTs-LLC9WbarFD88LzJRQEVIQy1kTLJfca4WpFUX3pmeoVzOU9Ybojv1IVnHDULaTqKLoTjHRpQBdNfsi0_6n9ZKAHN7pHMsx9UwnOselZsig66yMEWykOxC_1p7vv0ZtwnaC0P6ee1aTPvhq7Onthmm8AWuzyhTBLbYlgi84XfJAvnY8Onxz-5iNR-n_nPt4MKV4tBozXqEq14zrlfyfkr9hTC_ZKg1PK9lk"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#1B4332]/95 via-[#1B4332]/70 to-transparent"></div>
+</div>
+<div class="relative z-10 max-w-container-max mx-auto w-full">
+<h1 class="font-h3 text-h3 text-white mb-2">My Listings</h1>
+<p class="text-body-md text-emerald-50/80 mb-8 max-w-xl">Track and manage your listed crops. Optimize your harvest sales with real-time market insights.</p>
+<!-- Filter Chips -->
+<div class="flex flex-wrap gap-3">
+<button class="px-6 py-2 rounded-full bg-[#2D6A4F] text-white font-button text-sm shadow-lg shadow-[#2D6A4F]/20">All</button>
+<button class="px-6 py-2 rounded-full bg-white/10 backdrop-blur-md text-emerald-50 border border-white/20 font-button text-sm hover:bg-white/20 transition-all">Live</button>
+<button class="px-6 py-2 rounded-full bg-white/10 backdrop-blur-md text-emerald-50 border border-white/20 font-button text-sm hover:bg-white/20 transition-all">Sold</button>
+<button class="px-6 py-2 rounded-full bg-white/10 backdrop-blur-md text-emerald-50 border border-white/20 font-button text-sm hover:bg-white/20 transition-all">Expired</button>
+</div>
+</div>
+</section>
+<!-- Listings Grid -->
+<main class="max-w-container-max mx-auto px-margin-desktop py-16">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Card 1: Basmati Rice -->
+<div class="glass-card rounded-[20px] overflow-hidden group hover:-translate-y-1.5 transition-all duration-300 shadow-[0_24px_60px_-15px_rgba(26,77,46,0.08)] bg-white">
+<div class="h-[160px] relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close-up of high-quality basmati rice grains scattered on a rustic wooden surface with warm atmospheric lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5d4RKypu_FtzFqN4M4x_rMKi4s_RzK1NESMp_LcWdGGwyyDsx5jXfhwUBdP5lnRQA5JiCe6fmIaYMlZkVG87vwiXSm9tQGf_eOwM7E9JR97Yw_tv2EgfnJJB7dFRcUJKCqLBOfvTWegV3Y8ZmsaKS_LeFp-kFk8KCLpvHKzZAtoSK7hUNENVXu1I-CA7HZTmdwwixNZMqkPl64aXc3vkQg5vqarYMkO66vDe12fOo6VwJIcvuSeMzJuN8dwmDKjgfhr5j1S5VUW0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+<h4 class="text-white font-bold text-xl leading-tight">Basmati Rice</h4>
+<span class="px-3 py-1 rounded-full bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-wider">Live</span>
+</div>
+</div>
+<div class="p-6 space-y-4">
+<div class="flex justify-between text-on-surface-variant text-sm">
+<span>Quantity: 500 kg</span>
+<span class="font-semibold text-on-surface">₹28/kg</span>
+</div>
+<div class="bg-emerald-50/50 rounded-xl p-3 flex justify-between items-center border border-emerald-100">
+<span class="text-xs uppercase tracking-widest text-emerald-800/60 font-bold">Total Value</span>
+<span class="text-lg font-bold text-[#2D6A4F]">₹14,000</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 rounded-md bg-tertiary/5 text-tertiary text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">star</span> Grade A
+                        </span>
+<span class="px-3 py-1 rounded-md bg-secondary/5 text-secondary text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">eco</span> Fresh
+                        </span>
+</div>
+<div class="pt-4 flex items-center gap-3 border-t border-emerald-900/5">
+<button class="text-emerald-800 text-sm font-semibold hover:underline">View Details</button>
+<button class="ml-auto p-2 rounded-lg bg-surface-container-low text-emerald-900 hover:bg-emerald-50 transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="px-4 py-2 rounded-full bg-[#2D6A4F] text-white text-sm font-button shadow-md hover:shadow-lg hover:bg-primary transition-all">Mark as Sold</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Red Onions -->
+<div class="glass-card rounded-[20px] overflow-hidden group hover:-translate-y-1.5 transition-all duration-300 shadow-[0_24px_60px_-15px_rgba(26,77,46,0.08)] bg-white">
+<div class="h-[160px] relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Red onions in a burlap sack with natural sunlight hitting the purple skins, high detail texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASevHOq1YTsaWx0wWnM9Wx8s80IzoHsGfU_sON8zqcXV8BDRwm5cARCHOnghTvfHZVLULT-HZNDDv5X0kZi2skpbFCnkq-7sHtSmNxjNsyG_5_4sZvN_558DOb2UugHwITncYWXdO-BQFj5lYmTI4iMPY49eYjX7bIYer8EHxl4bpy_cTMVCQ-mL2zogWadyJ3Rif25yn8PEWvqdH2A-kf5pE3Y_zKDL8Nqy2fqHJozq0fbfXfMWtGw8T3gAaLF5uxR4hvxCazgCU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+<h4 class="text-white font-bold text-xl leading-tight">Red Onions</h4>
+<span class="px-3 py-1 rounded-full bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-wider">Live</span>
+</div>
+</div>
+<div class="p-6 space-y-4">
+<div class="flex justify-between text-on-surface-variant text-sm">
+<span>Quantity: 1200 kg</span>
+<span class="font-semibold text-on-surface">₹18/kg</span>
+</div>
+<div class="bg-emerald-50/50 rounded-xl p-3 flex justify-between items-center border border-emerald-100">
+<span class="text-xs uppercase tracking-widest text-emerald-800/60 font-bold">Total Value</span>
+<span class="text-lg font-bold text-[#2D6A4F]">₹21,600</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 rounded-md bg-tertiary/5 text-tertiary text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">star</span> Grade B
+                        </span>
+<span class="px-3 py-1 rounded-md bg-secondary/5 text-secondary text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">eco</span> Good
+                        </span>
+</div>
+<div class="pt-4 flex items-center gap-3 border-t border-emerald-900/5">
+<button class="text-emerald-800 text-sm font-semibold hover:underline">View Details</button>
+<button class="ml-auto p-2 rounded-lg bg-surface-container-low text-emerald-900 hover:bg-emerald-50 transition-colors">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="px-4 py-2 rounded-full bg-[#2D6A4F] text-white text-sm font-button shadow-md hover:shadow-lg hover:bg-primary transition-all">Mark as Sold</button>
+</div>
+</div>
+</div>
+<!-- Card 3: Alphonso Mangoes -->
+<div class="glass-card rounded-[20px] overflow-hidden group hover:-translate-y-1.5 transition-all duration-300 shadow-[0_24px_60px_-15px_rgba(26,77,46,0.08)] bg-white opacity-90">
+<div class="h-[160px] relative overflow-hidden grayscale-[0.3]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Vibrant golden alphonso mangoes stacked in a basket under warm sunlight, soft focus background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLsJNuoe0eUl8_qb0AOOg7sAxH9KauNfyPDkLPU9q3zwR4L0iKlISICcCNhnyu4z_nOp89TwFBbBAtKpJQHx2veZvD6aZKhEPWtRdv__7xCgr4ZOxUwKVDgAqOVDDhnNCceXfZ-Qf6D_MOGDA3DKtJc1tVSa06_tuqWXc71wHkq4pre56yAEcsE-9T0Srpx6O9o2QAmCyYr3GWk-MApz8ktzl-n1Hv_eBNCOL6EkNifNp9qiQZOGl17xISp5W5BQRTIm0oHKsFnO8"/>
+<div class="absolute inset-0 bg-black/30"></div>
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+<h4 class="text-white font-bold text-xl leading-tight">Alphonso Mangoes</h4>
+<span class="px-3 py-1 rounded-full bg-slate-500 text-white text-[10px] font-bold uppercase tracking-wider">Sold</span>
+</div>
+</div>
+<div class="p-6 space-y-4">
+<div class="flex justify-between text-on-surface-variant text-sm">
+<span>Quantity: 200 kg</span>
+<span class="font-semibold text-on-surface">₹120/kg</span>
+</div>
+<div class="bg-slate-50 rounded-xl p-3 flex justify-between items-center border border-slate-100">
+<span class="text-xs uppercase tracking-widest text-slate-400 font-bold">Total Value</span>
+<span class="text-lg font-bold text-slate-500 line-through">₹24,000</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 rounded-md bg-tertiary/5 text-tertiary text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">star</span> Premium
+                        </span>
+<span class="px-3 py-1 rounded-md bg-secondary/5 text-secondary text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">flare</span> Peak Fresh
+                        </span>
+</div>
+<div class="pt-4 flex items-center gap-3 border-t border-emerald-900/5">
+<button class="text-emerald-800 text-sm font-semibold hover:underline">View History</button>
+<span class="ml-auto text-xs font-medium text-slate-400 italic">Sold on Oct 24</span>
+</div>
+</div>
+</div>
+<!-- Card 4: Wheat (Sharbati) -->
+<div class="glass-card rounded-[20px] overflow-hidden group hover:-translate-y-1.5 transition-all duration-300 shadow-[0_24px_60px_-15px_rgba(26,77,46,0.08)] bg-white opacity-80">
+<div class="h-[160px] relative overflow-hidden grayscale">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Golden stalks of wheat in a field during harvest season, black and white artistic photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrHhh1hFPBX5WXl57A8sRAEVU9q3-eGILtHDMApypbTKsfv98r4gnw07yUXS7VVb9ScUmkBjsRDjfCVnDQ3tGlwatLR7swqGqF4ZE6nqEcmha_k_03qzp9rwpb0AyFMC9oUnhhWlE5W86oiDrnZ6MMTMPEDTmwYBBjW9dSbBM8hqZF--bhVYUOZnZ7l_AQpq0XweHwNHAtBjhrs4UWzBcDEVLyAosAxKEzusTYITQm_hEb-f0NW8VTQ-4sP1feabl1lMuCG1OAVFc"/>
+<div class="absolute inset-0 bg-red-900/20"></div>
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+<h4 class="text-white font-bold text-xl leading-tight">Wheat (Sharbati)</h4>
+<span class="px-3 py-1 rounded-full bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider">Expired</span>
+</div>
+</div>
+<div class="p-6 space-y-4">
+<div class="flex justify-between text-on-surface-variant text-sm">
+<span>Quantity: 800 kg</span>
+<span class="font-semibold text-on-surface">₹22/kg</span>
+</div>
+<div class="bg-red-50/50 rounded-xl p-3 flex justify-between items-center border border-red-100">
+<span class="text-xs uppercase tracking-widest text-red-800/40 font-bold">Total Value</span>
+<span class="text-lg font-bold text-red-900/60">₹17,600</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 rounded-md bg-tertiary/5 text-tertiary text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">star</span> Grade A
+                        </span>
+<span class="px-3 py-1 rounded-md bg-red-50 text-red-700 text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 4 days old
+                        </span>
+</div>
+<div class="pt-4 flex items-center gap-3 border-t border-emerald-900/5">
+<button class="text-red-700 text-sm font-semibold hover:underline">Re-list Now</button>
+<button class="ml-auto p-2 rounded-lg bg-surface-container-low text-emerald-900 hover:bg-emerald-50 transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB -->
+<div class="fixed bottom-10 right-10 z-[60] group">
+<div class="absolute right-full mr-4 top-1/2 -translate-y-1/2 px-4 py-2 bg-emerald-900 text-white text-sm font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">
+            List New Crop
+        </div>
+<button class="w-16 h-16 rounded-full bg-[#2D6A4F] text-white shadow-[0_10px_30px_rgba(45,106,79,0.4)] hover:scale-110 active:scale-95 transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl">add</span>
+</button>
+</div>
+<!-- BottomNavBar for Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 dark:bg-emerald-950/80 backdrop-blur-xl border-t border-emerald-900/5 shadow-[0_-10px_40px_rgba(26,77,46,0.05)]">
+<a class="flex flex-col items-center justify-center text-emerald-800/40" href="#">
+<span class="material-symbols-outlined">storefront</span>
+<span class="text-[10px] font-medium uppercase tracking-widest mt-1">Market</span>
+</a>
+<a class="flex flex-col items-center justify-center text-emerald-900 bg-emerald-100/50 rounded-xl px-4 py-1" href="#">
+<span class="material-symbols-outlined">potted_plant</span>
+<span class="text-[10px] font-medium uppercase tracking-widest mt-1">My Listings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-emerald-800/40" href="#">
+<span class="material-symbols-outlined">query_stats</span>
+<span class="text-[10px] font-medium uppercase tracking-widest mt-1">Insights</span>
+</a>
+<a class="flex flex-col items-center justify-center text-emerald-800/40" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium uppercase tracking-widest mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

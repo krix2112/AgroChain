@@ -35,7 +35,7 @@ export default function Homepage() {
               <p className="text-lg text-white/80 max-w-md">Empowering Indian agriculture with direct market access, secure payments, and premium logistics support.</p>
               <div className="flex gap-4">
                 <button onClick={() => router.push('/login')} className="px-8 py-4 bg-white text-[#2E7D32] rounded-xl font-bold shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">Get Started Now</button>
-                <button className="px-8 py-4 backdrop-blur-md bg-white/10 hover:bg-white/20 border border-white/40 text-white rounded-xl font-bold transition-all transform hover:scale-105">View Live Prices</button>
+                <button onClick={() => router.push('/trader/dashboard?tab=mandi-prices')} className="px-8 py-4 backdrop-blur-md bg-white/10 hover:bg-white/20 border border-white/40 text-white rounded-xl font-bold transition-all transform hover:scale-105">View Live Prices</button>
               </div>
             </div>
             <div className="backdrop-blur-xl bg-white/15 border border-white/30 rounded-3xl p-8">

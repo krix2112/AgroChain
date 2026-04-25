@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Post a Requirement | AgroChain</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#d9e6dd",
+                    "secondary-fixed-dim": "#96d5a3",
+                    "on-error-container": "#93000a",
+                    "on-surface": "#131e19",
+                    "on-primary-fixed": "#00210d",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#424942",
+                    "primary-fixed": "#c1edc8",
+                    "inverse-on-surface": "#e7f4eb",
+                    "surface-tint": "#40674a",
+                    "on-secondary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#b1f2be",
+                    "on-tertiary-fixed": "#2a1700",
+                    "surface-dim": "#d0ddd5",
+                    "primary": "#001707",
+                    "surface-container-low": "#eaf7ee",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#c77e00",
+                    "surface-container-high": "#deebe3",
+                    "on-secondary-fixed-variant": "#12512c",
+                    "tertiary": "#1e0f00",
+                    "tertiary-container": "#3a2200",
+                    "primary-fixed-dim": "#a6d1ad",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "surface": "#f0fdf4",
+                    "on-error": "#ffffff",
+                    "primary-container": "#052e16",
+                    "on-background": "#131e19",
+                    "on-secondary-container": "#347047",
+                    "on-primary-container": "#6f9877",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "surface-variant": "#d9e6dd",
+                    "outline": "#727971",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed-variant": "#284f33",
+                    "inverse-surface": "#27332d",
+                    "tertiary-fixed": "#ffddb8",
+                    "surface-container": "#e4f1e8",
+                    "secondary-fixed": "#b1f2be",
+                    "background": "#f0fdf4",
+                    "secondary": "#2e6a41",
+                    "on-secondary-fixed": "#00210d",
+                    "inverse-primary": "#a6d1ad",
+                    "surface-bright": "#f0fdf4",
+                    "outline-variant": "#c1c8bf"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "1.5rem",
+                    "container-padding": "2.5rem",
+                    "stack-gap": "1rem",
+                    "split-ratio": "45/55"
+            },
+            "fontFamily": {
+                    "label-sm": ["Inter"],
+                    "button": ["Plus Jakarta Sans"],
+                    "body-md": ["Inter"],
+                    "h3": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"],
+                    "h1": ["Plus Jakarta Sans"],
+                    "h2": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-sm": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "button": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h3": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h1": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "h2": ["30px", {"lineHeight": "1.3", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(209, 250, 229, 0.5);
+        }
+        .custom-focus:focus {
+            outline: none;
+            border-color: #14532d;
+            box-shadow: 0 0 0 4px rgba(20, 83, 45, 0.1);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white/60 dark:bg-emerald-950/60 backdrop-blur-md shadow-sm border-b border-emerald-100 dark:border-emerald-800">
+<div class="flex items-center gap-2">
+<span class="text-xl font-bold text-emerald-950 dark:text-emerald-50 font-['Plus_Jakarta_Sans'] tracking-tight">AgroChain</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-emerald-700/70 dark:text-emerald-300/70 font-['Plus_Jakarta_Sans'] font-semibold transition-colors hover:bg-emerald-50/50" href="#">Marketplace</a>
+<a class="text-emerald-900 dark:text-emerald-50 font-bold border-b-2 border-emerald-900 font-['Plus_Jakarta_Sans'] transition-colors" href="#">Post Request</a>
+<a class="text-emerald-700/70 dark:text-emerald-300/70 font-['Plus_Jakarta_Sans'] font-semibold transition-colors hover:bg-emerald-50/50" href="#">My Listings</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-emerald-900 dark:text-emerald-50 active:scale-95 duration-150 transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-emerald-900 dark:text-emerald-50 active:scale-95 duration-150 transition-colors">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</nav>
+<!-- Split Screen Layout -->
+<main class="flex min-h-screen pt-16">
+<!-- Left Pane: Immersive Photography -->
+<aside class="hidden lg:block w-[45%] fixed left-0 h-[calc(100vh-64px)] top-16">
+<div class="relative h-full w-full overflow-hidden">
+<img class="h-full w-full object-cover" data-alt="expansive golden wheat field during a dramatic sunset with warm light bathing the crops and a clear distant horizon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKwRQNGiQI97F0sH3147QZSKOT_55Eobt_aptzgGv5NOh1a_aZ82k8syOkwnYI4EXADWBbCB9CK2z5WrKvEU9b9RRuZdzhDBdtiSY8rdHwd7W3Ppz73SLRbttvtWj2zcV4jXMUb2HwaU7de2t-7LIDM44y2jYvYna3DgylkaHpsNMxdWzNPWCutPOrxk6JDf4wz3nTDrH-tCWHJXue-zK5s8uFbX9RwZZcwEseVEGi_tZdNKwR1ban0WR3v7ggG1NNdavyM5NEeko"/>
+<div class="absolute inset-0 bg-gradient-to-r from-primary-container/20 to-transparent"></div>
+<div class="absolute bottom-12 left-12 max-w-md">
+<h2 class="font-h1 text-h1 text-white mb-4 drop-shadow-lg">Empowering Sustainable Trade</h2>
+<p class="font-body-lg text-body-lg text-white/90 drop-shadow-md">Connect directly with vetted farmers and secure your supply chain with blockchain transparency.</p>
+</div>
+</div>
+</aside>
+<!-- Right Pane: Functional Portal -->
+<section class="w-full lg:w-[55%] lg:ml-[45%] p-gutter md:p-container-padding bg-surface">
+<div class="max-w-2xl mx-auto">
+<header class="mb-10">
+<h1 class="font-h1 text-h1 text-on-surface mb-2">Post a Requirement</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Let farmers know what you need</p>
+</header>
+<form class="glass-panel p-8 rounded-xl shadow-sm space-y-6">
+<!-- Crop Selection -->
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Crop Name</label>
+<div class="relative">
+<select class="w-full bg-white border border-outline-variant rounded-xl p-4 appearance-none custom-focus text-on-surface font-body-md">
+<option>Select a crop</option>
+<option>Golden Durum Wheat</option>
+<option>Organic Soybeans</option>
+<option>Premium Basmati Rice</option>
+<option>Red Kidney Beans</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Quantity & Unit -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Quantity Required</label>
+<div class="flex gap-2">
+<input class="flex-1 bg-white border border-outline-variant rounded-xl p-4 custom-focus text-on-surface font-body-md" placeholder="0.00" type="number"/>
+<div class="flex bg-surface-container-high rounded-xl p-1 h-fit">
+<button class="px-4 py-3 bg-white shadow-sm rounded-lg text-primary font-bold text-sm" type="button">MT</button>
+<button class="px-4 py-3 text-on-surface-variant font-medium text-sm" type="button">KG</button>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Price Offer (per unit)</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">$</span>
+<input class="w-full bg-white border border-outline-variant rounded-xl p-4 pl-8 custom-focus text-on-surface font-body-md" placeholder="0.00" type="number"/>
+</div>
+</div>
+</div>
+<!-- Quality Grade Selector -->
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Quality Grade</label>
+<div class="grid grid-cols-3 gap-2 bg-surface-container rounded-xl p-1.5">
+<button class="py-3 px-4 rounded-lg font-button text-button bg-white shadow-sm text-primary transition-all" type="button">Any</button>
+<button class="py-3 px-4 rounded-lg font-button text-button text-on-surface-variant hover:bg-white/50 transition-all" type="button">Grade A</button>
+<button class="py-3 px-4 rounded-lg font-button text-button text-on-surface-variant hover:bg-white/50 transition-all" type="button">Grade B</button>
+</div>
+</div>
+<!-- Location & Date -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Delivery Location</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">location_on</span>
+<input class="w-full bg-white border border-outline-variant rounded-xl p-4 pl-12 custom-focus text-on-surface font-body-md" placeholder="Search city or port" type="text"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Required By Date</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">calendar_today</span>
+<input class="w-full bg-white border border-outline-variant rounded-xl p-4 pl-12 custom-focus text-on-surface font-body-md" type="date"/>
+</div>
+</div>
+</div>
+<!-- Notes -->
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Additional Notes</label>
+<textarea class="w-full bg-white border border-outline-variant rounded-xl p-4 custom-focus text-on-surface font-body-md resize-none" placeholder="Mention specific variety, moisture levels, or packaging preferences..." rows="4"></textarea>
+</div>
+<!-- Submit Button -->
+<div class="pt-4">
+<button class="w-full bg-primary-container text-white py-5 rounded-xl font-button text-button shadow-lg shadow-primary-container/20 active:scale-[0.98] transition-all hover:bg-primary duration-200" type="submit">
+                            Post Requirement
+                        </button>
+<p class="text-center text-label-sm text-on-surface-variant mt-4">
+                            By posting, you agree to the <a class="text-primary underline font-semibold" href="#">AgroChain Trade Protocols</a>.
+                        </p>
+</div>
+</form>
+<!-- Helpful Tips (Bento-style extra content) -->
+<div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-4 pb-24">
+<div class="p-6 bg-secondary-container/30 border border-secondary-container rounded-xl flex gap-4">
+<span class="material-symbols-outlined text-secondary-container" data-weight="fill">verified_user</span>
+<div>
+<h4 class="font-button text-primary mb-1">Market Insight</h4>
+<p class="text-label-sm text-on-secondary-container">Wheat prices are currently trending 5% higher in your selected region.</p>
+</div>
+</div>
+<div class="p-6 bg-tertiary-fixed/30 border border-tertiary-fixed rounded-xl flex gap-4">
+<span class="material-symbols-outlined text-on-tertiary-container" data-weight="fill">speed</span>
+<div>
+<h4 class="font-button text-on-tertiary-fixed-variant mb-1">Fast Response</h4>
+<p class="text-label-sm text-on-tertiary-fixed-variant">Adding specific quality grades leads to 3x faster matching with suppliers.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Shared Component - Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 h-20 bg-white/80 dark:bg-emerald-950/80 backdrop-blur-xl shadow-[0_-4px_12px_rgba(5,46,22,0.05)] border-t border-emerald-100 dark:border-emerald-800 rounded-t-xl">
+<div class="flex flex-col items-center justify-center text-emerald-700/60 dark:text-emerald-400/60 tap-highlight-transparent transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="text-[11px] font-medium font-['Plus_Jakarta_Sans']">Marketplace</span>
+</div>
+<div class="flex flex-col items-center justify-center text-emerald-900 dark:text-emerald-100 bg-emerald-100 dark:bg-emerald-800/60 rounded-xl px-3 py-1 tap-highlight-transparent transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="add_box">add_box</span>
+<span class="text-[11px] font-medium font-['Plus_Jakarta_Sans']">Post Request</span>
+</div>
+<div class="flex flex-col items-center justify-center text-emerald-700/60 dark:text-emerald-400/60 tap-highlight-transparent transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="text-[11px] font-medium font-['Plus_Jakarta_Sans']">My Listings</span>
+</div>
+<div class="flex flex-col items-center justify-center text-emerald-700/60 dark:text-emerald-400/60 tap-highlight-transparent transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="text-[11px] font-medium font-['Plus_Jakarta_Sans']">My Trades</span>
+</div>
+</nav>
+</body></html>

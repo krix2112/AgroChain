@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#f0fdf4",
+                    "surface-container-high": "#deebe3",
+                    "on-primary-fixed-variant": "#284f33",
+                    "tertiary-container": "#3a2200",
+                    "on-secondary-fixed-variant": "#12512c",
+                    "primary-fixed-dim": "#a6d1ad",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "primary": "#001707",
+                    "on-background": "#131e19",
+                    "surface-variant": "#d9e6dd",
+                    "surface-container": "#e4f1e8",
+                    "on-primary": "#ffffff",
+                    "background": "#f0fdf4",
+                    "secondary": "#2e6a41",
+                    "tertiary": "#1e0f00",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "outline": "#727971",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-surface": "#131e19",
+                    "error": "#ba1a1a",
+                    "inverse-on-surface": "#e7f4eb",
+                    "outline-variant": "#c1c8bf",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#d9e6dd",
+                    "on-secondary-fixed": "#00210d",
+                    "inverse-surface": "#27332d",
+                    "tertiary-fixed": "#ffddb8",
+                    "inverse-primary": "#a6d1ad",
+                    "secondary-fixed-dim": "#96d5a3",
+                    "primary-fixed": "#c1edc8",
+                    "surface-container-low": "#eaf7ee",
+                    "on-secondary-container": "#347047",
+                    "on-primary-container": "#6f9877",
+                    "surface-tint": "#40674a",
+                    "surface-dim": "#d0ddd5",
+                    "surface": "#f0fdf4",
+                    "secondary-fixed": "#b1f2be",
+                    "primary-container": "#052e16",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed": "#00210d",
+                    "secondary-container": "#b1f2be",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-container": "#c77e00",
+                    "error-container": "#ffdad6",
+                    "on-surface-variant": "#424942",
+                    "surface-container-lowest": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "h3": ["Plus Jakarta Sans"],
+                    "label-sm": ["Inter"],
+                    "button": ["Plus Jakarta Sans"],
+                    "h1": ["Plus Jakarta Sans"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "h2": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "h3": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "label-sm": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "button": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                    "h1": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h2": ["30px", {"lineHeight": "1.3", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .glass-dark {
+            background: rgba(5, 46, 22, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface-bright font-body-md text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 z-50 w-full bg-primary-container text-white border-b border-on-primary-fixed-variant/20 shadow-sm">
+<div class="flex justify-between items-center px-6 py-3 w-full">
+<!-- Brand Logo -->
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-white text-3xl" data-icon="eco">eco</span>
+<span class="font-h3 text-xl font-bold tracking-tight text-white">AgroChain</span>
+</div>
+<!-- Navigation -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="font-h3 text-base text-white font-bold border-b-2 border-white pb-1" href="#">Dashboard</a>
+<a class="font-h3 text-base text-white/70 hover:text-white transition-colors" href="#">Marketplace</a>
+<a class="font-h3 text-base text-white/70 hover:text-white transition-colors" href="#">Contracts</a>
+</nav>
+<!-- Actions -->
+<div class="flex items-center gap-6">
+<!-- Language Toggle -->
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-full border border-white/20 hover:bg-white/10 transition-colors text-label-sm">
+<span>EN</span>
+<span class="opacity-40">|</span>
+<span>हिंदी</span>
+</button>
+<!-- Notifications -->
+<button class="relative hover:bg-white/10 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined text-white" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-tertiary-fixed-dim rounded-full"></span>
+</button>
+<!-- Profile -->
+<div class="flex items-center gap-3 border-l border-white/10 pl-6">
+<div class="text-right hidden sm:block">
+<p class="text-label-sm text-white/70 leading-none mb-1">Namaste, 🙏</p>
+<p class="font-h3 text-base text-white leading-none">Ramesh Kumar</p>
+</div>
+<img alt="Farmer profile avatar" class="w-10 h-10 rounded-full border-2 border-white/20 object-cover" data-alt="Close-up portrait of a middle-aged Indian farmer smiling warmly, wearing a traditional white kurta, outdoor lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACSANv8Kky4DSB6RxgkSfzSx1UcSGRBtgXTu9qdIVY0GMNOPc-IU-gdhNhkVUyrhKk-P9D_p3AlcgrPkfwonN5KAE0Wu5z_N-DbxlY99Hbr_KFlA_2GvKLXrQaJI5SXnMgE_0aBEbFPROOwgM8CSyZbENl6mW2p0iSfV5UH1fJA_m_M1qmRIBJMwTYYS7HKgT-6f3vRJf1DsnR2aGwSpiYpOPIXymUpw7CO_GIKDcTUfNqQoWjym3sKla-fbhchBXo6Mo5cWWeuxs"/>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-[64px]">
+<!-- Hero Section -->
+<section class="relative h-[420px] overflow-hidden flex items-end">
+<!-- Background with Overlay -->
+<div class="absolute inset-0 z-0">
+<img alt="Blurred paddy field background" class="w-full h-full object-cover blur-[2px]" data-alt="Panoramic aerial view of lush green rice paddy fields stretching to the horizon under a golden sunset glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0OMnVu9VPPHDTH3Kl8cFHfEsAo8kvOUaBZybi5WtmriaPZPVgpBKGDQ34JFpQ-9TjLRHUyIXOd3hOMUF-Z1g7OajgFW3-ndkATsZ2Hvv3T4efbfR-gUUz6QPUYjMQ_ZpwtY7Szp5QPkStgZwsKX8fuDrKwRxzGIHuODZrMRXYZF3t6r8OfOiHPCnGvD_dRmK0dC3iEVGqsQbnZlLVOUzhoZwA5VkFbLoH-b-3n-lvVqCJBriQICs3HKOh1dJxIA06AqeMnpkaUTY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary-container via-primary-container/80 to-transparent"></div>
+</div>
+<!-- Content -->
+<div class="container mx-auto px-6 pb-12 relative z-10 flex flex-col md:flex-row justify-between items-end gap-8">
+<!-- Farmer Profile -->
+<div class="space-y-4">
+<div class="flex items-center gap-3">
+<span class="bg-secondary text-white px-3 py-1 rounded-full text-label-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="verified" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified</span>
+                            Verified Farmer
+                        </span>
+</div>
+<div>
+<h1 class="font-h1 text-white mb-2">Ramesh Kumar</h1>
+<p class="font-body-lg text-white/80 flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+                            Mathura, UP · Wheat · Tomato · Onion
+                        </p>
+</div>
+</div>
+<!-- Stats Floating Glass Cards -->
+<div class="flex flex-wrap gap-4">
+<div class="glass-card p-4 rounded-xl text-white min-w-[140px]">
+<p class="text-label-sm text-white/70 uppercase tracking-wider mb-1">Listings</p>
+<p class="text-h2 font-bold">12</p>
+</div>
+<div class="glass-card p-4 rounded-xl text-white min-w-[140px]">
+<p class="text-label-sm text-white/70 uppercase tracking-wider mb-1">Total Earned</p>
+<p class="text-h2 font-bold">₹1.2L</p>
+</div>
+<div class="glass-card p-4 rounded-xl text-white min-w-[140px]">
+<p class="text-label-sm text-white/70 uppercase tracking-wider mb-1">Rating</p>
+<div class="flex items-center gap-2">
+<p class="text-h2 font-bold">4.8</p>
+<span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Actions -->
+<section class="py-12 bg-surface-bright">
+<div class="container mx-auto px-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Sell Crop -->
+<div class="bg-gradient-to-br from-secondary to-primary-container p-6 rounded-xl shadow-lg border border-white/10 group cursor-pointer hover:translate-y-[-4px] transition-all duration-300">
+<div class="bg-white/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-white">
+<span class="material-symbols-outlined text-3xl" data-icon="agriculture">agriculture</span>
+</div>
+<h3 class="font-h3 text-white mb-2">Sell Crop</h3>
+<p class="font-body-md text-white/80 mb-6">List your fresh harvest on the global marketplace instantly.</p>
+<button class="bg-white text-primary-container px-4 py-2 rounded-lg font-button flex items-center gap-2 hover:bg-secondary-fixed transition-colors">
+                            Start Listing <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- View Offers -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-outline-variant/30 group cursor-pointer hover:border-tertiary-fixed-dim transition-all duration-300">
+<div class="bg-tertiary-fixed/30 w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-tertiary-container">
+<span class="material-symbols-outlined text-3xl" data-icon="local_offer">local_offer</span>
+</div>
+<h3 class="font-h3 text-on-surface mb-2">View Offers</h3>
+<p class="font-body-md text-on-surface-variant mb-6">Review active bids and buyer interest on your crops.</p>
+<button class="border border-tertiary-container text-tertiary-container px-4 py-2 rounded-lg font-button flex items-center gap-2 hover:bg-tertiary-container hover:text-white transition-all">
+                            View Offers <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- My Orders -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-outline-variant/30 group cursor-pointer hover:border-secondary transition-all duration-300">
+<div class="bg-secondary-fixed/30 w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-secondary">
+<span class="material-symbols-outlined text-3xl" data-icon="inventory_2">inventory_2</span>
+</div>
+<h3 class="font-h3 text-on-surface mb-2">My Orders</h3>
+<p class="font-body-md text-on-surface-variant mb-6">Track logistics and payment for your active contracts.</p>
+<button class="border border-secondary text-secondary px-4 py-2 rounded-lg font-button flex items-center gap-2 hover:bg-secondary hover:text-white transition-all">
+                            Track Status <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Analytics Strip -->
+<section class="py-8 border-y border-outline-variant/10">
+<div class="container mx-auto px-6">
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+<div class="bg-white p-6 rounded-xl border border-outline-variant/20 flex items-center justify-between">
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Total Trades</p>
+<p class="text-h2">24</p>
+</div>
+<div class="bg-surface-container rounded-full p-3">
+<span class="material-symbols-outlined text-secondary" data-icon="query_stats">query_stats</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-outline-variant/20 flex items-center justify-between">
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Active Deals</p>
+<p class="text-h2">6</p>
+</div>
+<div class="bg-surface-container rounded-full p-3">
+<span class="material-symbols-outlined text-on-tertiary-container" data-icon="trending_up">trending_up</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-outline-variant/20 flex items-center justify-between">
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Completed</p>
+<p class="text-h2">18</p>
+</div>
+<div class="bg-surface-container rounded-full p-3">
+<span class="material-symbols-outlined text-secondary" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- My Trades Vertical List -->
+<section class="py-16">
+<div class="container mx-auto px-6">
+<div class="flex items-center justify-between mb-10">
+<h2 class="font-h2 text-primary-container">My Recent Trades</h2>
+<button class="text-secondary font-button flex items-center gap-1 hover:underline">
+                        See All Activity <span class="material-symbols-outlined" data-icon="keyboard_arrow_right">keyboard_arrow_right</span>
+</button>
+</div>
+<div class="space-y-4">
+<!-- Tomato Card -->
+<div class="bg-white rounded-xl p-4 flex flex-col md:flex-row items-center gap-6 border border-outline-variant/20 hover:shadow-md transition-shadow">
+<img alt="Tomato crop thumbnail" class="w-20 h-20 rounded-lg object-cover" data-alt="A small crate of bright red, ripe organic vine tomatoes on a rustic wooden background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCS3YpQm7uRBwnFyZvpCj4xrn1xbwWTWKzbYNaDnBmFCCZ2LmSK9LDe09CcCe17N4b5aZXsG3FOawKDcCJHIuMEElGa5McJzU2FY1ftalMko6YeZb8RTv7qWReFBQ23H5it_LpVqaJeCajdeQxBd5A16t8Gpa8RYAMGV1jgsgbsbepRj4xZzdMqz61k0mbn9TLDI5tBeqGyQmx6aM68DWZxClNGqU9qjttsE8C-iCmKOq_c3OKJn8IaIG0BuUgxRy45LP6ChWnCIpg"/>
+<div class="flex-grow grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+<div>
+<p class="text-label-sm text-on-surface-variant">Crop Type</p>
+<p class="font-button text-primary-container">Organic Tomatoes</p>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">Quantity</p>
+<p class="font-button">500 Kg</p>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">Deal Value</p>
+<p class="font-button">₹22,500</p>
+</div>
+<div class="flex items-center">
+<span class="bg-secondary-fixed text-on-secondary-fixed-variant px-3 py-1 rounded-full text-label-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="local_shipping">local_shipping</span>
+                                    In Delivery
+                                </span>
+</div>
+</div>
+<button class="w-full md:w-auto px-6 py-2 border border-secondary text-secondary rounded-lg font-button hover:bg-secondary hover:text-white transition-all whitespace-nowrap">
+                            View Details
+                        </button>
+</div>
+<!-- Wheat Card -->
+<div class="bg-white rounded-xl p-4 flex flex-col md:flex-row items-center gap-6 border border-outline-variant/20 hover:shadow-md transition-shadow">
+<img alt="Wheat crop thumbnail" class="w-20 h-20 rounded-lg object-cover" data-alt="Close up of golden dry wheat stalks bundled together in a sunlit field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFppEoYSvv4xV8bvSQde3YZL_IZHir2qyzX5dTu5b49X8mxt8ghQCmqNVKWS8BTE-mLGQPonWeKzo6dcWUdYBP-Z9fuzkRtRMRJJIfimME1W7jFJu80_HyVzFFn9NckLXbBlkoAlzp1cbN-SkdJ2P3o_-Oonha9WzEkIuks3romnGttqNR5eMqPIqvxakdGpsc1mKr1o5VSMFjKC0gLDQI8iTyZ5NqG_nqHemjeUcdusEATkyShLfdqCx8obvQfkSt1rgvJnRmXws"/>
+<div class="flex-grow grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+<div>
+<p class="text-label-sm text-on-surface-variant">Crop Type</p>
+<p class="font-button text-primary-container">Premium Wheat</p>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">Quantity</p>
+<p class="font-button">2,000 Kg</p>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">Deal Value</p>
+<p class="font-button">₹48,000</p>
+</div>
+<div class="flex items-center">
+<span class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full text-label-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="task_alt">task_alt</span>
+                                    Completed
+                                </span>
+</div>
+</div>
+<button class="w-full md:w-auto px-6 py-2 border border-secondary text-secondary rounded-lg font-button hover:bg-secondary hover:text-white transition-all whitespace-nowrap">
+                            View Details
+                        </button>
+</div>
+<!-- Onion Card -->
+<div class="bg-white rounded-xl p-4 flex flex-col md:flex-row items-center gap-6 border border-outline-variant/20 hover:shadow-md transition-shadow">
+<img alt="Onion crop thumbnail" class="w-20 h-20 rounded-lg object-cover" data-alt="A pile of large red onions with dry outer skin on a dark tabletop with natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs1s1wgHeAGBVjKV-My9pGHFf4g9cnXiuxb05c3K7R6zYRQPBOseH1rluZ3yELV6OkVKxC3H3batKtZ1IHnCVhTyH7j9ikdFfRCkVwoTSao5itb3JF2PXU4bln-h42f5jX8Lwx18XJJt1Qr95WFNBLb3hQzm-AoocEVWJlev6VeKahT8MaXHEOnwXaqldlbRGLeIm1Cj_fiqvvUxU17xirG-VCVzNw0uUrcJdCOKRuzNMncLS9W5xaN00VMCLV9CQpKphBoLYDWwc"/>
+<div class="flex-grow grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+<div>
+<p class="text-label-sm text-on-surface-variant">Crop Type</p>
+<p class="font-button text-primary-container">Red Onions</p>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">Quantity</p>
+<p class="font-button">800 Kg</p>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">Deal Value</p>
+<p class="font-button">₹16,000</p>
+</div>
+<div class="flex items-center">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-3 py-1 rounded-full text-label-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="handshake">handshake</span>
+                                    Agreed
+                                </span>
+</div>
+</div>
+<button class="w-full md:w-auto px-6 py-2 border border-secondary text-secondary rounded-lg font-button hover:bg-secondary hover:text-white transition-all whitespace-nowrap">
+                            View Details
+                        </button>
+</div>
+<!-- Corn Card -->
+<div class="bg-white rounded-xl p-4 flex flex-col md:flex-row items-center gap-6 border border-outline-variant/20 hover:shadow-md transition-shadow">
+<img alt="Corn crop thumbnail" class="w-20 h-20 rounded-lg object-cover" data-alt="Fresh sweet corn on the cob with green husks in a wooden basket" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPWAiS44h1TbIIkBYgJmVzmoHsxX_wi2qITqJRjExMjW6hA7GryCc1FU7SQ8Xy3_WTuO1Y4WUvRl7H5ct0siefVLBQPXe1KI51sR6yEzud_GUHgXQD9ixSGrqqxI3FLHcEhK5zp37VlqAUNrj3zYTSM8-wN3ai3dMZcY9tEMZhPdbRqQNcWUek65QdaqcGIj-wIwlX4aXi1Mgu8rtwqW4i1kQHokAJQFcpTbNg17z3hMGKSzVPOIU5yygvLWdvW_pI7hndqHPWIzo"/>
+<div class="flex-grow grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+<div>
+<p class="text-label-sm text-on-surface-variant">Crop Type</p>
+<p class="font-button text-primary-container">Sweet Corn</p>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">Quantity</p>
+<p class="font-button">400 Kg</p>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant">Deal Value</p>
+<p class="font-button">₹12,000</p>
+</div>
+<div class="flex items-center">
+<span class="bg-outline-variant/30 text-on-surface-variant px-3 py-1 rounded-full text-label-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="add_circle">add_circle</span>
+                                    Created
+                                </span>
+</div>
+</div>
+<button class="w-full md:w-auto px-6 py-2 border border-secondary text-secondary rounded-lg font-button hover:bg-secondary hover:text-white transition-all whitespace-nowrap">
+                            View Details
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- List Strip -->
+<section class="container mx-auto px-6 pb-16">
+<div class="bg-primary-container rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+<!-- Abstract Texture Overlay -->
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<div class="absolute top-0 right-0 w-64 h-64 bg-secondary rounded-full blur-3xl"></div>
+</div>
+<div class="relative z-10">
+<h2 class="font-h2 text-white mb-2">List your harvest in minutes</h2>
+<p class="font-body-lg text-white/70">Connect directly with verified buyers and skip the middlemen.</p>
+</div>
+<button class="relative z-10 bg-white text-primary-container px-10 py-4 rounded-xl font-button text-lg flex items-center gap-3 hover:bg-secondary-fixed transition-all hover:scale-105 active:scale-95 shadow-xl">
+<span class="material-symbols-outlined" data-icon="potted_plant">potted_plant</span>
+                    🌱 Start Listing
+                </button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-white border-t border-outline-variant/30 pt-16 pb-8">
+<div class="container mx-auto px-6">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="eco">eco</span>
+<span class="font-h3 text-xl font-bold tracking-tight text-primary-container">AgroChain</span>
+</div>
+<p class="text-on-surface-variant mb-6">Empowering Indian farmers through transparent blockchain technology and direct market access.</p>
+</div>
+<div class="space-y-4">
+<h4 class="font-button text-primary-container">Platform</h4>
+<nav class="flex flex-col gap-3">
+<a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">Marketplace</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">Quality Standards</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">Logistics Partners</a>
+</nav>
+</div>
+<div class="space-y-4">
+<h4 class="font-button text-primary-container">Farmer Support</h4>
+<nav class="flex flex-col gap-3">
+<a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">Yield Estimator</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">Soil Health Guide</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors" href="#">Pricing Insights</a>
+</nav>
+</div>
+<div class="space-y-6">
+<h4 class="font-button text-primary-container">Need Help?</h4>
+<div class="flex flex-col gap-4">
+<button class="bg-secondary text-white px-6 py-3 rounded-xl font-button flex items-center justify-center gap-2 hover:bg-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined" data-icon="call">call</span>
+                            Call Support
+                        </button>
+<button class="bg-surface-container text-on-surface px-6 py-3 rounded-xl font-button flex items-center justify-center gap-2 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                            Help / FAQ
+                        </button>
+</div>
+</div>
+</div>
+<div class="pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-label-sm text-on-surface-variant">© 2024 AgroChain Technologies. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="text-label-sm text-on-surface-variant hover:text-secondary" href="#">Privacy Policy</a>
+<a class="text-label-sm text-on-surface-variant hover:text-secondary" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

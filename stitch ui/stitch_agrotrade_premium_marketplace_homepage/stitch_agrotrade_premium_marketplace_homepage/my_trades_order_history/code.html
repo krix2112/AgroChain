@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Trades | AgroChain</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "surface-container-low": "#eaf7ee",
+                    "secondary-container": "#b1f2be",
+                    "on-surface": "#131e19",
+                    "background": "#f0fdf4",
+                    "on-secondary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#96d5a3",
+                    "tertiary": "#1e0f00",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#e4f1e8",
+                    "error-container": "#ffdad6",
+                    "on-primary-container": "#6f9877",
+                    "surface-variant": "#d9e6dd",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#b1f2be",
+                    "on-tertiary-container": "#c77e00",
+                    "secondary": "#2e6a41",
+                    "surface-container-high": "#deebe3",
+                    "outline": "#727971",
+                    "surface-container-highest": "#d9e6dd",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-primary-fixed": "#00210d",
+                    "on-secondary-fixed": "#00210d",
+                    "tertiary-fixed": "#ffddb8",
+                    "primary": "#001707",
+                    "on-primary": "#ffffff",
+                    "surface-dim": "#d0ddd5",
+                    "surface": "#f0fdf4",
+                    "on-secondary-fixed-variant": "#12512c",
+                    "outline-variant": "#c1c8bf",
+                    "primary-fixed": "#c1edc8",
+                    "surface-tint": "#40674a",
+                    "primary-container": "#052e16",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-container": "#3a2200",
+                    "inverse-on-surface": "#e7f4eb",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#27332d",
+                    "on-background": "#131e19",
+                    "inverse-primary": "#a6d1ad",
+                    "primary-fixed-dim": "#a6d1ad",
+                    "on-secondary-container": "#347047",
+                    "on-surface-variant": "#424942",
+                    "surface-bright": "#f0fdf4",
+                    "on-primary-fixed-variant": "#284f33"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "split-ratio": "45/55",
+                    "stack-gap": "1rem",
+                    "gutter": "1.5rem",
+                    "container-padding": "2.5rem"
+            },
+            "fontFamily": {
+                    "label-sm": ["Inter"],
+                    "h1": ["Plus Jakarta Sans"],
+                    "body-lg": ["Inter"],
+                    "h2": ["Plus Jakarta Sans"],
+                    "body-md": ["Inter"],
+                    "h3": ["Plus Jakarta Sans"],
+                    "button": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-sm": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "h1": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h2": ["30px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h3": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "button": ["16px", {"lineHeight": "1", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .pulse-ring {
+            box-shadow: 0 0 0 0 rgba(20, 83, 45, 0.4);
+            animation: pulse-ring 1.5s infinite;
+        }
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(20, 83, 45, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(20, 83, 45, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(20, 83, 45, 0); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="hidden md:flex flex-col h-full fixed left-0 top-0 bg-emerald-50 dark:bg-emerald-950 h-screen w-64 border-r border-emerald-100 dark:border-emerald-800 z-50">
+<div class="px-6 py-8">
+<h1 class="text-lg font-black text-emerald-900 dark:text-emerald-50 font-h1">AgroChain</h1>
+<p class="text-xs text-emerald-700 dark:text-emerald-300 font-label-sm">Trader Portal</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm">Dashboard</span>
+</a>
+<a class="bg-emerald-900 text-white dark:bg-emerald-100 dark:text-emerald-900 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm">Orders</span>
+</a>
+<a class="text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-sm">Inventory</span>
+</a>
+<a class="text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-sm">Contracts</span>
+</a>
+<a class="text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+<span class="font-label-sm">Marketplace</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-emerald-100 dark:border-emerald-800 p-2">
+<a class="text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-sm">Help Center</span>
+</a>
+<a class="text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900 rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-sm">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 relative min-h-screen">
+<!-- Hero Header -->
+<header class="relative w-full h-[320px] flex items-center px-12 overflow-hidden">
+<div class="absolute inset-0 bg-primary-container z-0">
+<img alt="Wheat Field Hero" class="w-full h-full object-cover opacity-30 blur-[2px]" data-alt="wide angle shot of a golden wheat field at sunset with soft sunlight filtering through the ears and a warm blurred background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPWGMrZoWQq0vZhRTdgghUT8Wzou-YvIoy3YJi6hSybZleletjmZILre0jd_pbHKxRgaHYqfd-5k83PHyN4X09BCWmMpZQmZFastaO__xD0xqiWfaFc3EECFSQOTxVAnJHBv4y0cuB77bteq6YVsgwfVlRyNEXxvcbERhaHDKKQv2Aye-_0D_K_xnSK40r8FOFmXcMnU1rJgBUBn6NNGIfBT3GSqCyBRfm9WWSyTBIHvHxxjdHD373Y2LvoxUNU-i3HjvTAekQ-t8"/>
+</div>
+<div class="relative z-10 w-full flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="text-white space-y-2">
+<h1 class="font-h1 text-h1 text-white tracking-tight">My Trades</h1>
+<p class="font-body-lg text-white/80 opacity-90">All your orders and deals in one place</p>
+</div>
+<div class="glass-card p-6 rounded-xl grid grid-cols-2 gap-x-12 gap-y-6 min-w-[340px]">
+<div>
+<p class="text-white/60 text-xs font-label-sm mb-1 uppercase tracking-wider">Total Orders</p>
+<p class="text-white font-h3 text-h3">36</p>
+</div>
+<div>
+<p class="text-white/60 text-xs font-label-sm mb-1 uppercase tracking-wider">Total Spent</p>
+<p class="text-white font-h3 text-h3">₹2.4L</p>
+</div>
+<div>
+<p class="text-white/60 text-xs font-label-sm mb-1 uppercase tracking-wider">Completed</p>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-400"></span>
+<p class="text-white font-h3 text-h3">28</p>
+</div>
+</div>
+<div>
+<p class="text-white/60 text-xs font-label-sm mb-1 uppercase tracking-wider">Pending</p>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-amber-400"></span>
+<p class="text-white font-h3 text-h3">08</p>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Filter & Content Area -->
+<section class="max-w-6xl mx-auto px-6 -mt-8 relative z-20 pb-20">
+<!-- Filter Pills -->
+<div class="flex items-center gap-3 overflow-x-auto hide-scrollbar py-4 mb-6">
+<button class="bg-primary-container text-white px-6 py-2.5 rounded-full font-button flex items-center gap-2 shadow-lg shadow-primary-container/20 border border-primary-container transition-all">
+                    All
+                </button>
+<button class="bg-white text-on-surface-variant border border-outline-variant px-6 py-2.5 rounded-full font-button hover:bg-surface-container-low transition-colors">
+                    Pending
+                </button>
+<button class="bg-white text-on-surface-variant border border-outline-variant px-6 py-2.5 rounded-full font-button hover:bg-surface-container-low transition-colors">
+                    In Transit
+                </button>
+<button class="bg-white text-on-surface-variant border border-outline-variant px-6 py-2.5 rounded-full font-button hover:bg-surface-container-low transition-colors">
+                    Delivered
+                </button>
+<button class="bg-white text-on-surface-variant border border-outline-variant px-6 py-2.5 rounded-full font-button hover:bg-surface-container-low transition-colors">
+                    Cancelled
+                </button>
+</div>
+<!-- Orders List -->
+<div class="space-y-4">
+<!-- Order Card 1 (Delivered) -->
+<div class="bg-white rounded-[24px] p-6 shadow-sm border border-emerald-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+<!-- Top Row -->
+<div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+<div class="flex items-center gap-4">
+<img alt="Wheat" class="w-16 h-16 rounded-xl object-cover" data-alt="close-up top-view of high quality golden wheat grains in a wooden bowl with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlYS7TBuYqif6J_cFzK-x9rgu2d0dVUgEQN_ps-Y87wFLT-U2ZXd3ts-CyKz8d-MNdVIJrxz3EvwzODXTiMQbGfL75Zmo5WENgk19Vs7_fXiPT1uQggRd5qKP1_w4jyh3GRY7KCCltcXpLVgyNlO1Cc12XoHsnFbqpY23RyYQ8ftRh5utivwjx35olc1Pq9GmAdMdY5SWVrRDQB2ah6Q_UQ7jMuUsT9QDsXmKXFqjlKveQ6qZR0VzLBJVN6tINPHv2eXU5DV39wgw"/>
+<div>
+<h4 class="font-h3 text-body-md font-bold text-on-surface">Premium Durum Wheat</h4>
+<p class="text-on-surface-variant text-sm font-label-sm">#TRD-2041 • Farmer: Ramesh Kumar</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="text-secondary font-h3 text-body-lg font-bold">₹48,000</p>
+<span class="bg-secondary-container text-on-secondary-container text-xs px-3 py-1 rounded-full font-bold">20 Quintals</span>
+</div>
+<span class="bg-green-100 text-green-700 px-4 py-1.5 rounded-full font-bold text-sm border border-green-200 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-green-600 animate-pulse"></span>
+                                Delivered
+                            </span>
+</div>
+</div>
+<!-- Tracker -->
+<div class="relative flex justify-between items-center px-4 mb-8">
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-emerald-100 -translate-y-1/2 z-0"></div>
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-secondary -translate-y-1/2 z-0"></div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="check" data-weight="fill">check</span>
+</div>
+<span class="text-xs font-bold text-secondary">Ordered</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="check" data-weight="fill">check</span>
+</div>
+<span class="text-xs font-bold text-secondary">Confirmed</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="check" data-weight="fill">check</span>
+</div>
+<span class="text-xs font-bold text-secondary">In Transit</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="check" data-weight="fill">check</span>
+</div>
+<span class="text-xs font-bold text-secondary">Delivered</span>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex justify-end gap-3">
+<button class="text-secondary font-button text-sm px-6 py-2 hover:bg-secondary-container/30 rounded-lg transition-colors">View Details</button>
+<button class="bg-primary-container text-white font-button text-sm px-6 py-2 rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+                            Download PDF
+                        </button>
+</div>
+</div>
+<!-- Order Card 2 (In Transit) -->
+<div class="bg-white rounded-[24px] p-6 shadow-sm border border-emerald-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+<div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+<div class="flex items-center gap-4">
+<img alt="Tomato" class="w-16 h-16 rounded-xl object-cover" data-alt="overhead view of ripe red organic tomatoes on a rustic wooden background with natural sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC29AoHXdKOl2pp7slFjhH3zWBavKGqaJWiclSAvRn4mcbF0gpERZ5-AoGgmUuSSthUvh0H7ENGSsx7vp5C8fz6kKztK3ouxMFYx34nPJJXR_ckwB_PSO8mLwWEW3lvdjgFb5vKh3eiPO6N16uDySr6LT76rN0h9IWK1dv1H74Q6GqXVOk0hyqdOCEg-AC9mlscvHml2DqQJHzXxtO6pmUa6pKrUFiXtCFp2JYgcCIXAzu5G_2iX3ZPQyDK3movyBVOrYuYkEAIVno"/>
+<div>
+<h4 class="font-h3 text-body-md font-bold text-on-surface">Hybrid Roma Tomatoes</h4>
+<p class="text-on-surface-variant text-sm font-label-sm">#TRD-2038 • Farmer: Anita Devi</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="text-secondary font-h3 text-body-lg font-bold">₹12,400</p>
+<span class="bg-secondary-container text-on-secondary-container text-xs px-3 py-1 rounded-full font-bold">50 Crates</span>
+</div>
+<span class="bg-amber-50 text-amber-700 px-4 py-1.5 rounded-full font-bold text-sm border border-amber-200 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+                                In Transit
+                            </span>
+</div>
+</div>
+<!-- Tracker -->
+<div class="relative flex justify-between items-center px-4 mb-8">
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-emerald-100 -translate-y-1/2 z-0"></div>
+<div class="absolute top-1/2 left-0 w-2/3 h-[2px] bg-secondary -translate-y-1/2 z-0"></div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-xs font-bold text-secondary">Ordered</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-xs font-bold text-secondary">Confirmed</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-white border-2 border-secondary flex items-center justify-center pulse-ring">
+<span class="material-symbols-outlined text-secondary text-lg" data-icon="local_shipping">local_shipping</span>
+</div>
+<span class="text-xs font-bold text-secondary">In Transit</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2 opacity-40">
+<div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-emerald-400 text-sm" data-icon="done_all">done_all</span>
+</div>
+<span class="text-xs font-bold text-on-surface-variant">Delivered</span>
+</div>
+</div>
+<div class="flex justify-end gap-3">
+<button class="text-secondary font-button text-sm px-6 py-2 hover:bg-secondary-container/30 rounded-lg transition-colors">View Details</button>
+<button class="bg-primary-container text-white font-button text-sm px-6 py-2 rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+                            Download PDF
+                        </button>
+</div>
+</div>
+<!-- Order Card 3 (Pending) -->
+<div class="bg-white rounded-[24px] p-6 shadow-sm border border-emerald-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+<div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+<div class="flex items-center gap-4">
+<img alt="Rice" class="w-16 h-16 rounded-xl object-cover" data-alt="macro shot of long grain basmati rice grains showing texture and ivory color with soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7NzIQ2Ug5gsjR3XDGhU9s5cNM-y94TQ1yOC1H9tzVuBRjVbXuP0-2ddNww98exQ7AXLxm8Rw1vmUkR4AAMkUkSlg_tPVimxmqCv3ncEc6pCqKWxZEAR4PhjQxvN_BSM_9k8K3SO07lMNSSVKTv0MweVkhCG0jonaThVhSrbOyN6bg0Op_P30zANP6VtcAhIfusrxDyhusNYzA6VvS6URxz4_ieHSPcixj598EKx8oSpDXhfYO6zvvJE_c4yo3tUE6_OU0r9VuLDI"/>
+<div>
+<h4 class="font-h3 text-body-md font-bold text-on-surface">Basmati Rice (A-Grade)</h4>
+<p class="text-on-surface-variant text-sm font-label-sm">#TRD-2035 • Farmer: Gurnam Singh</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="text-secondary font-h3 text-body-lg font-bold">₹82,000</p>
+<span class="bg-secondary-container text-on-secondary-container text-xs px-3 py-1 rounded-full font-bold">15 Quintals</span>
+</div>
+<span class="bg-yellow-50 text-yellow-700 px-4 py-1.5 rounded-full font-bold text-sm border border-yellow-200 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+                                Pending
+                            </span>
+</div>
+</div>
+<!-- Tracker (Simple) -->
+<div class="relative flex justify-between items-center px-4 mb-8">
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-emerald-100 -translate-y-1/2 z-0"></div>
+<div class="absolute top-1/2 left-0 w-1/4 h-[2px] bg-secondary -translate-y-1/2 z-0"></div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-xs font-bold text-secondary">Ordered</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-white border-2 border-yellow-500 flex items-center justify-center">
+<span class="material-symbols-outlined text-yellow-600 text-lg" data-icon="pending">pending</span>
+</div>
+<span class="text-xs font-bold text-yellow-700">Confirmed</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2 opacity-40">
+<div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-emerald-400 text-sm" data-icon="local_shipping">local_shipping</span>
+</div>
+<span class="text-xs font-bold text-on-surface-variant">In Transit</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2 opacity-40">
+<div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-emerald-400 text-sm" data-icon="done_all">done_all</span>
+</div>
+<span class="text-xs font-bold text-on-surface-variant">Delivered</span>
+</div>
+</div>
+<div class="flex justify-end gap-3">
+<button class="text-secondary font-button text-sm px-6 py-2 hover:bg-secondary-container/30 rounded-lg transition-colors">View Details</button>
+<button class="bg-primary-container text-white font-button text-sm px-6 py-2 rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+                            Download PDF
+                        </button>
+</div>
+</div>
+<!-- Order Card 4 (Cancelled) -->
+<div class="bg-white rounded-[24px] p-6 shadow-sm border border-emerald-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group opacity-80">
+<div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+<div class="flex items-center gap-4">
+<img alt="Onion" class="w-16 h-16 rounded-xl object-cover grayscale" data-alt="red onions with skin on a textured surface with moody low lighting and deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfi54xTr_Q806ILtikeyUZd5QwBvhtvY9iJVx5mJCZPyocH6QcFNsRIcJ09coEJwqrth2NryoFUVet9IkxH491PSfxPbaxOfu5-R7ABn6XHU4CDWsgwg79R4B0Si79yKWghaliVW4u0CSg6mlfvAc0MYuNNAYDNiedpyQ-UW-TriKjjNix4tImLxulgOwL6NrQDxryIKHXlvP8AvphrSJsZdO7Fj45vy3cNQPqSXkR1khIl2fCXewazxEqFo6lnfm9g25yMtOtJTA"/>
+<div>
+<h4 class="font-h3 text-body-md font-bold text-on-surface line-through">Red Nasik Onions</h4>
+<p class="text-on-surface-variant text-sm font-label-sm">#TRD-2019 • Farmer: Suresh Patil</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="text-on-surface-variant font-h3 text-body-lg font-bold">₹18,500</p>
+<span class="bg-surface-variant text-on-surface-variant text-xs px-3 py-1 rounded-full font-bold">12 Quintals</span>
+</div>
+<span class="bg-red-50 text-red-700 px-4 py-1.5 rounded-full font-bold text-sm border border-red-200 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-red-600"></span>
+                                Cancelled
+                            </span>
+</div>
+</div>
+<div class="flex justify-end gap-3">
+<p class="text-red-600 text-sm font-label-sm italic mr-auto flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+                            Quality check failed at origin
+                        </p>
+<button class="text-on-surface-variant font-button text-sm px-6 py-2 hover:bg-surface-variant rounded-lg transition-colors">View Logs</button>
+</div>
+</div>
+<!-- Order Card 5 (Delivered) -->
+<div class="bg-white rounded-[24px] p-6 shadow-sm border border-emerald-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+<div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+<div class="flex items-center gap-4">
+<img alt="Potato" class="w-16 h-16 rounded-xl object-cover" data-alt="fresh raw potatoes in a burlap sack with earth on them under warm natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6pcW1z-R0TIorRrcCksHHxNnGmZ0s6QOBiG_WbtLaVDNOelBeqHfmotJcnVqxS2RAf78_bBZWftNsoE7DvxFV9LTAVEkGOgaj7CKIakBl9ETEZm4RBw3r8a55tMVBSk2l-p5Uc7stm8zUd-Y174XAHTghp28dAlzECosec_j1r9JwePHvkRfGV2B4DLF_zgDs7kALTFM226k7svUFmz8MfXowAb3NLGrI7ST7ysldS73OjAvcvuSFZucUzxpT9BimiD1VIMnfZns"/>
+<div>
+<h4 class="font-h3 text-body-md font-bold text-on-surface">Agria Table Potatoes</h4>
+<p class="text-on-surface-variant text-sm font-label-sm">#TRD-2015 • Farmer: Balbir Singh</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="text-secondary font-h3 text-body-lg font-bold">₹35,200</p>
+<span class="bg-secondary-container text-on-secondary-container text-xs px-3 py-1 rounded-full font-bold">30 Quintals</span>
+</div>
+<span class="bg-green-100 text-green-700 px-4 py-1.5 rounded-full font-bold text-sm border border-green-200 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-green-600"></span>
+                                Delivered
+                            </span>
+</div>
+</div>
+<!-- Tracker -->
+<div class="relative flex justify-between items-center px-4 mb-8">
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-secondary -translate-y-1/2 z-0"></div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-xs font-bold text-secondary">Ordered</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-xs font-bold text-secondary">Confirmed</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-xs font-bold text-secondary">In Transit</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-xs font-bold text-secondary">Delivered</span>
+</div>
+</div>
+<div class="flex justify-end gap-3">
+<button class="text-secondary font-button text-sm px-6 py-2 hover:bg-secondary-container/30 rounded-lg transition-colors">View Details</button>
+<button class="bg-primary-container text-white font-button text-sm px-6 py-2 rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+                            Download PDF
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Floating Action Button -->
+<button class="fixed bottom-8 right-8 bg-secondary text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all z-40">
+<span class="material-symbols-outlined text-3xl" data-icon="add" data-weight="fill">add</span>
+</button>
+</main>
+<!-- Modal (Hidden state mockup) -->
+<div class="fixed inset-0 z-[60] bg-primary-container/40 backdrop-blur-sm hidden flex items-center justify-center p-6">
+<div class="bg-white w-full max-w-md rounded-[32px] overflow-hidden shadow-2xl">
+<div class="p-6 border-b border-emerald-100 flex justify-between items-center bg-emerald-50">
+<div>
+<h3 class="font-h3 text-lg font-bold text-on-primary-fixed-variant">Tracking Order #TRD-2038</h3>
+<p class="text-sm text-secondary">Tomato • Anita Devi</p>
+</div>
+<button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-emerald-200 transition-colors">
+<span class="material-symbols-outlined text-on-surface" data-icon="close">close</span>
+</button>
+</div>
+<div class="p-8">
+<div class="relative flex flex-col gap-10">
+<!-- Vertical Line -->
+<div class="absolute left-[19px] top-4 bottom-4 w-0.5 bg-emerald-100 z-0"></div>
+<div class="absolute left-[19px] top-4 h-[60%] w-0.5 bg-secondary z-0"></div>
+<!-- Step 1 -->
+<div class="relative z-10 flex items-center gap-6">
+<div class="w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-lg" data-icon="shopping_cart" data-weight="fill">shopping_cart</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Order Placed</p>
+<p class="text-xs text-on-surface-variant font-label-sm">Oct 12, 2023 • 10:45 AM</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative z-10 flex items-center gap-6">
+<div class="w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-lg" data-icon="verified" data-weight="fill">verified</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Quality Check Passed</p>
+<p class="text-xs text-on-surface-variant font-label-sm">Oct 13, 2023 • 02:15 PM</p>
+</div>
+</div>
+<!-- Step 3 (Active) -->
+<div class="relative z-10 flex items-center gap-6">
+<div class="w-12 h-12 -ml-1 rounded-full bg-white border-2 border-secondary text-secondary flex items-center justify-center pulse-ring">
+<span class="material-symbols-outlined text-xl" data-icon="local_shipping" data-weight="fill">local_shipping</span>
+</div>
+<div>
+<p class="font-bold text-secondary">In Transit</p>
+<p class="text-xs text-on-surface-variant font-label-sm">Current Location: Warehouse Hub 4</p>
+</div>
+</div>
+<!-- Step 4 (Upcoming) -->
+<div class="relative z-10 flex items-center gap-6 opacity-40">
+<div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-400 flex items-center justify-center">
+<span class="material-symbols-outlined text-lg" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Delivered</p>
+<p class="text-xs text-on-surface-variant font-label-sm">Estimated: Oct 16, 2023</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-10 bg-primary-container text-white py-4 rounded-xl font-button hover:bg-emerald-900 transition-all">
+                    Track Live on Map
+                </button>
+</div>
+</div>
+</div>
+</body></html>

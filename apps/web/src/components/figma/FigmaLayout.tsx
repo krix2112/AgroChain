@@ -4,11 +4,12 @@ import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Users, ShoppingCart, Package, Store,
-  FileText, Wallet, Bell, Search, Menu, X, LogOut
+  FileText, Wallet, Bell, Search, Menu, X, LogOut, BarChart3
 } from 'lucide-react';
 
 const navigationItems = [
   { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { path: '/mandi-prices', label: 'Mandi Prices', icon: BarChart3 },
   { path: '/farmers', label: 'Farmers', icon: Users },
   { path: '/procurement', label: 'Procurement', icon: ShoppingCart },
   { path: '/lots', label: 'Lots', icon: Package },

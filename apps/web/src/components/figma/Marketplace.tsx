@@ -79,11 +79,9 @@ export default function Marketplace() {
                     <div className="text-xs text-gray-600 mb-1">Base Price</div>
                     <div className="text-3xl font-bold bg-gradient-to-r from-[#2E7D32] to-[#388E3C] bg-clip-text text-transparent">{lot.basePrice}</div>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button onClick={() => { setSelectedLot(lot.id); setShowBids(true); }} className="px-4 py-3 backdrop-blur-md bg-blue-500/10 border-2 border-blue-500 text-blue-700 rounded-xl font-semibold hover:bg-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 transition-all transform hover:scale-105 flex items-center justify-center gap-2"><Eye size={18} />View Bids</button>
-                    <button onClick={() => router.push('/trades')} className="px-4 py-3 bg-gradient-to-r from-[#2E7D32] to-[#388E3C] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:shadow-[#2E7D32]/50 transition-all transform hover:scale-105">Accept Offer</button>
+                  <div className="flex">
+                    <button onClick={() => router.push('/trades')} className="w-full px-4 py-3 bg-gradient-to-r from-[#2E7D32] to-[#388E3C] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:shadow-[#2E7D32]/50 transition-all transform hover:scale-105">Accept Offer</button>
                   </div>
-                  <button className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl font-semibold hover:border-[#2E7D32] hover:bg-gray-50 transition-all transform hover:scale-105 flex items-center justify-center gap-2"><MessageSquare size={18} />Negotiate</button>
                 </div>
               </div>
             ))}

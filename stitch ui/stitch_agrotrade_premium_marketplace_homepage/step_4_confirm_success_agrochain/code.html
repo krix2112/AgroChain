@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgroChain - Confirm Listing</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c1c8bf",
+                        "tertiary-container": "#3a2200",
+                        "surface-tint": "#40674a",
+                        "surface-bright": "#f0fdf4",
+                        "inverse-primary": "#a6d1ad",
+                        "inverse-surface": "#27332d",
+                        "on-primary-container": "#6f9877",
+                        "secondary": "#2e6a41",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "tertiary": "#1e0f00",
+                        "secondary-fixed-dim": "#96d5a3",
+                        "surface-container-high": "#deebe3",
+                        "secondary-container": "#b1f2be",
+                        "on-primary-fixed": "#00210d",
+                        "outline": "#727971",
+                        "surface-container": "#e4f1e8",
+                        "primary-fixed": "#c1edc8",
+                        "on-secondary-container": "#347047",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-secondary-fixed": "#00210d",
+                        "primary-container": "#052e16",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#e7f4eb",
+                        "surface-container-highest": "#d9e6dd",
+                        "surface": "#f0fdf4",
+                        "surface-variant": "#d9e6dd",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "primary-fixed-dim": "#a6d1ad",
+                        "on-tertiary-container": "#c77e00",
+                        "on-background": "#131e19",
+                        "background": "#f0fdf4",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface-container-low": "#eaf7ee",
+                        "on-surface": "#131e19",
+                        "on-surface-variant": "#424942",
+                        "primary": "#001707",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#d0ddd5",
+                        "secondary-fixed": "#b1f2be",
+                        "on-secondary-fixed-variant": "#12512c",
+                        "on-primary-fixed-variant": "#284f33"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "h1": ["Plus Jakarta Sans"],
+                        "h3": ["Plus Jakarta Sans"],
+                        "button": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "h2": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h1": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "h3": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "button": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-sm": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "h2": ["30px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid #d1fae5;
+        }
+        .bg-overlay {
+            background-color: rgba(5, 46, 22, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-background min-h-screen flex flex-col relative overflow-x-hidden">
+<!-- Background Image with Dark Overlay -->
+<div class="fixed inset-0 z-[-1]">
+<img class="w-full h-full object-cover blur-[2px]" data-alt="expansive golden wheat field stretching to the horizon under a soft sunset sky with warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDoldyOAOogIq1TJJRT1ZbitG9Im4i4ltd-Sag5vXVqtId9UYMPA-vSx1Y1BZcoeKTDi84HunZc8j9u34l7ebcLpRLjfSxWs0KptU_9DtHpSoZ8xG3NXQcBmq2-ggSp3qYAJ6kiuxsLYufc5d_1YTy47O4DALsxhX2djo7xDu4Ohu7xa9aPwOO3zvhkrhpQfF-xtE8GIbnJ3WmCxjcCl_uNaSpTzkU92deSuZ8OjzRoumvhjAfGU_-LBFTIyU9aC1JFd0JiaPcDdQ"/>
+<div class="absolute inset-0 bg-overlay"></div>
+</div>
+<!-- TopAppBar -->
+<header class="bg-emerald-50/80 dark:bg-emerald-950/80 backdrop-blur-md text-emerald-950 dark:text-emerald-50 font-['Plus_Jakarta_SANS'] antialiased docked full-width top-0 z-50 border-b border-emerald-100/50 dark:border-emerald-800/50 flat no shadows flex justify-between items-center px-6 py-4 w-full sticky top-0">
+<div class="text-xl font-bold text-emerald-950 dark:text-emerald-50 tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">agriculture</span>
+            AgroChain
+        </div>
+<div class="hidden md:flex items-center gap-6">
+<div class="flex items-center gap-2 text-label-sm font-button uppercase tracking-wider text-emerald-900/70">
+<span>EN</span>
+<span class="text-emerald-300">|</span>
+<span class="font-bold text-emerald-900">हिंदी</span>
+</div>
+<div class="flex items-center gap-3 pl-6 border-l border-emerald-200">
+<div class="text-right">
+<p class="text-xs text-emerald-800 font-medium opacity-70">Welcome back,</p>
+<p class="text-sm font-bold text-emerald-950">Namaste Ramesh</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">person</span>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow flex items-center justify-center p-gutter md:p-container-padding">
+<!-- Main Form Card (Step 4) -->
+<div class="w-full max-w-lg glass-card rounded-xl p-8 shadow-2xl relative">
+<!-- Step Progress Indicator -->
+<div class="flex items-center justify-between mb-8 w-full max-w-xs mx-auto">
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-white text-xs font-bold">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex-grow h-1 bg-secondary mx-2 rounded-full"></div>
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-white text-xs font-bold">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex-grow h-1 bg-secondary mx-2 rounded-full"></div>
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-white text-xs font-bold">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex-grow h-1 bg-secondary mx-2 rounded-full"></div>
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-on-secondary-container ring-4 ring-secondary-container text-white text-xs font-bold">4</div>
+</div>
+<div class="text-center mb-6">
+<h2 class="font-h2 text-primary text-[22px] leading-tight mb-1">Confirm Your Listing</h2>
+<p class="font-label-sm text-on-surface-variant text-sm">Review your details before posting.</p>
+</div>
+<!-- Tomato Banner -->
+<div class="relative w-full h-[180px] rounded-xl overflow-hidden mb-6 group">
+<img class="w-full h-full object-cover" data-alt="vibrant ripe red tomatoes on a vine in a greenhouse with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJXAQHsQvKGdiHGXGkdrbp6VVfK1PzadvvmlYT5_fh_nVqEMyhEuzpeXwT7xbUbkUouLthPVmNIN-PHCPXEyaNAmJBk2u_WZvxWvl756O7uNISsvjpmr1J5hXcv9E_Q7CR3BvSro8JT1JMDbzeO0GZQkm2YWRhRc_t81-HR97NKLWJBGv3hybLsPG-2b734OBSRWVURD0zB72-OP3rZxxhcTPnQstqzYAQQri6lhgFkDMKvpFHvDzSs89YsqEm4J3qpLFLDecJ4J8"/>
+<div class="absolute bottom-4 left-4 bg-primary-container/90 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg flex items-center gap-2">
+<span class="text-lg">🍅</span>
+<span class="font-button text-sm tracking-wide uppercase">Tomato</span>
+</div>
+</div>
+<!-- Details List -->
+<div class="space-y-3 mb-8">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/30">
+<span class="text-on-surface-variant text-sm font-label-sm">Crop Type</span>
+<span class="font-bold text-primary">Tomato (Solanum lycopersicum)</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/30">
+<span class="text-on-surface-variant text-sm font-label-sm">Total Quantity</span>
+<span class="font-bold text-primary">2,000 Kg</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/30">
+<span class="text-on-surface-variant text-sm font-label-sm">Quality Grade</span>
+<div class="text-right">
+<p class="font-bold text-primary">Medium Grade</p>
+<p class="text-xs text-on-secondary-container italic">Very Fresh · Harvested 2 days ago</p>
+</div>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/30">
+<span class="text-on-surface-variant text-sm font-label-sm">Expected Price</span>
+<span class="font-bold text-primary">₹ 24 / Kg</span>
+</div>
+<div class="flex justify-between items-center p-4 bg-surface rounded-lg mt-4 border border-secondary-container">
+<span class="text-secondary font-bold font-button uppercase tracking-tighter">Total Estimated Value</span>
+<span class="font-h3 text-secondary-fixed-variant text-[24px]">₹ 48,000</span>
+</div>
+</div>
+<!-- Radio Options -->
+<div class="space-y-3 mb-8">
+<label class="flex items-center gap-3 p-4 border border-on-secondary-container rounded-xl bg-secondary-container/20 cursor-pointer">
+<div class="w-5 h-5 rounded-full border-2 border-on-secondary-container flex items-center justify-center">
+<div class="w-2.5 h-2.5 bg-on-secondary-container rounded-full"></div>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-secondary-container text-lg">bolt</span>
+<span class="font-button text-on-secondary-container text-sm">Will go live instantly</span>
+</div>
+</label>
+<label class="flex items-center gap-3 p-4 border border-outline-variant/30 rounded-xl hover:bg-surface-container transition-colors cursor-pointer">
+<div class="w-5 h-5 rounded-full border-2 border-outline-variant"></div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-lg">inventory_2</span>
+<span class="font-button text-outline text-sm">Save offline for later</span>
+</div>
+</label>
+</div>
+<!-- CTA Buttons -->
+<div class="space-y-3">
+<button class="w-full bg-primary-container text-white py-4 rounded-xl font-button shadow-lg shadow-primary-container/20 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all relative overflow-hidden group">
+<div class="absolute inset-0 bg-white/10 animate-pulse group-hover:hidden"></div>
+                    🌱 Post Listing
+                </button>
+<button class="w-full bg-white text-on-surface-variant py-3 rounded-xl font-button border border-outline-variant/50 flex items-center justify-center gap-2 hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+                    Back and Edit
+                </button>
+</div>
+</div>
+</main>
+<!-- Success Modal Overlay (Hidden by default - showing as an example of success state) -->
+<!-- To see success state, uncomment or toggle visibility in real scenario -->
+<div class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 backdrop-blur-xl bg-primary-container/40">
+<div class="bg-white rounded-3xl p-10 max-w-md w-full shadow-2xl text-center space-y-6">
+<div class="w-24 h-24 bg-secondary-container rounded-full mx-auto flex items-center justify-center text-on-secondary-container ring-8 ring-secondary-container/20">
+<span class="material-symbols-outlined text-5xl font-bold" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<h1 class="font-h1 text-primary mb-2">Listing Posted!</h1>
+<p class="text-on-surface-variant font-body-md">Your tomatoes are now visible to verified buyers across the network.</p>
+</div>
+<div class="bg-surface-container rounded-2xl p-4 flex items-center gap-4 text-left border border-outline-variant/20">
+<img class="w-16 h-16 rounded-xl object-cover" data-alt="tomato" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoQuiGrEP9bT-2xq87YlT7g-jOYnIJddv4lTJXPZGt3k0FA7zHfhc2wUXzrOqCqgkhtZxE8dmRYyf3PXaN5TDEvTIcHajygr1NfY-R3ztQn36bEbUA6Xocwu99HIQbcviNfPjCImrLMXtHchvzK-Nugt0wK3G-pS-VjIVIPUUlD1oirHvY70TTGWsUPHhnttUmSzE-Dy8jFirbDSbjv5OCC0eulKzDC6kS4TyIlmE2B1tb_Mfot0L0z37pznWVoLjx2cQODvhFXAo"/>
+<div>
+<p class="font-bold text-primary">2,000 Kg Fresh Tomatoes</p>
+<p class="text-sm text-on-surface-variant">Listing ID: #AC-77829</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4">
+<button class="bg-primary-container text-white py-4 rounded-xl font-button shadow-lg shadow-primary-container/20 hover:scale-[1.02] transition-all">
+                    View Listing
+                </button>
+<button class="bg-[#ea580c] text-white py-4 rounded-xl font-button shadow-lg shadow-orange-600/20 hover:scale-[1.02] transition-all">
+                    Home
+                </button>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="bg-emerald-50 dark:bg-emerald-950 text-emerald-900 dark:text-emerald-100 font-['Plus_Jakarta_SANS'] text-xs uppercase tracking-widest w-full py-8 mt-auto border-t border-emerald-100 dark:border-emerald-800 flat">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 w-full max-w-7xl mx-auto">
+<p class="mb-4 md:mb-0">© 2024 AgroChain. Prestigious Stewardship &amp; Digital Harvesting.</p>
+<div class="flex gap-8">
+<a class="hover:text-emerald-950 dark:hover:text-emerald-50 underline transition-opacity" href="#">Terms of Service</a>
+<a class="hover:text-emerald-950 dark:hover:text-emerald-50 underline transition-opacity" href="#">Privacy Policy</a>
+<a class="hover:text-emerald-950 dark:hover:text-emerald-50 underline transition-opacity" href="#">Supply Chain Data</a>
+</div>
+</div>
+</footer>
+</body></html>

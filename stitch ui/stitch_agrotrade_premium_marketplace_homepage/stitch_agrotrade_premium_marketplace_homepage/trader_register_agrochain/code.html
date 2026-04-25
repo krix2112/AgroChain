@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgroChain - Trader Registration</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#f0fdf4",
+                        "on-primary": "#ffffff",
+                        "primary": "#001707",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#284f33",
+                        "inverse-primary": "#a6d1ad",
+                        "secondary-fixed-dim": "#96d5a3",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#b1f2be",
+                        "secondary": "#2e6a41",
+                        "inverse-on-surface": "#e7f4eb",
+                        "on-primary-container": "#6f9877",
+                        "on-surface-variant": "#424942",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#eaf7ee",
+                        "surface-container-high": "#deebe3",
+                        "on-secondary-container": "#347047",
+                        "surface-container-highest": "#d9e6dd",
+                        "on-tertiary-container": "#c77e00",
+                        "background": "#f0fdf4",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffddb8",
+                        "tertiary": "#1e0f00",
+                        "surface": "#f0fdf4",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#c1c8bf",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-primary-fixed": "#00210d",
+                        "outline": "#727971",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#3a2200",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-surface": "#131e19",
+                        "on-secondary-fixed": "#00210d",
+                        "primary-container": "#052e16",
+                        "inverse-surface": "#27332d",
+                        "primary-fixed": "#c1edc8",
+                        "on-background": "#131e19",
+                        "surface-dim": "#d0ddd5",
+                        "primary-fixed-dim": "#a6d1ad",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface-tint": "#40674a",
+                        "on-secondary-fixed-variant": "#12512c",
+                        "surface-container": "#e4f1e8",
+                        "surface-variant": "#d9e6dd",
+                        "secondary-container": "#b1f2be"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "h2": ["Plus Jakarta Sans"],
+                        "h1": ["Plus Jakarta Sans"],
+                        "button": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h3": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "h2": ["30px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "h1": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "button": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-sm": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h3": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f0fdf4;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c1edc8;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface">
+<main class="flex h-screen overflow-hidden">
+<!-- Left Panel: Form Section (55% width) -->
+<section class="w-full md:w-[55%] h-full bg-surface-bright overflow-y-auto custom-scrollbar p-12 flex flex-col">
+<!-- Header Logo -->
+<div class="mb-12">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded-xl flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" data-icon="storefront" style="font-variation-settings: 'FILL' 1;">storefront</span>
+</div>
+<span class="font-h3 text-h3 text-primary-container">AgroChain</span>
+</div>
+</div>
+<!-- Registration Content -->
+<div class="max-w-md w-full">
+<h1 class="font-h2 text-[32px] text-on-background mb-2">Register as a Trader</h1>
+<p class="font-label-sm text-on-surface-variant mb-8">Access a global marketplace of verified farmers.</p>
+<!-- Registration Form -->
+<form class="flex flex-col gap-5">
+<!-- Full Name -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-on-surface-variant">Full Name</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-xl" data-icon="person">person</span>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-secondary-container rounded-xl focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all" placeholder="John Doe" type="text"/>
+</div>
+</div>
+<!-- Business Name -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-on-surface-variant">Business Name</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-xl" data-icon="storefront">storefront</span>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-secondary-container rounded-xl focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all" placeholder="Global Harvest Ltd" type="text"/>
+</div>
+</div>
+<!-- Phone Number -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-on-surface-variant">Phone Number</label>
+<div class="flex">
+<span class="inline-flex items-center px-4 rounded-l-xl border border-r-0 border-secondary-container bg-surface-container-high text-on-surface-variant text-sm font-medium">
+                                +91
+                            </span>
+<input class="w-full px-4 py-3 bg-surface-container-lowest border border-secondary-container rounded-r-xl focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all" placeholder="9876543210" type="tel"/>
+</div>
+</div>
+<!-- Email Address -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-on-surface-variant">Email</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-xl" data-icon="mail">mail</span>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-secondary-container rounded-xl focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all" placeholder="john@agrochain.com" type="email"/>
+</div>
+</div>
+<!-- Location -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-on-surface-variant">Location / City</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-xl" data-icon="location_on">location_on</span>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-secondary-container rounded-xl focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all" placeholder="Mumbai, MH" type="text"/>
+</div>
+</div>
+<!-- Commodity Dropdown -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-on-surface-variant">Primary Commodity</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-xl" data-icon="inventory_2">inventory_2</span>
+<select class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-secondary-container rounded-xl focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all appearance-none">
+<option disabled="" selected="" value="">Select Commodity</option>
+<option value="wheat">Wheat</option>
+<option value="rice">Rice</option>
+<option value="vegetables">Vegetables</option>
+<option value="pulses">Pulses</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Passwords Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-on-surface-variant">Password</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-xl" data-icon="lock">lock</span>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-secondary-container rounded-xl focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-on-surface-variant">Confirm Password</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-xl" data-icon="lock">lock</span>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-secondary-container rounded-xl focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all" placeholder="••••••••" type="password"/>
+</div>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="mt-4 flex items-center justify-center gap-2 w-full py-4 bg-secondary text-on-secondary font-button text-button rounded-xl hover:opacity-90 active:scale-[0.98] transition-all shadow-lg shadow-secondary/20" type="submit">
+<span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+                        Create Trader Account
+                    </button>
+</form>
+<!-- Footer Link -->
+<div class="mt-10 text-center">
+<p class="font-label-sm text-on-surface-variant">
+                        Already have a trader account? 
+                        <a class="text-secondary font-bold hover:underline ml-1" href="#">Login →</a>
+</p>
+</div>
+</div>
+<!-- Spacer for footer aesthetics -->
+<div class="mt-auto pt-12 text-[10px] text-outline-variant uppercase tracking-widest">
+                AgroChain Ecosystem © 2024 • Secure Blockchain Portal
+            </div>
+</section>
+<!-- Right Panel: Immersive Visual Section (45% width) -->
+<section class="hidden md:block md:w-[45%] h-full relative">
+<!-- Background Image -->
+<div class="absolute inset-0 bg-cover bg-center" data-alt="expansive golden wheat field at sunset with warm lens flare and soft blur depth of field effect" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAIavzdsZ3d28WyilWOGKitEMjqesgUI3sMKTl914ZftTn_7HQw-MMB9sBZRsqZ-8OeCtxir-eRY2ISEFHmz4F0rhYnrdUroIbJ0v6azMZDiZwoTtQnAfwBL-aoGBbsw3mVHXKYBSfS_4A95JXqHEN0ms4AUrDGTqcOAkfKUkJFLRmVvOaoZHHvD3sW_UBaQiY9rTqs6yo60waI_IOeUnRkyQt0yDBtzSNnH8ATvpqIK_25K4R172SJ-ml4eb6Rk480JQ9BkeOa2_0')">
+<!-- Darkened overlay -->
+<div class="absolute inset-0 bg-primary/20"></div>
+</div>
+<!-- Glassmorphic Card Overlay -->
+<div class="absolute inset-0 flex items-center justify-center p-12">
+<div class="backdrop-blur-xl bg-white/10 border border-white/20 p-10 rounded-[2rem] max-w-sm text-white shadow-2xl">
+<div class="mb-6 w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<h2 class="font-h2 text-h2 mb-4 leading-tight">Trade with transparency.</h2>
+<p class="font-body-lg text-white/90">Blockchain-backed settlements ensure every grain is tracked and every payment is guaranteed.</p>
+<div class="mt-10 flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-sm font-medium">Real-time Yield Analytics</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-sm font-medium">Smart Contract Verification</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Brand Mark -->
+<div class="absolute bottom-8 right-8 text-white/40 font-bold tracking-widest text-xs rotate-90 origin-right">
+                STRENGTH THROUGH DATA
+            </div>
+</section>
+</main>
+</body></html>

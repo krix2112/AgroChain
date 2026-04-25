@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Trades | AgroChain</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#d9e6dd",
+                        "secondary-fixed-dim": "#96d5a3",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#131e19",
+                        "on-primary-fixed": "#00210d",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#424942",
+                        "primary-fixed": "#c1edc8",
+                        "inverse-on-surface": "#e7f4eb",
+                        "surface-tint": "#40674a",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#b1f2be",
+                        "on-tertiary-fixed": "#2a1700",
+                        "surface-dim": "#d0ddd5",
+                        "primary": "#001707",
+                        "surface-container-low": "#eaf7ee",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#c77e00",
+                        "surface-container-high": "#deebe3",
+                        "on-secondary-fixed-variant": "#12512c",
+                        "tertiary": "#1e0f00",
+                        "tertiary-container": "#3a2200",
+                        "primary-fixed-dim": "#a6d1ad",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface": "#f0fdf4",
+                        "on-error": "#ffffff",
+                        "primary-container": "#052e16",
+                        "on-background": "#131e19",
+                        "on-secondary-container": "#347047",
+                        "on-primary-container": "#6f9877",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-variant": "#d9e6dd",
+                        "outline": "#727971",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#284f33",
+                        "inverse-surface": "#27332d",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface-container": "#e4f1e8",
+                        "secondary-fixed": "#b1f2be",
+                        "background": "#f0fdf4",
+                        "secondary": "#2e6a41",
+                        "on-secondary-fixed": "#00210d",
+                        "inverse-primary": "#a6d1ad",
+                        "surface-bright": "#f0fdf4",
+                        "outline-variant": "#c1c8bf"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "1.5rem",
+                        "container-padding": "2.5rem",
+                        "stack-gap": "1rem",
+                        "split-ratio": "45/55"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "button": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "h3": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "h1": ["Plus Jakarta Sans"],
+                        "h2": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "button": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h3": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h1": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "h2": ["30px", {"lineHeight": "1.3", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid #d1fae5;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-hidden">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-white/60 dark:bg-emerald-950/60 backdrop-blur-md shadow-sm border-b border-emerald-100 dark:border-emerald-800">
+<div class="flex items-center gap-2">
+<span class="text-xl font-bold text-emerald-950 dark:text-emerald-50 font-['Plus_Jakarta_Sans'] tracking-tight">AgroChain</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<nav class="flex gap-6">
+<a class="text-emerald-700/70 hover:bg-emerald-50/50 transition-colors px-2 py-1 font-['Plus_Jakarta_Sans'] font-semibold" href="#">Marketplace</a>
+<a class="text-emerald-700/70 hover:bg-emerald-50/50 transition-colors px-2 py-1 font-['Plus_Jakarta_Sans'] font-semibold" href="#">Post Request</a>
+<a class="text-emerald-900 font-bold border-b-2 border-emerald-900 px-2 py-1 font-['Plus_Jakarta_Sans']" href="#">My Trades</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-emerald-50/50 transition-colors text-emerald-900">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-emerald-50/50 transition-colors text-emerald-900">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<main class="flex h-screen pt-16">
+<!-- Left Pane: Immersive Photography -->
+<aside class="hidden lg:block w-[45%] h-full relative overflow-hidden">
+<img alt="Golden wheat fields" class="absolute inset-0 w-full h-full object-cover" data-alt="expansive golden wheat field stretching to the horizon under a soft warm sunset light with gentle clouds in the sky" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8SHlL8IVoQdTn3NWo2sp0EGRng4ZbRl54eDg26mWy3SriGjhCIOUvv8lBWYT2jtid7COGHx_883WDOSsFCvJUdVQQjNc4SdwxYLzqzppb-IxM-Yue4-MIE4SnMh7qdA5PNJtH8WTkDcV47PeTIpZ6cML7p0HNaZUH7MjWBBm3ivL4nzkd52zqHgE_9BE22K88uabZHGH9QllFAdG3VEbQgwvlj1DFc7uIRx9Aqfm9mrxy-DELzdCC_qa9JzgDt0xL86qSo1nlEJE"/>
+<div class="absolute inset-0 bg-gradient-to-r from-primary-container/20 to-transparent"></div>
+<div class="absolute bottom-12 left-12 max-w-md">
+<h2 class="font-h1 text-white mb-4">Securing the future of agriculture.</h2>
+<p class="text-white/80 font-body-lg">Transparent trade fueled by blockchain technology for sustainable growth.</p>
+</div>
+</aside>
+<!-- Right Pane: Functional Portal -->
+<section class="flex-1 h-full overflow-y-auto bg-surface relative hide-scrollbar">
+<div class="p-container-padding pb-32">
+<!-- Header Section -->
+<header class="mb-10">
+<h1 class="font-h1 text-on-surface mb-2">My Trades</h1>
+<p class="font-body-lg text-on-surface-variant">All orders and deals you've made</p>
+</header>
+<!-- Stats Bento Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+<div class="glass-card p-6 rounded-xl">
+<div class="flex items-center justify-between mb-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">shopping_cart</span>
+<span class="text-label-sm text-secondary-container bg-primary-container px-2 py-0.5 rounded-full">+12%</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Total Orders</p>
+<h3 class="font-h3 text-on-surface">142</h3>
+</div>
+<div class="glass-card p-6 rounded-xl">
+<div class="flex items-center justify-between mb-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Total Spent</p>
+<h3 class="font-h3 text-on-surface">$24.8k</h3>
+</div>
+<div class="glass-card p-6 rounded-xl border-l-4 border-l-secondary-container">
+<div class="flex items-center justify-between mb-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Completed Trades</p>
+<h3 class="font-h3 text-on-surface">128</h3>
+</div>
+<div class="glass-card p-6 rounded-xl">
+<div class="flex items-center justify-between mb-2">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Pending Deliveries</p>
+<h3 class="font-h3 text-on-surface">14</h3>
+</div>
+</div>
+<!-- Filter Tabs -->
+<div class="flex items-center gap-2 mb-8 overflow-x-auto hide-scrollbar pb-2">
+<button class="bg-primary-container text-white px-6 py-2 rounded-full font-button text-button shadow-sm">All</button>
+<button class="bg-white border border-outline-variant text-on-surface-variant px-6 py-2 rounded-full font-button text-button hover:bg-surface-container-low transition-colors">Pending</button>
+<button class="bg-white border border-outline-variant text-on-surface-variant px-6 py-2 rounded-full font-button text-button hover:bg-surface-container-low transition-colors">Completed</button>
+<button class="bg-white border border-outline-variant text-on-surface-variant px-6 py-2 rounded-full font-button text-button hover:bg-surface-container-low transition-colors">Cancelled</button>
+</div>
+<!-- Order Cards Grid -->
+<div class="grid grid-cols-1 gap-6">
+<!-- Card 1 -->
+<div class="glass-card rounded-xl p-6 transition-all hover:shadow-md border-l-4 border-l-tertiary-container">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-start gap-4">
+<div class="w-16 h-16 rounded-xl bg-surface-container-highest flex items-center justify-center text-3xl">
+                                    🌾
+                                </div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h4 class="font-h3 text-lg leading-none">Organic Hard Red Wheat</h4>
+<span class="bg-tertiary-container/20 text-tertiary-container text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Pending</span>
+</div>
+<p class="text-label-sm text-on-surface-variant mb-1">#TRD-2041 • Oct 24, 2023</p>
+<div class="flex items-center gap-1 text-label-sm text-secondary">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span>Farmer: Samuel Green • Nebraska, USA</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:flex-col md:items-end gap-2 md:min-w-[120px]">
+<p class="text-label-sm text-on-surface-variant">5,000 kg</p>
+<p class="text-h2 text-secondary-fixed-variant font-bold">$12,500.00</p>
+<button class="flex items-center gap-2 text-primary font-button group">
+                                    View Details 
+                                    <span class="material-symbols-outlined transition-transform group-hover:translate-y-1">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="glass-card rounded-xl p-6 transition-all hover:shadow-md border-l-4 border-l-secondary-container">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-start gap-4">
+<div class="w-16 h-16 rounded-xl bg-surface-container-highest flex items-center justify-center text-3xl">
+                                    🌽
+                                </div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h4 class="font-h3 text-lg leading-none">Non-GMO Yellow Corn</h4>
+<span class="bg-secondary-container/30 text-on-secondary-container text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Delivered</span>
+</div>
+<p class="text-label-sm text-on-surface-variant mb-1">#TRD-1982 • Oct 18, 2023</p>
+<div class="flex items-center gap-1 text-label-sm text-secondary">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span>Farmer: Elena Rossi • Iowa, USA</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:flex-col md:items-end gap-2 md:min-w-[120px]">
+<p class="text-label-sm text-on-surface-variant">12,000 kg</p>
+<p class="text-h2 text-secondary-fixed-variant font-bold">$8,400.00</p>
+<button class="flex items-center gap-2 text-primary font-button">
+                                    View Details 
+                                    <span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="glass-card rounded-xl p-6 transition-all hover:shadow-md border-l-4 border-l-error">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 opacity-75">
+<div class="flex items-start gap-4">
+<div class="w-16 h-16 rounded-xl bg-surface-container-highest flex items-center justify-center text-3xl grayscale">
+                                    🥔
+                                </div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h4 class="font-h3 text-lg leading-none">Russet Potatoes Bulk</h4>
+<span class="bg-error-container text-on-error-container text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Cancelled</span>
+</div>
+<p class="text-label-sm text-on-surface-variant mb-1">#TRD-1855 • Oct 12, 2023</p>
+<div class="flex items-center gap-1 text-label-sm text-secondary">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span>Farmer: Michael Scott • Idaho, USA</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:flex-col md:items-end gap-2 md:min-w-[120px]">
+<p class="text-label-sm text-on-surface-variant">2,500 kg</p>
+<p class="text-h2 text-on-error-container font-bold">$3,125.00</p>
+<button class="flex items-center gap-2 text-primary font-button">
+                                    View Details 
+                                    <span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="glass-card rounded-xl p-6 transition-all hover:shadow-md border-l-4 border-l-tertiary-container">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-start gap-4">
+<div class="w-16 h-16 rounded-xl bg-surface-container-highest flex items-center justify-center text-3xl">
+                                    ☕
+                                </div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h4 class="font-h3 text-lg leading-none">Arabica Coffee Beans</h4>
+<span class="bg-tertiary-container/20 text-tertiary-container text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">In Transit</span>
+</div>
+<p class="text-label-sm text-on-surface-variant mb-1">#TRD-2104 • Oct 28, 2023</p>
+<div class="flex items-center gap-1 text-label-sm text-secondary">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span>Farmer: Juan Valdés • Colombia</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between md:flex-col md:items-end gap-2 md:min-w-[120px]">
+<p class="text-label-sm text-on-surface-variant">800 kg</p>
+<p class="text-h2 text-secondary-fixed-variant font-bold">$18,200.00</p>
+<button class="flex items-center gap-2 text-primary font-button">
+                                    View Details 
+                                    <span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Delivery Timeline Bottom Sheet (Simulated Active State) -->
+<div class="fixed bottom-20 md:bottom-0 left-0 md:left-auto md:right-0 w-full md:w-[55%] bg-white rounded-t-3xl shadow-2xl z-40 transform translate-y-0 transition-transform duration-300 border-t border-emerald-100">
+<div class="p-6">
+<div class="w-12 h-1.5 bg-surface-container-highest rounded-full mx-auto mb-6"></div>
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="font-h3 text-on-surface">Order Timeline: #TRD-2104</h2>
+<p class="text-label-sm text-on-surface-variant">Tracking bulk shipment from Colombia Port</p>
+</div>
+<button class="p-2 bg-surface-container-low rounded-full">
+<span class="material-symbols-outlined text-on-surface">close</span>
+</button>
+</div>
+<!-- Stepper Timeline -->
+<div class="space-y-8 relative before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-outline-variant">
+<!-- Step 1 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-secondary flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-white text-[14px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Oct 28, 09:12 AM</p>
+<h4 class="font-button text-on-surface">Contract Signed &amp; Funds Escrowed</h4>
+<p class="text-body-md text-on-surface-variant text-sm">Blockchain transaction verified. Order #TRD-2104 is now active.</p>
+</div>
+<!-- Step 2 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-secondary flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-white text-[14px]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Oct 29, 02:45 PM</p>
+<h4 class="font-button text-on-surface">Quality Verification Complete</h4>
+<p class="text-body-md text-on-surface-variant text-sm">Third-party inspector confirmed bean moisture and grade.</p>
+</div>
+<!-- Step 3 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-f59e0b flex items-center justify-center z-10" style="background-color: #f59e0b;">
+<span class="material-symbols-outlined text-white text-[14px]" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+</div>
+<p class="text-label-sm text-on-surface-variant">Oct 30, 11:30 AM (Current)</p>
+<h4 class="font-button text-on-surface">In Transit - Sea Freight</h4>
+<p class="text-body-md text-on-surface-variant text-sm">Shipment departed Port of Buenaventura. Estimated arrival: Nov 12.</p>
+</div>
+<!-- Step 4 -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-outline-variant flex items-center justify-center z-10">
+<div class="w-2 h-2 bg-white rounded-full"></div>
+</div>
+<p class="text-label-sm text-on-surface-variant italic">Estimated Nov 14</p>
+<h4 class="font-button text-outline">Delivery &amp; Release of Funds</h4>
+<p class="text-body-md text-on-surface-variant text-sm">Funds will be released to farmer upon confirmation of receipt.</p>
+</div>
+</div>
+<button class="w-full mt-10 py-4 bg-primary-container text-white rounded-xl font-button text-button shadow-lg active:scale-[0.98] transition-transform">
+                        Download Contract PDF
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 h-20 bg-white/80 dark:bg-emerald-950/80 backdrop-blur-xl md:hidden rounded-t-xl border-t border-emerald-100 shadow-[0_-4px_12px_rgba(5,46,22,0.05)]">
+<div class="flex flex-col items-center justify-center text-emerald-700/60 transition-all active:scale-90">
+<span class="material-symbols-outlined">storefront</span>
+<span class="text-[11px] font-medium font-['Plus_Jakarta_Sans']">Marketplace</span>
+</div>
+<div class="flex flex-col items-center justify-center text-emerald-700/60 transition-all active:scale-90">
+<span class="material-symbols-outlined">add_box</span>
+<span class="text-[11px] font-medium font-['Plus_Jakarta_Sans']">Post Request</span>
+</div>
+<div class="flex flex-col items-center justify-center text-emerald-700/60 transition-all active:scale-90">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-[11px] font-medium font-['Plus_Jakarta_Sans']">My Listings</span>
+</div>
+<div class="flex flex-col items-center justify-center text-emerald-900 bg-emerald-100 rounded-xl px-3 py-1 transition-all active:scale-90">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="text-[11px] font-medium font-['Plus_Jakarta_Sans']">My Trades</span>
+</div>
+</nav>
+</body></html>

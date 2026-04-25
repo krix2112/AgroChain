@@ -155,16 +155,8 @@ export default function Lots() {
                 <QualityBar label="Purity" value={lot.quality.purity} color="#F57C00" />
               </div>
               <div className="flex gap-3">
-                {lot.status === 'Draft' ? (
-                  <><button onClick={() => openEditModal(lot)} className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl font-semibold hover:bg-gray-50 transition-all transform hover:scale-105 flex items-center justify-center gap-2"><Edit2 size={18} />Edit</button>
-                    <button className="flex-1 px-4 py-3 bg-gradient-to-r from-[#2E7D32] to-[#388E3C] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:shadow-[#2E7D32]/50 transition-all transform hover:scale-105 flex items-center justify-center gap-2"><TrendingUp size={18} />Publish</button></>
-                ) : lot.status === 'Published' ? (
-                  <><button onClick={() => router.push('/marketplace')} className="flex-1 px-4 py-3 border-2 border-blue-500 text-blue-600 bg-blue-50 rounded-xl font-semibold hover:bg-blue-100 transition-all transform hover:scale-105">View in Market</button>
-                    <button className="flex-1 px-4 py-3 bg-gradient-to-r from-[#2E7D32] to-[#388E3C] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl hover:shadow-[#2E7D32]/50 transition-all transform hover:scale-105 flex items-center justify-center gap-2"><Shield size={18} />See Bids</button></>
-                ) : (
-                  <button className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl font-semibold cursor-default opacity-60">Sold</button>
-                )}
-                <button className="p-3 border-2 border-red-200 text-red-500 rounded-xl hover:bg-red-50 hover:border-red-500 transition-all transform hover:scale-105"><Trash2 size={20} /></button>
+                <button onClick={() => openEditModal(lot)} className="flex-1 px-4 py-3 border-2 border-blue-500 text-blue-600 bg-blue-50 rounded-xl font-semibold hover:bg-blue-100 transition-all transform hover:scale-105 flex items-center justify-center gap-2"><Edit2 size={18} />Edit</button>
+                <button className="p-3 border-2 border-red-200 text-red-500 rounded-xl hover:bg-red-50 hover:border-red-500 transition-all transform hover:scale-105 flex items-center justify-center"><Trash2 size={20} /></button>
               </div>
             </div>
           </div>

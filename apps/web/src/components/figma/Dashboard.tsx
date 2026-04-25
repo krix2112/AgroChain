@@ -45,22 +45,7 @@ export default function Dashboard() {
         })}
       </div>
 
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#2E7D32] to-[#FDD835] shadow-xl">
-        <div className="p-6 flex items-center gap-6">
-          <div className="relative flex-shrink-0">
-            <div className="absolute inset-0 bg-white/30 rounded-2xl blur-lg animate-pulse" />
-            <div className="relative w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-lg"><TrendingUp size={28} className="text-white" strokeWidth={2.5} /></div>
-          </div>
-          <div className="flex-1">
-            <div className="inline-block backdrop-blur-md bg-white rounded-full px-4 py-1 mb-2"><span className="text-sm font-bold text-green-700">eNAM showing ₹2,570/qtl</span></div>
-            <p className="text-white/90 text-sm">Lot #23 (Wheat, 50 qtl) can earn <span className="font-bold text-white">+₹120/qtl</span> via eNAM</p>
-          </div>
-          <div className="flex gap-3 flex-shrink-0">
-            <button className="px-5 py-2.5 bg-white text-[#2E7D32] rounded-xl font-semibold text-sm hover:shadow-lg transition-all transform hover:scale-105">View Insights</button>
-            <button onClick={() => router.push('/lots')} className="px-5 py-2.5 bg-[#2E7D32] text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all transform hover:scale-105">Create Lot</button>
-          </div>
-        </div>
-      </div>
+
 
       <div>
         <div className="flex items-center justify-between mb-6">

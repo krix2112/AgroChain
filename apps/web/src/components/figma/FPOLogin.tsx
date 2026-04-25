@@ -33,6 +33,7 @@ export default function FPOLogin() {
           // For dev convenience, show dummy code if returned
           if (data.dummyCode) {
             console.log("DEV: OTP is", data.dummyCode);
+            setOtp(data.dummyCode); // Automatically fill the OTP for the user
           }
         } else {
           setError(data.error || 'Failed to send OTP');

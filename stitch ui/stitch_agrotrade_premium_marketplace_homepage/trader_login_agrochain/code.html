@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#f0fdf4",
+                    "on-primary": "#ffffff",
+                    "primary": "#001707",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#284f33",
+                    "inverse-primary": "#a6d1ad",
+                    "secondary-fixed-dim": "#96d5a3",
+                    "on-tertiary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#b1f2be",
+                    "secondary": "#2e6a41",
+                    "inverse-on-surface": "#e7f4eb",
+                    "on-primary-container": "#6f9877",
+                    "on-surface-variant": "#424942",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#eaf7ee",
+                    "surface-container-high": "#deebe3",
+                    "on-secondary-container": "#347047",
+                    "surface-container-highest": "#d9e6dd",
+                    "on-tertiary-container": "#c77e00",
+                    "background": "#f0fdf4",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffddb8",
+                    "tertiary": "#1e0f00",
+                    "surface": "#f0fdf4",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#c1c8bf",
+                    "on-tertiary-fixed": "#2a1700",
+                    "on-primary-fixed": "#00210d",
+                    "outline": "#727971",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-container": "#3a2200",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "on-surface": "#131e19",
+                    "on-secondary-fixed": "#00210d",
+                    "primary-container": "#052e16",
+                    "inverse-surface": "#27332d",
+                    "primary-fixed": "#c1edc8",
+                    "on-background": "#131e19",
+                    "surface-dim": "#d0ddd5",
+                    "primary-fixed-dim": "#a6d1ad",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "surface-tint": "#40674a",
+                    "on-secondary-fixed-variant": "#12512c",
+                    "surface-container": "#e4f1e8",
+                    "surface-variant": "#d9e6dd",
+                    "secondary-container": "#b1f2be"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-gap": "1rem",
+                    "container-padding": "2.5rem",
+                    "gutter": "1.5rem",
+                    "split-ratio": "45/55"
+            },
+            "fontFamily": {
+                    "h2": ["Plus Jakarta Sans"],
+                    "h1": ["Plus Jakarta Sans"],
+                    "button": ["Plus Jakarta Sans"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "h3": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "h2": ["30px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "h1": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "button": ["16px", {"lineHeight": "1", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-sm": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h3": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(5, 46, 22, 0.1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface-bright font-body-md text-on-surface selection:bg-secondary-container">
+<main class="min-h-screen flex flex-col md:flex-row overflow-hidden">
+<!-- Left Panel: Functional Portal (55% on desktop per split-ratio) -->
+<section class="w-full md:w-[55%] min-h-screen bg-surface-bright flex flex-col p-12 md:p-12 lg:p-16 relative z-10 overflow-y-auto">
+<!-- Top Navigation/Logo Area -->
+<div class="mb-16">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white" data-icon="storefront">storefront</span>
+</div>
+<span class="font-h2 text-primary-container text-2xl">AgroChain</span>
+</div>
+<p class="text-on-surface-variant italic font-body-md mt-1 opacity-70">Modern Agriculturalist Portal</p>
+</div>
+<!-- Login Content -->
+<div class="max-w-md w-full mx-auto md:mx-0 flex-grow flex flex-col justify-center">
+<header class="mb-10">
+<h1 class="font-h1 text-[36px] text-primary-container mb-3 tracking-tight">Welcome back, trader.</h1>
+<p class="text-on-surface-variant font-body-md">Log in to manage your inventory, bids, and contracts.</p>
+</header>
+<form class="space-y-6">
+<!-- Input: Email/Phone -->
+<div class="space-y-2">
+<label class="font-label-sm text-primary-container block">Phone Number or Email</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline" data-icon="mail">mail</span>
+</div>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-on-surface" placeholder="trader@agrochain.com" type="text"/>
+</div>
+</div>
+<!-- Input: Password -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="font-label-sm text-primary-container block">Password</label>
+<a class="text-sm font-medium text-secondary hover:text-primary-container transition-colors" href="#">Forgot Password?</a>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline" data-icon="lock">lock</span>
+</div>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-all outline-none text-on-surface" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full bg-primary-container text-on-primary font-button py-4 rounded-lg flex items-center justify-center gap-2 hover:bg-secondary transition-all active:scale-[0.98] duration-150" type="submit">
+<span class="material-symbols-outlined text-lg" data-icon="storefront">storefront</span>
+                        Login
+                    </button>
+</form>
+<div class="mt-8 text-center md:text-left">
+<p class="text-on-surface-variant font-label-sm">
+                        New trader? 
+                        <a class="text-secondary font-bold hover:underline ml-1" href="#">Register here</a>
+</p>
+</div>
+</div>
+<!-- Footer-esque subtext -->
+<div class="mt-16 pt-8 border-t border-outline-variant/30">
+<p class="text-xs text-on-surface-variant opacity-50">© 2024 AgroChain Protocol. Securely powering global grain logistics.</p>
+</div>
+</section>
+<!-- Right Panel: Immersive Visual (45% on desktop per split-ratio) -->
+<section class="hidden md:flex md:w-[45%] h-screen relative bg-surface-dim overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover brightness-75 blur-[2px]" data-alt="expansive golden wheat field at sunset with warm sunlight glowing through the stalks and a soft hazy bokeh background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOujF8VN8Ch7PciH5gDcK6MTatAho6Dx0Re7O1ZS6SchSNVwtmu_SGUK9h50VaNshKyP2xqRoGn1Oy45huTvoIgjy75s-Vp6QOSCaW8AQkn0hCZDKOyZOVP6amL9wSMidwOlxN6eIB4INbWDWUAddVKgVb7hVJetKrTfpqyB4QmH5ldhWQcK17mYH29kq5DYq6YTY6iEFpy9DJw5Wz3bw3g3KNEKwaM5wV651WhQL74GRNuuLTKUpwCgHJKclRSjwzGUHTg0-z-NE"/>
+<!-- Subtle overlay for text readability -->
+<div class="absolute inset-0 bg-primary-container/10"></div>
+</div>
+<!-- Glassmorphism Card Overlay -->
+<div class="relative z-10 w-full flex items-center justify-center p-12">
+<div class="glass-card p-10 rounded-xl w-full max-w-sm">
+<div class="mb-6 flex items-center gap-3">
+<div class="w-2 h-8 bg-tertiary-fixed-dim rounded-full"></div>
+<h2 class="font-h3 text-primary-container">Join 1,200+ verified traders.</h2>
+</div>
+<ul class="space-y-6">
+<li class="flex gap-4">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-secondary/10 border border-secondary/20 flex items-center justify-center">
+<span class="text-secondary font-bold text-sm">01</span>
+</div>
+<div>
+<h4 class="font-button text-primary-container text-sm">Verify Identity</h4>
+<p class="text-xs text-on-surface-variant mt-1">KYC integrated blockchain verification for trusted trade.</p>
+</div>
+</li>
+<li class="flex gap-4">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-secondary/10 border border-secondary/20 flex items-center justify-center">
+<span class="text-secondary font-bold text-sm">02</span>
+</div>
+<div>
+<h4 class="font-button text-primary-container text-sm">List Inventory</h4>
+<p class="text-xs text-on-surface-variant mt-1">Real-time yield estimates synced directly from sensors.</p>
+</div>
+</li>
+<li class="flex gap-4">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-secondary/10 border border-secondary/20 flex items-center justify-center">
+<span class="text-secondary font-bold text-sm">03</span>
+</div>
+<div>
+<h4 class="font-button text-primary-container text-sm">Execute Contracts</h4>
+<p class="text-xs text-on-surface-variant mt-1">Automated escrow and settlements in the field.</p>
+</div>
+</li>
+</ul>
+<div class="mt-8 pt-8 border-t border-white/40 flex items-center justify-between">
+<div class="flex -space-x-2">
+<img class="w-8 h-8 rounded-full border-2 border-white object-cover" data-alt="portrait of a confident agricultural business owner" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhmxEBs5BauHUHbxoPa-bwS62tsv7YtyD67_SMJWzGvSP8CnV2LWP1Cu9F6Xu5kl2Tgu5yKepHsdVoagYCbXJPMQQ_HYEhLuS8lnhJ2z0pdmtMFBguPCnpqUiILAPwVccqFd-4lvYqT63NA1OJ7AJKHhZVj2IoPvATQP-SrJw6s80ZOjoQFK6hLqx0E4RtTFWcxaHWUXdn3tEebZXamdXlmKiYbGl2Fct9OiBkQyiB5bIGFnDwge6SjgBRn1JEB80Lyqo0s1DoRVU"/>
+<img class="w-8 h-8 rounded-full border-2 border-white object-cover" data-alt="portrait of a commercial grain distributor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3Kxs0k3ViuxP8wpvw2AwPmykMOCO__DmRhng-9t148Qt8CXOTm-BaaoDyy5FOCsaTbPmrAFCTDVhwwUdTVfc5tB6sQs9y-OR3VZRqgQ9dbzK92PvF_CQj2gMQc392FT0DU9a1pAemvp04rJ5B6r3Dr-cqGPn9RlhR2gfVbF_hFGXUmzJCMf8UtGryX7-N3PZ_2E7wKmKZGEDXcJef-QM7MDauOUXcvUiVBvn0C3aC8DOtN4n9BslxmKH4xhFQv7SMb3-mN3mGi7s"/>
+<img class="w-8 h-8 rounded-full border-2 border-white object-cover" data-alt="portrait of a female trade logistics manager" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz0xPsp7mzIQ5mGNY1-fHvzhv66rqM6-1P85ZHzf4K1M2uAzo36Z4_gDChe9bZhAhpXF1amABSf6lRWSNn9OfU9FVHY8tgSW6uBTaA_EKUvAenSq9AwwS1OJSgkFMbd-mD2gWHokNbLgMHvXZu6Xo0qo2k9m-N08RXeP7nytmF4n6emLT9SEKBN_gJSQYON23ySRnqaKQmFYcBMt7yFF7c9TTFuXtxPHm0oDLSAsVP59H06izyYZ_Rz57Rc0-AcUGJJ8GS_90zukk"/>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-secondary flex items-center justify-center text-[10px] text-white font-bold">+2k</div>
+</div>
+<span class="font-label-sm text-secondary">Verified Network</span>
+</div>
+</div>
+</div>
+<!-- Accent Detail -->
+<div class="absolute bottom-12 right-12 flex items-center gap-4 text-white/80">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+<span class="text-sm font-label-sm tracking-widest uppercase">Harvest Sector 04-A</span>
+</div>
+</section>
+</main>
+<!-- Contextual Floating Action - Only for Support -->
+<div class="fixed bottom-8 left-8 md:left-auto md:right-[47%] z-50">
+<button class="w-12 h-12 bg-white/80 backdrop-blur-md border border-outline-variant/30 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all text-primary-container group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+</body></html>
