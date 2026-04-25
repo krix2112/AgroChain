@@ -23,12 +23,16 @@ app.use(cors({
 // Handle preflight for ALL routes explicitly
 app.options('*', cors());
 
-// Connect to Database
 connectDB().then(async () => {
     if (process.env.MONGODB_URI) {
-        // Run seeding on startup to ensure demo accounts exist
+        console.log('Production DB detected, running startup seeding...');
         const seedFpo = require('./src/scripts/seedDemo');
-        await seedFpo();
+        try {
+            await seedFpo();
+            console.log('Startup seeding completed successfully');
+        } catch (err) {
+            console.error('Startup seeding failed:', err.message);
+        }
     }
 });
 
