@@ -1,13 +1,63 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
   BarChart, Bar, Cell, LineChart, Line, ComposedChart,
   PieChart, Pie, Sector
 } from 'recharts';
-import { Search, Check, ChevronDown, Leaf, MapPin, SlidersHorizontal } from 'lucide-react';
+import { Search, Check, ChevronDown, Leaf, MapPin, SlidersHorizontal, RefreshCw, AlertCircle } from 'lucide-react';
 
-// --- CUSTOM SVG ILLUSTRATIONS ---
+// ─── API base (no key ever in this file) ────────────────────
+const API_BASE = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api')
+  .replace(/\/api\/?$/, '') // strip trailing /api if present — our routes live at /api/mandi-intelligence
+  + '/api/mandi-intelligence';
+
+async function mandiGet<T>(path: string): Promise<T> {
+  const res = await fetch(`${API_BASE}${path}`, { cache: 'no-store' });
+  const json = await res.json();
+  if (!res.ok || !json.success) throw new Error(json.error || `Request failed ${res.status}`);
+  return json.data as T;
+}
+
+// ─── Types ───────────────────────────────────────────────────
+interface LiveMonitor {
+  available: boolean;
+  minPrice?: number;
+  maxPrice?: number;
+  modalPrice?: number;
+  priceSpread?: number;
+  freshness?: string;
+  date?: string;
+  market?: string;
+  district?: string;
+  state?: string;
+  reason?: string;
+}
+interface SellSignalData {
+  signal: 'sell_now' | 'hold' | 'watch';
+  confidence?: number;
+  vs30dAvgPct?: number;
+  explanation: string;
+}
+interface MomentumPoint { date: string; modalPrice: number | null; ma7: number | null; ma30: number | null; }
+interface SpreadPoint   { date: string; minPrice: number; modalPrice: number; maxPrice: number; }
+interface SeasonMonth   { label: string; avgModal: number | null; count: number; }
+interface BarEntry      { market: string; district?: string; state?: string; modalPrice: number; minPrice: number; maxPrice: number; }
+interface HeatmapRow    { label: string; values: (number | null)[]; normalized: (number | null)[]; }
+interface DashboardData {
+  livePriceMonitor: LiveMonitor;
+  sellSignal: SellSignalData;
+  momentum: { available: boolean; series: MomentumPoint[]; direction: string };
+  priceSpreadBand: { available: boolean; series: SpreadPoint[]; avgSpread: number | null };
+  seasonality: { available: boolean; months: SeasonMonth[] };
+  marketComparisonBars: { bars: BarEntry[]; count: number };
+  heatmap: { dates: string[]; matrix: HeatmapRow[]; colorDomain: { min: number; max: number } };
+  trendView: { available: boolean; direction: string; pctChange: number | null };
+  forecastBand: { available: boolean; confidence?: number; direction?: string };
+  meta: { fetchedAt: string; latestRecordDate: string | null; missingDataWarnings: string[] };
+}
+
+// ─── CUSTOM SVG ILLUSTRATIONS (preserved exactly) ───────────
 const GrowthIllustration = () => (
   <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="4" y="20" width="6" height="8" rx="1.5" fill="#86EFAC" />
@@ -46,17 +96,7 @@ const SellSignalIllustration = () => (
   </svg>
 );
 
-const MainChartIllustration = () => (
-  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="6" y="22" width="6" height="12" rx="2" fill="#34d399" fillOpacity="0.8" />
-    <rect x="17" y="14" width="6" height="20" rx="2" fill="#10b981" fillOpacity="0.9" />
-    <rect x="28" y="6" width="6" height="28" rx="2" fill="#059669" />
-    <path d="M4 18L17 8L28 2" stroke="#064e3b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    <circle cx="28" cy="2" r="3" fill="#064e3b" />
-  </svg>
-);
-
-// --- CUSTOM SEARCHABLE DROPDOWN ---
+// ─── CUSTOM SEARCHABLE DROPDOWN ──────────────────────────────
 const CustomDropdown = ({ options, value, onChange, icon: Icon, label }: any) => {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
@@ -65,7 +105,6 @@ const CustomDropdown = ({ options, value, onChange, icon: Icon, label }: any) =>
   const filteredOptions = options.filter((opt: any) => 
     opt.label.toLowerCase().includes(search.toLowerCase())
   );
-
   const selectedOption = options.find((opt: any) => opt.value === value);
 
   useEffect(() => {
@@ -112,15 +151,9 @@ const CustomDropdown = ({ options, value, onChange, icon: Icon, label }: any) =>
             {filteredOptions.length > 0 ? filteredOptions.map((opt: any) => (
               <button
                 key={opt.value}
-                onClick={() => {
-                  onChange(opt.value);
-                  setIsOpen(false);
-                  setSearch('');
-                }}
+                onClick={() => { onChange(opt.value); setIsOpen(false); setSearch(''); }}
                 className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                  value === opt.value
-                    ? 'bg-emerald-50 text-emerald-700'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  value === opt.value ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
                 {opt.label}
@@ -136,9 +169,9 @@ const CustomDropdown = ({ options, value, onChange, icon: Icon, label }: any) =>
   );
 };
 
-// --- CUSTOM PIE/DONUT SHAPE WITH HOVER POP ---
+// ─── CUSTOM PIE/DONUT SHAPE (preserved exactly) ───────────────
 const renderActiveShape = (props: any) => {
-  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent } = props;
   return (
     <g>
       <text x={cx} y={cy - 10} dy={8} textAnchor="middle" fill="#111827" className="text-lg font-bold">
@@ -148,39 +181,21 @@ const renderActiveShape = (props: any) => {
         {`${(percent * 100).toFixed(1)}%`}
       </text>
       <Sector
-        cx={cx}
-        cy={cy}
-        innerRadius={innerRadius - 2}
-        outerRadius={outerRadius + 8}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        fill={fill}
+        cx={cx} cy={cy} innerRadius={innerRadius - 2} outerRadius={outerRadius + 8}
+        startAngle={startAngle} endAngle={endAngle} fill={fill}
         style={{ filter: `drop-shadow(0px 4px 10px ${fill}60)`, transition: 'all 300ms ease-in-out' }}
       />
       <Sector
-        cx={cx}
-        cy={cy}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        innerRadius={outerRadius + 12}
-        outerRadius={outerRadius + 15}
-        fill={fill}
-        opacity={0.3}
+        cx={cx} cy={cy} startAngle={startAngle} endAngle={endAngle}
+        innerRadius={outerRadius + 12} outerRadius={outerRadius + 15}
+        fill={fill} opacity={0.3}
       />
     </g>
   );
 };
 
-
-// --- MAIN COMPONENT ---
-const MANDIS = [
-  { name: 'Azadpur Mandi, Delhi', location: 'Delhi', arrivals: '1,200 tons', trend: 'up', volatility: 'Low', status: 'Active' },
-  { name: 'Vashi Mandi, Mumbai', location: 'Maharashtra', arrivals: '850 tons', trend: 'down', volatility: 'High', status: 'Active' },
-  { name: 'Koyambedu, Chennai', location: 'Tamil Nadu', arrivals: '600 tons', trend: 'stable', volatility: 'Medium', status: 'Closed' },
-  { name: 'Lasalgaon Mandi, Nashik', location: 'Maharashtra', arrivals: '2,400 tons', trend: 'up', volatility: 'Medium', status: 'Active' },
-];
-
-const TickerItem = ({ name, price, change }: { name: string, price: string, change: string }) => (
+// ─── TICKER ITEM ─────────────────────────────────────────────
+const TickerItem = ({ name, price, change }: { name: string; price: string; change: string }) => (
   <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full whitespace-nowrap">
     <span className="text-xs font-bold text-white/60">{name}</span>
     <span className="text-sm font-black text-white">{price}</span>
@@ -188,111 +203,200 @@ const TickerItem = ({ name, price, change }: { name: string, price: string, chan
   </div>
 );
 
-export default function MandiPrices() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeMandi, setActiveMandi] = useState<string>('Azadpur Mandi, Delhi');
-  const [selectedCommodity, setSelectedCommodity] = useState('wheat');
-  const [selectedMandi, setSelectedMandi] = useState('ludhiana');
-  const [activePieIndex, setActivePieIndex] = useState(0);
+// ─── LOADING SKELETON ─────────────────────────────────────────
+const Skeleton = ({ className = '' }: { className?: string }) => (
+  <div className={`bg-gray-100 animate-pulse rounded-2xl ${className}`} />
+);
 
-  const filteredMandis = MANDIS.filter(m => 
-    m.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+// ─── ERROR BANNER ─────────────────────────────────────────────
+const ErrorBanner = ({ message, onRetry }: { message: string; onRetry: () => void }) => (
+  <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-100 rounded-2xl text-sm text-red-700">
+    <AlertCircle size={18} className="shrink-0 text-red-500" />
+    <span className="flex-1">{message}</span>
+    <button onClick={onRetry} className="flex items-center gap-1 text-xs font-semibold text-red-600 hover:text-red-800 transition-colors">
+      <RefreshCw size={13} /> Retry
+    </button>
+  </div>
+);
+
+// ─── fmt helpers ──────────────────────────────────────────────
+const fmt  = (n?: number | null) => n != null ? `₹${n.toLocaleString('en-IN')}` : '—';
+const fmtP = (n?: number | null) => n != null ? `${n > 0 ? '+' : ''}${n.toFixed(1)}%` : '—';
+
+// ─── STATIC MANDIS TABLE (preserved from original) ───────────
+const MANDIS_STATIC = [
+  { name: 'Azadpur Mandi, Delhi',       location: 'Delhi',         arrivals: '1,200 tons', trend: 'up',     volatility: 'Low',    status: 'Active' },
+  { name: 'Vashi Mandi, Mumbai',         location: 'Maharashtra',   arrivals: '850 tons',   trend: 'down',   volatility: 'High',   status: 'Active' },
+  { name: 'Koyambedu, Chennai',          location: 'Tamil Nadu',    arrivals: '600 tons',   trend: 'stable', volatility: 'Medium', status: 'Closed' },
+  { name: 'Lasalgaon Mandi, Nashik',     location: 'Maharashtra',   arrivals: '2,400 tons', trend: 'up',     volatility: 'Medium', status: 'Active' },
+];
+
+// ─── DONUT DATA (static — quality grade breakdown is not part of govt API) ───
+const DONUT_DATA = [
+  { name: 'Premium Grade', value: 45, color: '#34d399' },
+  { name: 'Standard Grade', value: 35, color: '#10b981' },
+  { name: 'Fair Average',   value: 20, color: '#059669' },
+];
+
+// ─── SIGNAL COLOR MAP ─────────────────────────────────────────
+const signalMeta = {
+  sell_now: { label: 'Sell Now', color: 'emerald' },
+  hold:     { label: 'Hold',     color: 'blue'    },
+  watch:    { label: 'Watch',    color: 'amber'   },
+};
+
+// ─── MAIN COMPONENT ──────────────────────────────────────────
+export default function MandiPrices() {
+  const [searchQuery,        setSearchQuery]        = useState('');
+  const [activePieIndex,     setActivePieIndex]     = useState(0);
+
+  // Filter state — seeded with first options; updated once dropdowns load
+  const [commodityOptions, setCommodityOptions] = useState([{ value: 'Wheat', label: 'Wheat' }]);
+  const [stateOptions,     setStateOptions]     = useState([{ value: 'Punjab', label: 'Punjab' }]);
+  const [districtOptions,  setDistrictOptions]  = useState<{ value: string; label: string }[]>([]);
+  const [marketOptions,    setMarketOptions]    = useState<{ value: string; label: string }[]>([]);
+
+  const [selectedCommodity, setSelectedCommodity] = useState('Wheat');
+  const [selectedState,     setSelectedState]     = useState('Punjab');
+  const [selectedDistrict,  setSelectedDistrict]  = useState('');
+  const [selectedMarket,    setSelectedMarket]    = useState('');
+
+  // Dashboard data
+  const [dashData,  setDashData]  = useState<DashboardData | null>(null);
+  const [loading,   setLoading]   = useState(false);
+  const [error,     setError]     = useState<string | null>(null);
+
+  const filteredMandis = MANDIS_STATIC.filter(m =>
+    m.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     m.location.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const commodityOptions = [
-    { value: 'wheat', label: 'Wheat (Durum)' },
-    { value: 'rice', label: 'Basmati Rice' },
-    { value: 'mustard', label: 'Mustard Seed' },
-    { value: 'chickpea', label: 'Bengal Gram' },
+  // ── Load dropdown lists on mount ──
+  useEffect(() => {
+    mandiGet<string[]>('/commodities')
+      .then(cs => cs.length ? setCommodityOptions(cs.map(c => ({ value: c, label: c }))) : null)
+      .catch(() => {/* keep defaults */});
+    mandiGet<string[]>('/states')
+      .then(ss => ss.length ? setStateOptions(ss.map(s => ({ value: s, label: s }))) : null)
+      .catch(() => {/* keep defaults */});
+  }, []);
+
+  // ── Load districts when state changes ──
+  useEffect(() => {
+    if (!selectedState) return;
+    setSelectedDistrict(''); setSelectedMarket('');
+    setDistrictOptions([]);  setMarketOptions([]);
+    mandiGet<string[]>(`/districts?state=${encodeURIComponent(selectedState)}`)
+      .then(ds => setDistrictOptions(ds.map(d => ({ value: d, label: d }))))
+      .catch(() => {});
+  }, [selectedState]);
+
+  // ── Load markets when district changes ──
+  useEffect(() => {
+    if (!selectedDistrict) return;
+    setSelectedMarket(''); setMarketOptions([]);
+    mandiGet<string[]>(`/markets?district=${encodeURIComponent(selectedDistrict)}&state=${encodeURIComponent(selectedState)}`)
+      .then(ms => setMarketOptions(ms.map(m => ({ value: m, label: m }))))
+      .catch(() => {});
+  }, [selectedDistrict, selectedState]);
+
+  // ── Fetch dashboard ──
+  const fetchDashboard = useCallback(() => {
+    if (!selectedCommodity) return;
+    setLoading(true); setError(null);
+
+    const qs = new URLSearchParams({ commodity: selectedCommodity, range: '30', forecastHorizon: '7' });
+    if (selectedState)    qs.set('state',    selectedState);
+    if (selectedDistrict) qs.set('district', selectedDistrict);
+    if (selectedMarket)   qs.set('market',   selectedMarket);
+    qs.set('compareBy', 'market');
+
+    mandiGet<DashboardData>(`/dashboard?${qs.toString()}`)
+      .then(d => { setDashData(d); setLoading(false); })
+      .catch(e => { setError(e.message || 'Failed to load mandi data.'); setLoading(false); });
+  }, [selectedCommodity, selectedState, selectedDistrict, selectedMarket]);
+
+  useEffect(() => { fetchDashboard(); }, [fetchDashboard]);
+
+  // ─── Derived chart data from backend response ─────────────
+
+  // Bar chart: top 8 markets by modal price
+  const barChartData = dashData?.marketComparisonBars.bars.slice(0, 8).map(b => ({
+    name:  b.market.length > 12 ? b.market.slice(0, 12) + '…' : b.market,
+    price: b.modalPrice,
+  })) ?? [];
+
+  // Spread band: date-formatted series
+  const spreadData = dashData?.priceSpreadBand.series.map(p => ({
+    date:  p.date.slice(5), // MM-DD
+    min:   p.minPrice,
+    max:   p.maxPrice,
+    modal: p.modalPrice,
+  })) ?? [];
+
+  // Seasonality curve
+  const seasonalityData = dashData?.seasonality.available
+    ? dashData.seasonality.months
+        .filter(m => m.avgModal !== null)
+        .map(m => ({ month: m.label, avg: m.avgModal! }))
+    : [];
+
+  // Momentum: map to recharts-friendly shape
+  const momentumData = dashData?.momentum.series
+    .filter(p => p.modalPrice !== null)
+    .map(p => ({
+      date:    p.date.slice(5),
+      current: p.modalPrice,
+      ma7:     p.ma7,
+      ma30:    p.ma30,
+    })) ?? [];
+
+  // Heatmap: derive labels from backend
+  const heatmapRows  = dashData?.heatmap.matrix ?? [];
+  const heatmapDates = dashData?.heatmap.dates ?? [];
+  const minVal       = dashData?.heatmap.colorDomain.min ?? 0;
+  const maxVal       = dashData?.heatmap.colorDomain.max ?? 1;
+
+  // Ticker items built from top 6 bar entries
+  const tickerItems = dashData?.marketComparisonBars.bars.slice(0, 6).map(b => {
+    const tag = `${selectedCommodity.slice(0,4).toUpperCase()}/${b.state?.slice(0,3).toUpperCase() ?? '—'}`;
+    return { name: tag, price: fmt(b.modalPrice), change: '+0.0%' }; // pct not available per-bar
+  }) ?? [
+    { name: 'WHEAT/DEL', price: '₹2,450', change: '+1.2%' },
+    { name: 'ONION/MAH', price: '₹1,800', change: '-0.5%' },
+    { name: 'TOMATO/KA', price: '₹3,200', change: '+4.8%' },
+    { name: 'POTATO/UP', price: '₹1,200', change: '+0.2%' },
+    { name: 'RICE/PB',   price: '₹4,500', change: '+0.8%' },
+    { name: 'MAIZE/BH',  price: '₹1,950', change: '-1.1%' },
   ];
 
-  const mandiOptions = [
-    { value: 'ludhiana', label: 'Ludhiana, Punjab' },
-    { value: 'jalandhar', label: 'Jalandhar, Punjab' },
-    { value: 'amritsar', label: 'Amritsar, Punjab' },
-    { value: 'patiala', label: 'Patiala, Punjab' },
-  ];
+  // Live price data
+  const live = dashData?.livePriceMonitor;
+  const sell = dashData?.sellSignal;
+  const smeta = signalMeta[sell?.signal ?? 'watch'];
 
-  // --- MOCK DATA FOR ADVANCED CHARTS ---
-  const barChartData = [
-    { name: 'Ludhiana', price: 2570 },
-    { name: 'Jalandhar', price: 2550 },
-    { name: 'Amritsar', price: 2620 },
-    { name: 'Patiala', price: 2480 },
-    { name: 'Chandigarh', price: 2590 },
-  ];
-
-  const spreadData = [
-    { date: '19 Apr', min: 2300, max: 2450, modal: 2380 },
-    { date: '20 Apr', min: 2320, max: 2480, modal: 2420 },
-    { date: '21 Apr', min: 2350, max: 2500, modal: 2450 },
-    { date: '22 Apr', min: 2310, max: 2460, modal: 2390 },
-    { date: '23 Apr', min: 2400, max: 2550, modal: 2480 },
-    { date: '24 Apr', min: 2420, max: 2600, modal: 2520 },
-    { date: '25 Apr', min: 2450, max: 2650, modal: 2570 },
-  ];
-
-  const seasonalityData = [
-    { month: 'Jan', avg: 2200 }, { month: 'Feb', avg: 2250 },
-    { month: 'Mar', avg: 2350 }, { month: 'Apr', avg: 2570 },
-    { month: 'May', avg: 2650 }, { month: 'Jun', avg: 2600 },
-    { month: 'Jul', avg: 2500 }, { month: 'Aug', avg: 2450 },
-    { month: 'Sep', avg: 2520 }, { month: 'Oct', avg: 2580 },
-    { month: 'Nov', avg: 2480 }, { month: 'Dec', avg: 2300 },
-  ];
-
-  const momentumData = [
-    { date: 'W1', current: 2300, ma7: 2250, ma30: 2200 },
-    { date: 'W2', current: 2380, ma7: 2300, ma30: 2220 },
-    { date: 'W3', current: 2450, ma7: 2380, ma30: 2250 },
-    { date: 'W4', current: 2570, ma7: 2460, ma30: 2300 },
-  ];
-
-  const donutData = [
-    { name: 'Premium Grade', value: 45, color: '#34d399' },
-    { name: 'Standard Grade', value: 35, color: '#10b981' },
-    { name: 'Fair Average', value: 20, color: '#059669' },
-  ];
-
-  // Heatmap Data & Utils
-  const heatmapMandis = ['Ludhiana', 'Jalandhar', 'Amritsar', 'Patiala', 'Chandigarh'];
-  const heatmapCommodities = ['Wheat', 'Rice', 'Mustard', 'Chickpea'];
-  const getHeatmapColor = (mIndex: number, cIndex: number) => {
-    // Generate pseudo-random deterministic heat mapping
-    const value = ((mIndex * 7 + cIndex * 3) % 10) / 10;
-    if (value < 0.33) return 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100 hover:border-red-200';
-    if (value < 0.66) return 'bg-amber-50 text-amber-600 border-amber-100 hover:bg-amber-100 hover:border-amber-200';
+  // Heatmap color helper using normalized value from backend
+  const getHeatmapColorFromNorm = (norm: number | null) => {
+    if (norm === null) return 'bg-gray-50 text-gray-300 border-gray-100';
+    if (norm < 0.33)  return 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100 hover:border-red-200';
+    if (norm < 0.66)  return 'bg-amber-50 text-amber-600 border-amber-100 hover:bg-amber-100 hover:border-amber-200';
     return 'bg-emerald-50 text-emerald-600 border-emerald-100 hover:bg-emerald-100 hover:border-emerald-200';
   };
 
-  const onPieEnter = (_: any, index: number) => {
-    setActivePieIndex(index);
-  };
-
-  const sellSignal = {
-    action: 'Sell Now',
-    reason: 'Price is 7.2% above 7-day moving average. Historical momentum indicates short-term peak.',
-    confidence: 87,
-  };
-
+  // ─── RENDER ──────────────────────────────────────────────────
   return (
     <div className="space-y-8 animate-in fade-in duration-700 bg-slate-50 min-h-screen -m-6 p-8">
+
       {/* Financial Ticker Bar */}
       <div className="relative -mx-8 -mt-8 overflow-hidden bg-slate-900 py-3 shadow-2xl border-b border-white/5">
         <div className="flex gap-8 animate-marquee">
-          <TickerItem name="WHEAT/DEL" price="₹2,450" change="+1.2%" />
-          <TickerItem name="ONION/MAH" price="₹1,800" change="-0.5%" />
-          <TickerItem name="TOMATO/KA" price="₹3,200" change="+4.8%" />
-          <TickerItem name="POTATO/UP" price="₹1,200" change="+0.2%" />
-          <TickerItem name="RICE/PB" price="₹4,500" change="+0.8%" />
-          <TickerItem name="MAIZE/BH" price="₹1,950" change="-1.1%" />
-          <TickerItem name="WHEAT/DEL" price="₹2,450" change="+1.2%" />
-          <TickerItem name="ONION/MAH" price="₹1,800" change="-0.5%" />
+          {[...tickerItems, ...tickerItems].map((t, i) => (
+            <TickerItem key={i} name={t.name} price={t.price} change={t.change} />
+          ))}
         </div>
       </div>
 
-      {/* --- HERO SECTION --- */}
+      {/* HERO SECTION */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-[10px] font-black uppercase tracking-widest mb-3">
@@ -302,33 +406,54 @@ export default function MandiPrices() {
             </span>
             Real-time Feed
           </div>
-          <h1 className="text-5xl font-black text-slate-900 tracking-tight leading-none">
-            Market Intelligence
-          </h1>
-          <p className="text-slate-500 font-medium mt-3 text-lg">Predictive pricing and logistics momentum for global agri-traders.</p>
+          <h1 className="text-5xl font-black text-slate-900 tracking-tight leading-none">Market Intelligence</h1>
+          <p className="text-slate-500 font-medium mt-3 text-lg">
+            Predictive pricing and logistics momentum for global agri-traders.
+            {dashData?.meta.latestRecordDate && (
+              <span className="ml-2 text-sm text-emerald-600 font-semibold">
+                Latest data: {dashData.meta.latestRecordDate}
+              </span>
+            )}
+          </p>
         </div>
-        
+
         <div className="flex items-center gap-4 w-full lg:w-auto">
           <div className="relative flex-1 lg:w-96">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-            <input 
-              type="text" 
+            <input
+              type="text"
               placeholder="Search mandi, state or commodity..."
               className="w-full pl-12 pr-4 py-4 bg-white border-2 border-slate-100 rounded-3xl focus:ring-8 focus:ring-blue-500/5 focus:border-blue-500 transition-all shadow-xl shadow-slate-200/50 font-bold"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <button className="p-4 bg-slate-900 text-white rounded-3xl hover:bg-slate-800 transition-all shadow-2xl hover:scale-105 active:scale-95">
-            <SlidersHorizontal size={24} />
+          <button
+            onClick={fetchDashboard}
+            disabled={loading}
+            className="p-4 bg-slate-900 text-white rounded-3xl hover:bg-slate-800 transition-all shadow-2xl hover:scale-105 active:scale-95 disabled:opacity-60"
+            title="Refresh data"
+          >
+            <RefreshCw size={24} className={loading ? 'animate-spin' : ''} />
           </button>
         </div>
       </div>
 
-      {/* --- LIVE PRICE & DROPDOWNS --- */}
+      {/* Error Banner */}
+      {error && <ErrorBanner message={error} onRetry={fetchDashboard} />}
+
+      {/* Warnings from backend meta */}
+      {dashData?.meta.missingDataWarnings?.length ? (
+        <div className="text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-2xl px-4 py-3 flex items-start gap-2">
+          <AlertCircle size={14} className="mt-0.5 shrink-0" />
+          <span>{dashData.meta.missingDataWarnings.join(' • ')}</span>
+        </div>
+      ) : null}
+
+      {/* LIVE PRICE + FILTERS */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 mb-12">
-        
-        {/* Filters (Left Side) */}
+
+        {/* Filters — now includes state, district, market */}
         <div className="xl:col-span-3 space-y-6">
           <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
             <h2 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
@@ -341,34 +466,59 @@ export default function MandiPrices() {
                 icon={Leaf}
                 options={commodityOptions}
                 value={selectedCommodity}
-                onChange={setSelectedCommodity}
+                onChange={(v: string) => { setSelectedCommodity(v); }}
               />
               <CustomDropdown
-                label="Target Mandi"
+                label="State"
                 icon={MapPin}
-                options={mandiOptions}
-                value={selectedMandi}
-                onChange={setSelectedMandi}
+                options={stateOptions}
+                value={selectedState}
+                onChange={(v: string) => setSelectedState(v)}
               />
+              {districtOptions.length > 0 && (
+                <CustomDropdown
+                  label="District"
+                  icon={MapPin}
+                  options={[{ value: '', label: 'All Districts' }, ...districtOptions]}
+                  value={selectedDistrict}
+                  onChange={(v: string) => setSelectedDistrict(v)}
+                />
+              )}
+              {marketOptions.length > 0 && (
+                <CustomDropdown
+                  label="Target Mandi"
+                  icon={MapPin}
+                  options={[{ value: '', label: 'All Mandis' }, ...marketOptions]}
+                  value={selectedMarket}
+                  onChange={(v: string) => setSelectedMarket(v)}
+                />
+              )}
             </div>
           </div>
         </div>
 
-        {/* Price Cards (Right Side) */}
+        {/* Price Cards */}
         <div className="xl:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Min Price Card */}
+          {/* Min Price */}
           <div className="group relative bg-gradient-to-br from-red-50 to-orange-50/50 rounded-3xl p-6 border border-red-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between overflow-hidden">
             <div className="absolute inset-0 bg-white/40" />
             <div className="relative">
               <div className="text-sm font-semibold text-gray-500 mb-4">Min Price Today</div>
               <div>
-                <div className="text-4xl font-bold text-gray-900 mb-1 tracking-tight">₹2,380</div>
-                <div className="text-xs text-gray-500">per quintal</div>
+                {loading ? <Skeleton className="h-10 w-32" /> : (
+                  <>
+                    <div className="text-4xl font-bold text-gray-900 mb-1 tracking-tight">
+                      {live?.available ? fmt(live.minPrice) : '—'}
+                    </div>
+                    <div className="text-xs text-gray-500">per quintal</div>
+                    {live?.freshness && <div className="text-xs text-gray-400 mt-1">{live.freshness}</div>}
+                  </>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Modal Price Card (Hero) */}
+          {/* Modal Price (Hero) */}
           <div className="group relative bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-8 shadow-xl hover:shadow-2xl hover:shadow-emerald-500/30 hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between overflow-hidden">
             <div className="absolute -top-24 -right-24 w-48 h-48 bg-white/10 rounded-full blur-2xl" />
             <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-black/10 rounded-full blur-2xl" />
@@ -376,36 +526,56 @@ export default function MandiPrices() {
               <div className="flex items-center justify-between mb-4">
                 <div className="text-sm font-bold text-white/90">Modal Price</div>
                 <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 border border-white/30 backdrop-blur-md">
-                  <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse shadow-[0_0_8px_rgba(134,239,172,0.8)]" />
-                  <span className="text-[10px] font-bold text-white tracking-wider">LIVE</span>
+                  {live?.freshness === 'today' ? (
+                    <>
+                      <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse shadow-[0_0_8px_rgba(134,239,172,0.8)]" />
+                      <span className="text-[10px] font-bold text-white tracking-wider">LIVE</span>
+                    </>
+                  ) : (
+                    <span className="text-[10px] font-bold text-white/80 tracking-wider">{live?.freshness?.toUpperCase() ?? 'LOADING'}</span>
+                  )}
                 </div>
               </div>
               <div>
-                <div className="text-6xl font-black text-white mb-1 tracking-tighter drop-shadow-md">
-                  ₹2,570
-                </div>
-                <div className="text-sm text-emerald-100 font-semibold">per quintal</div>
+                {loading ? <Skeleton className="h-16 w-40 bg-white/20" /> : (
+                  <>
+                    <div className="text-6xl font-black text-white mb-1 tracking-tighter drop-shadow-md">
+                      {live?.available ? fmt(live.modalPrice) : '—'}
+                    </div>
+                    <div className="text-sm text-emerald-100 font-semibold">per quintal</div>
+                    {live?.market && <div className="text-xs text-emerald-200 mt-1">{live.market}</div>}
+                  </>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Max Price Card */}
+          {/* Max Price */}
           <div className="group relative bg-gradient-to-br from-blue-50 to-cyan-50/50 rounded-3xl p-6 border border-blue-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between overflow-hidden">
             <div className="absolute inset-0 bg-white/40" />
             <div className="relative">
               <div className="text-sm font-semibold text-gray-500 mb-4">Max Price Today</div>
               <div>
-                <div className="text-4xl font-bold text-gray-900 mb-1 tracking-tight">₹2,620</div>
-                <div className="text-xs text-gray-500">per quintal</div>
+                {loading ? <Skeleton className="h-10 w-32" /> : (
+                  <>
+                    <div className="text-4xl font-bold text-gray-900 mb-1 tracking-tight">
+                      {live?.available ? fmt(live.maxPrice) : '—'}
+                    </div>
+                    <div className="text-xs text-gray-500">per quintal</div>
+                    {live?.priceSpread != null && (
+                      <div className="text-xs text-blue-500 mt-1">Spread: {fmt(live.priceSpread)}</div>
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* --- USP: SELL SIGNAL & MOMENTUM --- */}
+      {/* SELL SIGNAL + MOMENTUM */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-        {/* Sell Signal Panel (Dominant Hero) */}
+        {/* Sell Signal */}
         <div className="lg:col-span-5 relative overflow-hidden bg-white rounded-3xl shadow-xl border border-emerald-100 p-8 group hover:border-emerald-300 transition-colors">
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/80 to-teal-50/30" />
           <div className="absolute -top-32 -right-32 w-80 h-80 bg-emerald-100/50 rounded-full blur-[80px]" />
@@ -416,38 +586,57 @@ export default function MandiPrices() {
                   <SellSignalIllustration />
                 </div>
                 <div>
-                  <div className="text-4xl font-extrabold text-emerald-700">{sellSignal.action}</div>
-                  <div className="text-sm font-bold text-emerald-600/70 uppercase tracking-widest mt-1">AI Recommendation</div>
+                  {loading ? <Skeleton className="h-10 w-36 mb-2" /> : (
+                    <>
+                      <div className="text-4xl font-extrabold text-emerald-700">{smeta.label}</div>
+                      <div className="text-sm font-bold text-emerald-600/70 uppercase tracking-widest mt-1">Market Signal</div>
+                    </>
+                  )}
                 </div>
               </div>
-              <p className="text-gray-700 leading-relaxed text-lg border-l-2 border-emerald-400 pl-4 bg-white/40 p-3 rounded-r-xl">{sellSignal.reason}</p>
+              {loading ? <Skeleton className="h-16 w-full" /> : (
+                <p className="text-gray-700 leading-relaxed text-lg border-l-2 border-emerald-400 pl-4 bg-white/40 p-3 rounded-r-xl">
+                  {sell?.explanation ?? 'Analysing market conditions…'}
+                </p>
+              )}
             </div>
 
             <div className="space-y-4">
               <div className="bg-white/80 backdrop-blur-md rounded-2xl p-4 border border-emerald-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wider">Expected Margin</div>
-                    <div className="text-2xl font-bold text-emerald-600">+7.2%</div>
+                    <div className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wider">vs 30-day Avg</div>
+                    <div className={`text-2xl font-bold ${(sell?.vs30dAvgPct ?? 0) >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+                      {loading ? '—' : fmtP(sell?.vs30dAvgPct)}
+                    </div>
                   </div>
-                  <div><GrowthIllustration /></div>
+                  <GrowthIllustration />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white/80 backdrop-blur-md rounded-2xl p-4 border border-emerald-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5">
                   <div className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Spread</div>
-                  <div className="text-xl font-bold text-gray-900">₹190/qtl</div>
+                  <div className="text-xl font-bold text-gray-900">
+                    {loading ? '—' : (live?.priceSpread != null ? fmt(live.priceSpread) : '—')}
+                  </div>
                   <div className="mt-2"><CoinsIllustration /></div>
                 </div>
 
                 <div className="bg-white/80 backdrop-blur-md rounded-2xl p-4 border border-emerald-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 relative overflow-hidden">
                   <div className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Confidence</div>
-                  <div className="text-3xl font-bold text-blue-600">{sellSignal.confidence}%</div>
+                  <div className="text-3xl font-bold text-blue-600">
+                    {loading ? '—' : `${Math.round((sell?.confidence ?? dashData?.forecastBand?.confidence ?? 0) * 100)}%`}
+                  </div>
                   {/* SVG Circular Progress Ring */}
                   <svg className="absolute -right-4 -bottom-4 w-24 h-24 -rotate-90 opacity-10" viewBox="0 0 100 100">
                     <circle cx="50" cy="50" r="40" fill="transparent" stroke="currentColor" strokeWidth="8" className="text-blue-200" />
-                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="currentColor" strokeWidth="8" strokeDasharray="251.2" strokeDashoffset={251.2 - (251.2 * sellSignal.confidence) / 100} className="text-blue-600" strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1.5s ease-in-out' }} />
+                    <circle cx="50" cy="50" r="40" fill="transparent" stroke="currentColor" strokeWidth="8"
+                      strokeDasharray="251.2"
+                      strokeDashoffset={251.2 - (251.2 * ((sell?.confidence ?? dashData?.forecastBand?.confidence ?? 0)))}
+                      className="text-blue-600" strokeLinecap="round"
+                      style={{ transition: 'stroke-dashoffset 1.5s ease-in-out' }}
+                    />
                   </svg>
                 </div>
               </div>
@@ -459,74 +648,98 @@ export default function MandiPrices() {
         <div className="lg:col-span-7 bg-white rounded-3xl p-8 border border-gray-100 shadow-sm flex flex-col">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Price Momentum vs Moving Averages</h2>
           <div className="flex-grow min-h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={momentumData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
-                <XAxis dataKey="date" stroke="#d1d5db" tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis stroke="#d1d5db" tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} domain={['dataMin - 50', 'dataMax + 50']} />
-                <RechartsTooltip 
-                  contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', border: '1px solid #e5e7eb', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
-                  itemStyle={{ color: '#111827' }}
-                />
-                <Line type="monotone" dataKey="current" name="Current Price" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', r: 4 }} activeDot={{ r: 6, strokeWidth: 0 }} animationDuration={1500} />
-                <Line type="monotone" dataKey="ma7" name="7-Day MA" stroke="#3b82f6" strokeWidth={2} dot={false} animationDuration={1500} />
-                <Line type="monotone" dataKey="ma30" name="30-Day MA" stroke="#9ca3af" strokeWidth={2} strokeDasharray="5 5" dot={false} animationDuration={1500} />
-              </LineChart>
-            </ResponsiveContainer>
+            {loading ? <Skeleton className="h-full w-full min-h-[280px]" /> : momentumData.length ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={momentumData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
+                  <XAxis dataKey="date" stroke="#d1d5db" tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} />
+                  <YAxis stroke="#d1d5db" tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} domain={['dataMin - 50', 'dataMax + 50']} />
+                  <RechartsTooltip contentStyle={{ backgroundColor: 'rgba(255,255,255,0.95)', border: '1px solid #e5e7eb', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }} itemStyle={{ color: '#111827' }} />
+                  <Line type="monotone" dataKey="current" name="Current Price" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', r: 4 }} activeDot={{ r: 6, strokeWidth: 0 }} animationDuration={1500} />
+                  <Line type="monotone" dataKey="ma7"     name="7-Day MA"      stroke="#3b82f6" strokeWidth={2} dot={false} animationDuration={1500} />
+                  <Line type="monotone" dataKey="ma30"    name="30-Day MA"     stroke="#9ca3af" strokeWidth={2} strokeDasharray="5 5" dot={false} animationDuration={1500} />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-full flex items-center justify-center text-gray-400 text-sm">
+                No momentum data available yet for this selection.
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* --- ADVANCED DATA VISUALIZATIONS GRID --- */}
+      {/* ADVANCED DATA VISUALIZATIONS GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-        
-        {/* 1. Market Comparison Bar Chart */}
+
+        {/* 1. Market Comparison Bar */}
         <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Regional Price Comparison</h2>
           <div className="h-[280px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={barChartData} layout="vertical" margin={{ top: 0, right: 30, left: 10, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="barGradLight" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#34d399" />
-                    <stop offset="100%" stopColor="#10b981" />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" horizontal={true} vertical={false} />
-                <XAxis type="number" domain={['dataMin - 100', 'dataMax + 100']} stroke="#d1d5db" tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis dataKey="name" type="category" stroke="#9ca3af" tick={{ fill: '#4b5563', fontSize: 13, fontWeight: 500 }} width={80} axisLine={false} tickLine={false} />
-                <RechartsTooltip cursor={{ fill: '#f9fafb' }} contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', border: '1px solid #e5e7eb', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }} />
-                <Bar dataKey="price" fill="url(#barGradLight)" radius={[0, 4, 4, 0]} animationDuration={1200} barSize={24}>
-                  {barChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.price === Math.max(...barChartData.map(d => d.price)) ? '#059669' : 'url(#barGradLight)'} style={entry.price === Math.max(...barChartData.map(d => d.price)) ? { filter: 'drop-shadow(0 4px 6px rgba(16,185,129,0.3))' } : {}} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            {loading ? <Skeleton className="h-full w-full" /> : barChartData.length ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={barChartData} layout="vertical" margin={{ top: 0, right: 30, left: 10, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="barGradLight" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stopColor="#34d399" />
+                      <stop offset="100%" stopColor="#10b981" />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" horizontal={true} vertical={false} />
+                  <XAxis type="number" domain={['dataMin - 100', 'dataMax + 100']} stroke="#d1d5db" tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} />
+                  <YAxis dataKey="name" type="category" stroke="#9ca3af" tick={{ fill: '#4b5563', fontSize: 13, fontWeight: 500 }} width={90} axisLine={false} tickLine={false} />
+                  <RechartsTooltip cursor={{ fill: '#f9fafb' }} contentStyle={{ backgroundColor: 'rgba(255,255,255,0.95)', border: '1px solid #e5e7eb', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }} />
+                  <Bar dataKey="price" fill="url(#barGradLight)" radius={[0, 4, 4, 0]} animationDuration={1200} barSize={24}>
+                    {barChartData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={entry.price === Math.max(...barChartData.map(d => d.price)) ? '#059669' : 'url(#barGradLight)'}
+                        style={entry.price === Math.max(...barChartData.map(d => d.price)) ? { filter: 'drop-shadow(0 4px 6px rgba(16,185,129,0.3))' } : {}}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-full flex items-center justify-center text-gray-400 text-sm">
+                No market comparison data for this selection.
+              </div>
+            )}
           </div>
         </div>
 
-        {/* 2. Price Spread Band Chart */}
+        {/* 2. Price Spread Band */}
         <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Price Spread & Volatility</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-6">
+            Price Spread &amp; Volatility
+            {dashData?.priceSpreadBand.avgSpread != null && (
+              <span className="ml-3 text-sm font-normal text-gray-400">Avg spread: {fmt(dashData.priceSpreadBand.avgSpread)}</span>
+            )}
+          </h2>
           <div className="h-[280px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={spreadData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="spreadGradLight" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#10b981" stopOpacity={0.15} />
-                    <stop offset="100%" stopColor="#10b981" stopOpacity={0.02} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
-                <XAxis dataKey="date" stroke="#d1d5db" tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis stroke="#d1d5db" tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} domain={['dataMin - 50', 'dataMax + 50']} />
-                <RechartsTooltip contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', border: '1px solid #e5e7eb', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }} />
-                <Area type="monotone" dataKey="max" stroke="none" fill="url(#spreadGradLight)" animationDuration={1500} />
-                <Area type="monotone" dataKey="min" stroke="none" fill="#ffffff" animationDuration={1500} />
-                <Line type="monotone" dataKey="modal" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', r: 4 }} activeDot={{ r: 6, strokeWidth: 0 }} animationDuration={1500} />
-              </ComposedChart>
-            </ResponsiveContainer>
+            {loading ? <Skeleton className="h-full w-full" /> : spreadData.length ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <ComposedChart data={spreadData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="spreadGradLight" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#10b981" stopOpacity={0.15} />
+                      <stop offset="100%" stopColor="#10b981" stopOpacity={0.02} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
+                  <XAxis dataKey="date" stroke="#d1d5db" tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} />
+                  <YAxis stroke="#d1d5db" tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} domain={['dataMin - 50', 'dataMax + 50']} />
+                  <RechartsTooltip contentStyle={{ backgroundColor: 'rgba(255,255,255,0.95)', border: '1px solid #e5e7eb', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }} />
+                  <Area type="monotone" dataKey="max" stroke="none" fill="url(#spreadGradLight)" animationDuration={1500} />
+                  <Area type="monotone" dataKey="min" stroke="none" fill="#ffffff" animationDuration={1500} />
+                  <Line type="monotone" dataKey="modal" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', r: 4 }} activeDot={{ r: 6, strokeWidth: 0 }} animationDuration={1500} />
+                </ComposedChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-full flex items-center justify-center text-gray-400 text-sm">
+                No spread data available for this selection.
+              </div>
+            )}
           </div>
         </div>
 
@@ -534,25 +747,33 @@ export default function MandiPrices() {
         <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Historical Seasonality Curve</h2>
           <div className="h-[280px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={seasonalityData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="seasonGradLight" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#34d399" stopOpacity={0.3} />
-                    <stop offset="100%" stopColor="#10b981" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
-                <XAxis dataKey="month" stroke="#d1d5db" tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis stroke="#d1d5db" tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} domain={['dataMin - 100', 'dataMax + 100']} />
-                <RechartsTooltip contentStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', border: '1px solid #e5e7eb', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }} />
-                <Area type="natural" dataKey="avg" stroke="#10b981" strokeWidth={3} fill="url(#seasonGradLight)" animationDuration={2000} />
-              </AreaChart>
-            </ResponsiveContainer>
+            {loading ? <Skeleton className="h-full w-full" /> : seasonalityData.length ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={seasonalityData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="seasonGradLight" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#34d399" stopOpacity={0.3} />
+                      <stop offset="100%" stopColor="#10b981" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
+                  <XAxis dataKey="month" stroke="#d1d5db" tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} />
+                  <YAxis stroke="#d1d5db" tick={{ fill: '#6b7280', fontSize: 12 }} axisLine={false} tickLine={false} domain={['dataMin - 100', 'dataMax + 100']} />
+                  <RechartsTooltip contentStyle={{ backgroundColor: 'rgba(255,255,255,0.95)', border: '1px solid #e5e7eb', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }} />
+                  <Area type="natural" dataKey="avg" stroke="#10b981" strokeWidth={3} fill="url(#seasonGradLight)" animationDuration={2000} />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-full flex items-center justify-center text-gray-400 text-sm text-center p-6">
+                {dashData?.seasonality.available === false
+                  ? 'Not enough historical data for seasonality. This will improve as data accumulates.'
+                  : 'Loading seasonality…'}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* 4. Interactive Donut Chart (Quality/Volume Breakdown) */}
+        {/* 4. Donut Chart (static — quality grade breakdown) */}
         <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm flex flex-col">
           <h2 className="text-xl font-bold text-gray-900 mb-2">Volume by Quality Grade</h2>
           <p className="text-xs text-gray-500 mb-4">Hover segments to expand details.</p>
@@ -560,24 +781,22 @@ export default function MandiPrices() {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  // @ts-expect-error - activeIndex is supported by Recharts but types are missing in this version
+                  // @ts-expect-error - activeIndex is supported by Recharts but types are missing
                   activeIndex={activePieIndex}
                   activeShape={renderActiveShape}
-                  data={donutData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={70}
-                  outerRadius={90}
+                  data={DONUT_DATA}
+                  cx="50%" cy="50%"
+                  innerRadius={70} outerRadius={90}
                   dataKey="value"
-                  onMouseEnter={onPieEnter}
+                  onMouseEnter={(_: unknown, index: number) => setActivePieIndex(index)}
                   animationDuration={1000}
                   stroke="none"
                 >
-                  {donutData.map((entry, index) => (
-                    <Cell 
-                      key={`cell-${index}`} 
-                      fill={entry.color} 
-                      className="transition-all duration-300 outline-none" 
+                  {DONUT_DATA.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={entry.color}
+                      className="transition-all duration-300 outline-none"
                       style={{ opacity: activePieIndex === index ? 1 : 0.6, filter: activePieIndex !== index ? 'blur(1px)' : 'none' }}
                     />
                   ))}
@@ -588,45 +807,62 @@ export default function MandiPrices() {
         </div>
       </div>
 
-      {/* --- HEATMAP: MANDI VS COMMODITY --- */}
+      {/* HEATMAP */}
       <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm overflow-hidden">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">Price Heatmap: Mandis vs Commodities</h2>
-        <div className="overflow-x-auto pb-4">
-          <div className="min-w-[600px]">
-            {/* Header row */}
-            <div className="grid grid-cols-6 gap-2 mb-2">
-              <div className="text-xs font-semibold text-gray-400 uppercase">Mandi</div>
-              {heatmapCommodities.map(c => (
-                <div key={c} className="text-center text-xs font-semibold text-gray-500 uppercase">{c}</div>
-              ))}
-            </div>
-            {/* Grid rows */}
-            <div className="space-y-2">
-              {heatmapMandis.map((mandi, mIndex) => (
-                <div key={mandi} className="grid grid-cols-6 gap-2 items-center group">
-                  <div className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors">{mandi}</div>
-                  {heatmapCommodities.map((_, cIndex) => (
-                    <div 
-                      key={cIndex} 
-                      className={`h-12 rounded-xl border ${getHeatmapColor(mIndex, cIndex)} transition-all duration-300 hover:scale-105 hover:z-10 hover:shadow-md cursor-pointer flex items-center justify-center opacity-90 hover:opacity-100`}
-                    >
-                      <span className="opacity-0 hover:opacity-100 font-bold text-xs transition-opacity delay-100">
-                        ₹{(2200 + (mIndex*7 + cIndex*3)*45).toFixed(0)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-            {/* Legend */}
-            <div className="flex items-center justify-end gap-4 mt-6 text-xs text-gray-500 font-medium">
-              <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-red-100 border border-red-200" /> Low</div>
-              <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-amber-100 border border-amber-200" /> Average</div>
-              <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-emerald-100 border border-emerald-200" /> Premium</div>
+        <h2 className="text-xl font-bold text-gray-900 mb-6">Price Heatmap: Markets × Date</h2>
+        {loading ? <Skeleton className="h-64 w-full" /> : heatmapRows.length ? (
+          <div className="overflow-x-auto pb-4">
+            <div className="min-w-[600px]">
+              {/* Header row */}
+              <div className={`grid gap-2 mb-2`} style={{ gridTemplateColumns: `160px repeat(${Math.min(heatmapDates.length, 8)}, 1fr)` }}>
+                <div className="text-xs font-semibold text-gray-400 uppercase">Market</div>
+                {heatmapDates.slice(-8).map(d => (
+                  <div key={d} className="text-center text-xs font-semibold text-gray-500">{d.slice(5)}</div>
+                ))}
+              </div>
+              {/* Grid rows */}
+              <div className="space-y-2">
+                {heatmapRows.slice(0, 8).map((row) => (
+                  <div key={row.label} className={`grid gap-2 items-center group`} style={{ gridTemplateColumns: `160px repeat(${Math.min(heatmapDates.length, 8)}, 1fr)` }}>
+                    <div className="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors truncate">{row.label}</div>
+                    {row.normalized.slice(-8).map((norm, ci) => {
+                      const rawVal = row.values[row.values.length - Math.min(heatmapDates.length, 8) + ci];
+                      return (
+                        <div
+                          key={ci}
+                          className={`h-12 rounded-xl border ${getHeatmapColorFromNorm(norm)} transition-all duration-300 hover:scale-105 hover:z-10 hover:shadow-md cursor-pointer flex items-center justify-center opacity-90 hover:opacity-100`}
+                        >
+                          <span className="opacity-0 hover:opacity-100 font-bold text-xs transition-opacity delay-100">
+                            {rawVal != null ? fmt(rawVal) : '—'}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+              {/* Legend */}
+              <div className="flex items-center justify-end gap-4 mt-6 text-xs text-gray-500 font-medium">
+                <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-red-100 border border-red-200" /> Low</div>
+                <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-amber-100 border border-amber-200" /> Average</div>
+                <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-emerald-100 border border-emerald-200" /> Premium</div>
+                <div className="text-gray-400 ml-2">Range: {fmt(minVal)} – {fmt(maxVal)}</div>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="h-48 flex items-center justify-center text-gray-400 text-sm">
+            No heatmap data — select a commodity and state to generate a price matrix.
+          </div>
+        )}
       </div>
+
+      {/* Data source footer */}
+      {dashData?.meta && (
+        <div className="text-xs text-gray-400 text-center pb-4">
+          Source: Government of India — data.gov.in (Agmarknet) · Fetched: {new Date(dashData.meta.fetchedAt).toLocaleTimeString()}
+        </div>
+      )}
 
     </div>
   );

@@ -48,6 +48,7 @@ app.use('/api/listing', require('./src/routes/listing'));
 app.use('/api/request', require('./src/routes/cropRequest'));
 app.use('/api/bundle', require('./src/routes/bundle'));
 app.use('/api/fpo', require('./src/routes/fpo'));
+app.use('/api/mandi-intelligence', require('./src/routes/mandiIntelligence'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Health Check
