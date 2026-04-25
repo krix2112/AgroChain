@@ -9,6 +9,10 @@ const errorHandler = require('./src/middleware/error');
 
 const app = express();
 
+app.get('/version', (req, res) => {
+    res.json({ version: 'v1.0.4', timestamp: new Date().toISOString() });
+});
+
 app.use(cors({
   origin: [
     'http://localhost:3000',
