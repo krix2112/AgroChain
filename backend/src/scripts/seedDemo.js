@@ -169,7 +169,8 @@ async function seed() {
 
         console.log(`✅ Seeded: 1 FPO, 6 farmers, 8 procurements, 3 lots, 2 trades, 6 payouts`);
     } catch (err) {
-        console.error('Seeding FPO failed:', err);
+        console.error('CRITICAL SEEDING ERROR:', err);
+        throw err; // Re-throw to be caught by auto-seed
     }
 }
 

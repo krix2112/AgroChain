@@ -175,10 +175,18 @@ router.post('/login', async (req, res) => {
         
         // AUTO-SEED FALLBACK for demo accounts
         if (!user && (phone === "8178360741" || phone === "7251003723")) {
-            console.log('Demo user not found, triggering auto-seed...');
-            const seedFpo = require('../scripts/seedDemo');
-            await seedFpo();
-            user = await User.findOne({ phone });
+            try {
+                console.log('Demo user not found, triggering auto-seed...');
+                const seedFpo = require('../scripts/seedDemo');
+                await seedFpo();
+                user = await User.findOne({ phone });
+            } catch (seedErr: any) {
+                return res.status(500).json({ 
+                    success: false, 
+                    message: `Auto-seed failed: ${seedErr.message}`,
+                    stack: seedErr.stack
+                });
+            }
         }
 
         if (!user) {
